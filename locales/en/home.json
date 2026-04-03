@@ -1,0 +1,175 @@
+{
+  "header": {
+    "ctaRequest": "REQUEST A QUOTE",
+    "languageMenuAria": "Choose language",
+    "locales": {
+      "ru": { "short": "RU", "name": "Russian" },
+      "en": { "short": "EN", "name": "English" }
+    }
+  },
+  "nav": {
+    "home": "Home",
+    "machines": "Machines",
+    "about": "About",
+    "blog": "Blog",
+    "contact": "Contact"
+  },
+  "hero": {
+    "eyebrow": "Industrial excellence",
+    "lineOrange": "Precise and reliable",
+    "titleLine1": "Industrial",
+    "titleLine2": "machine tools",
+    "ctaExplore": "Explore machines",
+    "ctaDemo": "Watch demo",
+    "lede": "Advanced industrial solutions engineered for peak performance. We deliver reliability, precision, and innovation.",
+    "stats": [
+      { "value": "25+", "label": "Years of experience" },
+      { "value": "500+", "label": "Completed projects" },
+      { "value": "98%", "label": "Client satisfaction" }
+    ]
+  },
+  "solutions": {
+    "eyebrow": "Technology",
+    "title": "CORE SOLUTIONS",
+    "accent": "",
+    "description": "Built for performance. Built for reliability. Built for the future of manufacturing.",
+    "ctaDetails": "View details",
+    "cards": [
+      {
+        "title": "CNC precision machining center",
+        "description": "Advanced computer numerical control for high-precision production. Ideal for complex parts with exceptional accuracy and repeatability.",
+        "bullets": [
+          "5-axis capability",
+          "High-speed spindle",
+          "Automatic tool change"
+        ]
+      },
+      {
+        "title": "Industrial robotic system",
+        "description": "Fully automated robotics for assembly, welding, and material handling. Boosts throughput while maintaining consistent quality.",
+        "bullets": [
+          "6 degrees of freedom",
+          "AI-powered vision",
+          "Collaborative mode"
+        ]
+      },
+      {
+        "title": "Laser cutting and engraving system",
+        "description": "Modern fiber laser technology for cutting and engraving diverse materials. Suited for precision metalwork and custom fabrication.",
+        "bullets": [
+          "Ultra-fast processing",
+          "Multi-material support",
+          "Precision cutting"
+        ]
+      }
+    ]
+  },
+  "about": {
+    "eyebrow": "About Qualitech",
+    "title": "BUILDING",
+    "accent": "THE FUTURE",
+    "description": "Since 2001, Qualitech Machinery has been at the forefront of industrial innovation.",
+    "paragraphs": [
+      "Since 2001, Qualitech Machinery has been at the forefront of industrial innovation. Our commitment to excellence and precision engineering has made us a trusted partner worldwide.",
+      "We blend traditional craftsmanship with modern technology to build equipment that meets the demanding requirements of today’s industrial environment. Every machine undergoes rigorous quality control.",
+      "Our team of experienced engineers and technicians continuously innovates so our customers always have access to the most advanced solutions."
+    ],
+    "highlights": [
+      { "value": "ISO 9001", "label": "Certified quality" },
+      { "value": "24/7", "label": "Support" }
+    ]
+  },
+  "advantages": {
+    "eyebrow": "Why choose us",
+    "title": "QUALITECH",
+    "accent": "ADVANTAGE",
+    "description": "Excellence driven by innovation, quality, and commitment.",
+    "cards": [
+      {
+        "title": "Premium quality",
+        "description": "Every machine is built to the highest standards using top-grade materials and advanced technology."
+      },
+      {
+        "title": "Reliable and durable",
+        "description": "Our equipment is engineered for continuous operation in demanding industrial environments."
+      },
+      {
+        "title": "Expert support",
+        "description": "Comprehensive technical support and service from experienced engineers."
+      },
+      {
+        "title": "Innovative solutions",
+        "description": "Stay ahead with advanced automation features and smart technology integration."
+      }
+    ]
+  },
+  "insights": {
+    "eyebrow": "Latest insights",
+    "title": "INDUSTRY NEWS",
+    "accent": "",
+    "description": "Stay current with trends, tips, and innovations in industrial equipment.",
+    "readMore": "Read more",
+    "ctaMore": "Learn more",
+    "articles": [
+      {
+        "category": "Technology",
+        "title": "The future of industrial automation: AI and machine learning",
+        "description": "How artificial intelligence is reshaping manufacturing and what it means for the road ahead.",
+        "date": "March 12, 2026",
+        "readTime": "5 min read"
+      },
+      {
+        "category": "Maintenance",
+        "title": "CNC equipment maintenance best practices",
+        "description": "Essential tips to keep your CNC equipment running at peak performance.",
+        "date": "March 8, 2026",
+        "readTime": "7 min read"
+      },
+      {
+        "category": "Automation",
+        "title": "Optimizing production lines with robotics",
+        "description": "How integrating robotic systems can boost efficiency and reduce costs.",
+        "date": "March 5, 2026",
+        "readTime": "6 min read"
+      },
+      {
+        "category": "Innovation",
+        "title": "Using augmented reality for immersive on-site training",
+        "description": "How AR tools are transforming workforce training with hands-on, immersive learning.",
+        "date": "March 10, 2026",
+        "readTime": "8 min read"
+      }
+    ]
+  },
+  "footer": {
+    "tagline": "A leading provider of industrial equipment solutions with over 25 years of experience driving innovation in manufacturing.",
+    "quickLinks": {
+      "title": "Quick links",
+      "links": ["Machines", "About", "Blog", "Contact"]
+    },
+    "services": {
+      "title": "Services",
+      "links": [
+        "CNC machining",
+        "Robotic automation",
+        "Laser cutting",
+        "Maintenance",
+        "Support"
+      ]
+    },
+    "contact": {
+      "title": "Contact",
+      "addressLine1": "1250 Industrial Parkway",
+      "addressLine2": "Industrial District, Maryland, 21201",
+      "phone": "+1 (234) 567-890",
+      "email": "info@qualitech.com"
+    },
+    "copyright": "Copyright © 2017–2026 Neetrino IT Company. All rights reserved.",
+    "legal": [
+      "Privacy Policy",
+      "Shipping Policy",
+      "Terms of Use",
+      "Usage Policy"
+    ]
+  }
+}
