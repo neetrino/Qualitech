@@ -1,0 +1,22 @@
+import { NextResponse } from "next/server";
+
+export type ApiErrorBody = {
+  error: {
+    code: string;
+    message: string;
+    details?: Record<string, unknown>;
+  };
+};
+
+export function jsonError(
+  status: number,
+  code: string,
+  message: string,
+  details?: Record<string, unknown>,
+): NextResponse<ApiErrorBody> {
+  const body: ApiErrorBody = { error: { code, message } };
+  if (details !== undefined) {
+    body.error.details = details;
+  }
+  return NextResponse.json(body, { status });
+}
