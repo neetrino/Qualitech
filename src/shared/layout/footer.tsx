@@ -1,0 +1,37 @@
+import Image from "next/image";
+
+import { footerSections, homeAssets, legalLinks } from "@/features/home/home.data";
+
+const CONTACT_INFO_ICON_SIZE_PX = 14;
+
+export function Footer() {
+  return (
+    <footer className="mx-auto max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
+      <div className="grid gap-10 border-t border-[#18181b] pt-12 sm:gap-12 sm:pt-14 xl:grid-cols-[1.1fr_0.9fr_1fr_1fr]">
+        <div>
+          <Image alt="Qualitech logo" className="h-auto w-[260px] max-w-full sm:w-[300px]" src={homeAssets.footerLogo} width={338} height={46} />
+          <p className="mt-6 max-w-[220px] text-xs leading-relaxed tracking-[-0.02em] text-[#52525c] sm:mt-7 sm:max-w-[239px] sm:text-sm">Ведущий поставщик решений в области промышленного оборудования с более чем 25-летним опытом внедрения инноваций в производстве.</p>
+          <div className="mt-6 flex gap-2 sm:mt-7 sm:gap-3">{homeAssets.socialIcons.map((icon) => <span key={icon} className="grid size-9 place-items-center rounded-lg border border-[rgba(255,255,255,0.42)] bg-[#18181b] sm:size-10 sm:rounded-[10px]"><Image alt="" src={icon} width={18} height={18} /></span>)}</div>
+        </div>
+        {footerSections.map((section) => (
+          <div key={section.title}>
+            <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{section.title}</h3>
+            <ul className="mt-4 space-y-2.5 text-[11px] uppercase tracking-[0.12em] text-[#52525c] sm:mt-5 sm:space-y-3 sm:text-xs sm:tracking-[0.14em]">{section.links.map((link) => <li key={link}>{link}</li>)}</ul>
+          </div>
+        ))}
+        <div>
+          <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">Контактная информация</h3>
+          <div className="mt-4 space-y-3 text-[11px] tracking-[-0.01em] text-[#52525c] sm:mt-5 sm:text-xs">
+            <div className="flex gap-3"><Image alt="" className="mt-0.5 size-3.5 shrink-0" src={homeAssets.locationIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} /><p>1250 Индастриал-Паркуэй<br />Промышленный район, Мэриленд, 21201</p></div>
+            <p className="flex items-center gap-3"><Image alt="" className="size-3.5 shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />+1 (234) 567-890</p>
+            <p className="flex items-center gap-3"><Image alt="" className="size-3.5 shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />info@qualitech.com</p>
+          </div>
+        </div>
+      </div>
+      <div className="mt-10 flex flex-col gap-4 border-t border-[#18181b] pt-6 sm:mt-12 sm:pt-7 xl:flex-row xl:items-center xl:justify-between">
+        <p className="font-legal text-[10px] uppercase text-[#52525c] sm:text-xs">Авторские права © 2017–2026 Neetrino IT Company. Все права защищены.</p>
+        <div className="flex flex-wrap gap-2 text-[10px] tracking-[-0.01em] text-[#99a1af] sm:justify-end sm:gap-3 sm:text-xs">{legalLinks.map((item) => <span key={item}>{item}</span>)}</div>
+      </div>
+    </footer>
+  );
+}
