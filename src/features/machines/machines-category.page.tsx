@@ -1,12 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
 
 import type { MachineListItemDto } from "@/features/machines/machines.dto";
+import { machinesCategoryListHref } from "@/features/machines/machines-category-list-url";
+import { MachineListCard } from "@/features/machines/machine-list-card";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
-import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { isRemoteImageUrl } from "@/lib/image/remote-image-url";
-import { machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
 
@@ -21,58 +20,51 @@ type MachinesCategoryPageProps = {
   readonly page: number;
   readonly totalPages: number;
   readonly total: number;
+  readonly featuredOnly: boolean;
 };
 
-function MachineCard({
+function filterPillClass(active: boolean): string {
+  return active
+    ? "border-[#ff6900] bg-[#ff6900]/10 text-[#ff6900]"
+    : "border-[#27272a] text-white hover:border-[#ff6900] hover:text-[#ff6900]";
+}
+
+function ListingFilters({
   locale,
   sectionSlug,
+  featuredOnly,
   messages,
-  machine,
 }: {
   readonly locale: HomeLocale;
   readonly sectionSlug: string;
+  readonly featuredOnly: boolean;
   readonly messages: MachinesMessages;
-  readonly machine: MachineListItemDto;
 }) {
-  const href = machineDetailHref(locale, sectionSlug, machine.slug);
-  const alt = machine.coverImage?.alt?.trim() || messages.cardFallbackAlt;
-  const coverSrc = machine.coverImage?.url?.trim() ?? "";
-  const showCover = coverSrc.length > 0;
-
+  const allHref = machinesCategoryListHref(locale, sectionSlug, { page: 1, featuredOnly: false });
+  const featHref = machinesCategoryListHref(locale, sectionSlug, { page: 1, featuredOnly: true });
   return (
-    <article className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-[#18181b] bg-black p-px transition hover:border-[#27272a]">
-      <Link className="relative block h-[200px] shrink-0 overflow-hidden rounded-t-[12px] bg-[#18181b] sm:h-[220px]" href={href}>
-        {showCover ? (
-          <Image
-            alt={alt}
-            className="object-cover transition duration-300 hover:scale-[1.02]"
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            src={coverSrc}
-            unoptimized={isRemoteImageUrl(coverSrc)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#18181b_0%,#09090b_100%)] text-[11px] font-bold uppercase tracking-[0.14em] text-[#52525c]">
-            Qualitech
-          </div>
-        )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-[rgba(0,0,0,0.35)] to-transparent" />
-      </Link>
-      <div className="flex min-h-0 flex-1 flex-col px-4 py-5 sm:px-5 sm:py-6">
-        <h2 className="font-display text-lg uppercase leading-snug tracking-tight text-white sm:text-xl">
-          <Link className="transition hover:text-[#ff6900]" href={href}>
-            {machine.title}
-          </Link>
-        </h2>
-        <p className="mt-3 min-h-0 flex-1 text-sm leading-relaxed text-[#9f9fa9]">{machine.shortDescription}</p>
+    <nav
+      aria-label={messages.filterLabel}
+      className="mb-8 flex flex-col gap-4 border-b border-[#18181b] pb-8 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p className="text-[11px] font-black uppercase tracking-[0.12em] text-[#71717b]">{messages.filterLabel}</p>
+      <div className="flex flex-wrap gap-2">
         <Link
-          className="mt-5 inline-flex shrink-0 items-center gap-1.5 self-start text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110 sm:text-xs"
-          href={href}
+          aria-current={!featuredOnly ? "page" : undefined}
+          className={`rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] transition ${filterPillClass(!featuredOnly)}`}
+          href={allHref}
         >
-          {messages.readDetails}
+          {messages.filterAll}
+        </Link>
+        <Link
+          aria-current={featuredOnly ? "page" : undefined}
+          className={`rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] transition ${filterPillClass(featuredOnly)}`}
+          href={featHref}
+        >
+          {messages.filterFeatured}
         </Link>
       </div>
-    </article>
+    </nav>
   );
 }
 
@@ -81,12 +73,14 @@ function Pagination({
   sectionSlug,
   page,
   totalPages,
+  featuredOnly,
   messages,
 }: {
   readonly locale: HomeLocale;
   readonly sectionSlug: string;
   readonly page: number;
   readonly totalPages: number;
+  readonly featuredOnly: boolean;
   readonly messages: MachinesMessages;
 }) {
   if (totalPages <= 1) {
@@ -94,7 +88,8 @@ function Pagination({
   }
   const prev = page > 1 ? page - 1 : null;
   const next = page < totalPages ? page + 1 : null;
-  const base = machinesCategoryHref(locale, sectionSlug);
+  const prevHref = machinesCategoryListHref(locale, sectionSlug, { page: prev ?? 1, featuredOnly });
+  const nextHref = machinesCategoryListHref(locale, sectionSlug, { page: next ?? page, featuredOnly });
 
   return (
     <nav aria-label="Pagination" className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-[#18181b] pt-8">
@@ -105,7 +100,7 @@ function Pagination({
         {prev !== null ? (
           <Link
             className="rounded-full border border-[#27272a] px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-white transition hover:border-[#ff6900] hover:text-[#ff6900]"
-            href={prev === 1 ? base : `${base}?page=${prev}`}
+            href={prevHref}
           >
             {messages.paginationPrev}
           </Link>
@@ -117,7 +112,7 @@ function Pagination({
         {next !== null ? (
           <Link
             className="rounded-full border border-[#27272a] px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] text-white transition hover:border-[#ff6900] hover:text-[#ff6900]"
-            href={`${base}?page=${next}`}
+            href={nextHref}
           >
             {messages.paginationNext}
           </Link>
@@ -142,6 +137,7 @@ export function MachinesCategoryPage({
   page,
   totalPages,
   total,
+  featuredOnly,
 }: MachinesCategoryPageProps) {
   return (
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
@@ -152,44 +148,43 @@ export function MachinesCategoryPage({
         navContext="site"
       />
       <div className="overflow-x-hidden">
-        <section className="relative min-h-[min(44svh,380px)] overflow-hidden lg:min-h-[340px]">
-          <HeroBackgroundLayers />
-          <div
-            className={`relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-10 sm:px-5 sm:pb-12 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
-          >
-            <nav aria-label="Breadcrumb" className="mb-6 text-[11px] font-medium uppercase tracking-[0.12em] text-[#71717b]">
-              <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesPageHref(locale)}>
-                {machinesMessages.breadcrumbMachines}
-              </Link>
-              <span className="mx-2 text-[#3f3f46]" aria-hidden>
-                /
-              </span>
-              <span className="text-[#d4d4d8]">{sectionName}</span>
-            </nav>
-            <div className="mb-4 flex items-center gap-2">
-              <span className="h-px w-10 rounded-full bg-[#ff6900]" />
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff6900] sm:text-xs">{machinesMessages.heroEyebrow}</p>
-            </div>
-            <h1 className="max-w-[720px] font-display text-[clamp(1.5rem,4.2vw,2.75rem)] uppercase leading-[1.05] tracking-[-0.04em] text-white">
+        <section
+          className={`mx-auto max-w-[1280px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD} mt-6 sm:mt-8`}
+        >
+          <header className="mb-6 sm:mb-8">
+            <h1 className="font-display text-2xl uppercase leading-tight tracking-tight text-white sm:text-3xl lg:text-[2rem]">
               {sectionName}
             </h1>
-          </div>
-        </section>
+          </header>
 
-        <section className="mx-auto max-w-[1280px] px-4 pb-20 pt-4 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10">
+          <ListingFilters featuredOnly={featuredOnly} locale={locale} messages={machinesMessages} sectionSlug={sectionSlug} />
+
           {total === 0 ? (
             <div className="rounded-2xl border border-[#18181b] bg-[#09090b] px-6 py-14 text-center sm:px-10">
-              <h2 className="font-display text-xl uppercase tracking-tight text-white">{machinesMessages.sectionEmptyTitle}</h2>
-              <p className="mx-auto mt-3 max-w-md text-sm text-[#9f9fa9]">{machinesMessages.sectionEmptyBody}</p>
+              <h2 className="font-display text-xl uppercase tracking-tight text-white">
+                {featuredOnly ? machinesMessages.filterEmptyFeaturedTitle : machinesMessages.sectionEmptyTitle}
+              </h2>
+              {!featuredOnly ? (
+                <p className="mx-auto mt-3 max-w-md text-sm text-[#9f9fa9]">{machinesMessages.sectionEmptyBody}</p>
+              ) : null}
+              {featuredOnly ? (
+                <Link
+                  className="mt-6 inline-flex text-xs font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
+                  href={machinesCategoryListHref(locale, sectionSlug, { page: 1, featuredOnly: false })}
+                >
+                  {machinesMessages.filterShowAllLink}
+                </Link>
+              ) : null}
             </div>
           ) : (
             <>
-              <div className="grid gap-6 sm:grid-cols-2 lg:gap-8 xl:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xl:gap-5">
                 {machines.map((m) => (
-                  <MachineCard key={m.id} locale={locale} machine={m} messages={machinesMessages} sectionSlug={sectionSlug} />
+                  <MachineListCard key={m.id} locale={locale} machine={m} messages={machinesMessages} sectionSlug={sectionSlug} />
                 ))}
               </div>
               <Pagination
+                featuredOnly={featuredOnly}
                 locale={locale}
                 messages={machinesMessages}
                 page={page}

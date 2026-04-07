@@ -6,9 +6,11 @@ import type {
   MachineCategorySectionContextDto,
   MachineDetailDto,
   MachineDetailWithLocaleSlugs,
+  MachineListItemDto,
   MachinesListResult,
 } from "@/features/machines/machines.dto";
 import { mapMachineDetailRow, mapMachineListRow } from "@/features/machines/machines.mappers";
+import { RELATED_MACHINES_CAROUSEL_LIMIT } from "@/features/machines/machines.constants";
 import {
   collectDescendantCategoryIds,
   countMachinesForList,
@@ -18,6 +20,7 @@ import {
   findMachineDetailBySlug,
   findMachinesForList,
   findMachinesForListInCategoryIds,
+  findRelatedMachinesInCategoryIds,
   findTopLevelMachineCategories,
   listCategoryTranslationSlugs,
   listMachineTranslationSlugs,
@@ -111,6 +114,20 @@ export async function listMachinesInCategorySectionPublic(
     data: rows.map(mapMachineListRow),
     meta: { page: query.page, limit: query.limit, total },
   };
+}
+
+export async function listRelatedMachinesInSectionPublic(
+  sectionSlug: string,
+  excludeMachineId: string,
+  locale: AppLocale,
+): Promise<MachineListItemDto[]> {
+  const cat = await findMachineCategoryTranslationBySlug(sectionSlug, locale);
+  if (!cat) {
+    return [];
+  }
+  const ids = await collectDescendantCategoryIds(cat.categoryId);
+  const rows = await findRelatedMachinesInCategoryIds(ids, excludeMachineId, locale, RELATED_MACHINES_CAROUSEL_LIMIT);
+  return rows.map(mapMachineListRow);
 }
 
 export async function getMachineDetailForSectionPublic(

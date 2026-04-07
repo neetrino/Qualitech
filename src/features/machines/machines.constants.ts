@@ -1,6 +1,11 @@
+/** Default page index for public machine list APIs. */
 export const MACHINES_LIST_DEFAULT_PAGE = 1;
-export const MACHINES_LIST_DEFAULT_LIMIT = 20;
+
+/** Default page size for `/machines/[category]` listing. */
+export const MACHINES_LIST_DEFAULT_LIMIT = 12;
+
+/** Hard cap for `limit` query on machine list APIs. */
 export const MACHINES_LIST_MAX_LIMIT = 50;
 
-/** Next.js `revalidate` for public machine catalog routes (keep a numeric literal in `page.tsx`). */
-export const MACHINES_PUBLIC_REVALIDATE_SEC = 60;
+/** Max items in the “related machines” carousel on product detail. */
+export const RELATED_MACHINES_CAROUSEL_LIMIT = 12;

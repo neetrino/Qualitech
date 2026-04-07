@@ -5,6 +5,7 @@ import { homeLocaleToAppLocale } from "@/features/blog/blog.locale";
 import { MachinesCategoryPage } from "@/features/machines/machines-category.page";
 import { MACHINES_LIST_DEFAULT_LIMIT } from "@/features/machines/machines.constants";
 import { loadMachinesMessages } from "@/features/machines/machines.messages";
+import { machinesCategoryListHref } from "@/features/machines/machines-category-list-url";
 import {
   getMachineCategorySectionPublic,
   listMachinesInCategorySectionPublic,
@@ -18,7 +19,7 @@ export const revalidate = 60;
 
 type PageProps = {
   readonly params: Promise<{ locale: string; categorySlug: string }>;
-  readonly searchParams: Promise<{ page?: string }>;
+  readonly searchParams: Promise<{ page?: string; featured?: string }>;
 };
 
 function parseListPage(raw: string | undefined): number {
@@ -27,6 +28,10 @@ function parseListPage(raw: string | undefined): number {
     return 1;
   }
   return n;
+}
+
+function parseFeaturedOnly(raw: string | undefined): boolean {
+  return raw === "true" || raw === "1";
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -55,6 +60,7 @@ export default async function Page({ params, searchParams }: PageProps) {
   const appLocale = homeLocaleToAppLocale(locale);
   const sp = await searchParams;
   const page = parseListPage(sp.page);
+  const featuredOnly = parseFeaturedOnly(sp.featured);
 
   const section = await getMachineCategorySectionPublic(categorySlug, appLocale);
   if (!section) {
@@ -65,6 +71,7 @@ export default async function Page({ params, searchParams }: PageProps) {
     locale: appLocale,
     page,
     limit: MACHINES_LIST_DEFAULT_LIMIT,
+    ...(featuredOnly ? { featured: true } : {}),
   });
   if (!result) {
     notFound();
@@ -72,11 +79,15 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const totalPages = Math.max(1, Math.ceil(result.meta.total / result.meta.limit));
   if (result.meta.total === 0 && page > 1) {
-    redirect(`/${locale}/machines/${encodeURIComponent(categorySlug)}`);
+    redirect(machinesCategoryListHref(locale, categorySlug, { page: 1, featuredOnly }));
   }
   if (result.meta.total > 0 && page > totalPages) {
-    const base = `/${locale}/machines/${encodeURIComponent(categorySlug)}`;
-    redirect(totalPages > 1 ? `${base}?page=${totalPages}` : base);
+    redirect(
+      machinesCategoryListHref(locale, categorySlug, {
+        page: totalPages,
+        featuredOnly,
+      }),
+    );
   }
 
   const [homeMessages, machinesMessages] = await Promise.all([
@@ -86,6 +97,7 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <MachinesCategoryPage
+      featuredOnly={featuredOnly}
       homeMessages={homeMessages}
       locale={locale}
       machineSectionSlugByLocale={section.slugByLocale}

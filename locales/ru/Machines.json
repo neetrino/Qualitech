@@ -17,5 +17,13 @@
   "galleryFallbackAlt": "Фото оборудования",
   "paginationPrev": "Назад",
   "paginationNext": "Вперёд",
-  "pageIndicator": "Страница {page} из {totalPages}"
+  "pageIndicator": "Страница {page} из {totalPages}",
+  "relatedTitle": "Другие позиции в разделе",
+  "relatedCarouselPrev": "Прокрутить влево",
+  "relatedCarouselNext": "Прокрутить вправо",
+  "filterLabel": "Показать",
+  "filterAll": "Все",
+  "filterFeatured": "Рекомендуемые",
+  "filterEmptyFeaturedTitle": "В этом разделе нет рекомендуемых позиций",
+  "filterShowAllLink": "Показать все"
 }

@@ -17,5 +17,13 @@
   "galleryFallbackAlt": "Machine photo",
   "paginationPrev": "Previous",
   "paginationNext": "Next",
-  "pageIndicator": "Page {page} of {totalPages}"
+  "pageIndicator": "Page {page} of {totalPages}",
+  "relatedTitle": "More from this section",
+  "relatedCarouselPrev": "Scroll products left",
+  "relatedCarouselNext": "Scroll products right",
+  "filterLabel": "Show",
+  "filterAll": "All",
+  "filterFeatured": "Featured",
+  "filterEmptyFeaturedTitle": "No featured products in this section",
+  "filterShowAllLink": "Show all products"
 }

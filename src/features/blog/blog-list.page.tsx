@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { BLOG_LIST_INDEX_EXTRA_TOP_SPACING } from "@/features/blog/blog.constants";
 import type { BlogPostListItemDto } from "@/features/blog/blog.dto";
 import { formatBlogPublishedDate } from "@/features/blog/blog.format-date";
 import type { BlogMessages } from "@/features/blog/blog.messages";
-import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { blogPostHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
@@ -133,38 +134,26 @@ export function BlogListPage({ locale, homeMessages, blogMessages, posts, page, 
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
       <Header blogListPage={page} locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
-        <section className="relative min-h-[min(44svh,480px)] overflow-hidden lg:min-h-[400px]">
-          <HeroBackgroundLayers />
-          <div
-            className={`relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-10 sm:px-5 sm:pb-12 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
-          >
-            <div className="mb-4 flex items-center gap-2">
-              <span className="h-px w-10 rounded-full bg-[#ff6900]" />
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff6900] sm:text-xs">{blogMessages.heroEyebrow}</p>
-            </div>
-            <h1 className="max-w-[720px] font-display text-[clamp(1.5rem,4.2vw,2.75rem)] uppercase leading-[1.05] tracking-[-0.04em] text-white">
-              {blogMessages.heroTitle}
-            </h1>
-            <p className="mt-4 max-w-[560px] text-sm leading-6 text-[#9f9fa9] sm:text-[15px] sm:leading-7">{blogMessages.heroSubtitle}</p>
-          </div>
-        </section>
-
-        <section className="mx-auto max-w-[1280px] px-4 pb-20 pt-4 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10">
-          {total === 0 ? (
-            <div className="rounded-2xl border border-[#18181b] bg-[#09090b] px-6 py-14 text-center sm:px-10">
-              <h2 className="font-display text-xl uppercase tracking-tight text-white">{blogMessages.emptyTitle}</h2>
-              <p className="mx-auto mt-3 max-w-md text-sm text-[#9f9fa9]">{blogMessages.emptyBody}</p>
-            </div>
-          ) : (
-            <>
-              <div className="grid gap-6 sm:grid-cols-2 lg:gap-8 xl:grid-cols-3">
-                {posts.map((post) => (
-                  <BlogPostCard key={post.id} locale={locale} messages={blogMessages} post={post} />
-                ))}
+        <section
+          className={`mx-auto max-w-[1280px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
+        >
+          <div className={BLOG_LIST_INDEX_EXTRA_TOP_SPACING}>
+            {total === 0 ? (
+              <div className="rounded-2xl border border-[#18181b] bg-[#09090b] px-6 py-14 text-center sm:px-10">
+                <h2 className="font-display text-xl uppercase tracking-tight text-white">{blogMessages.emptyTitle}</h2>
+                <p className="mx-auto mt-3 max-w-md text-sm text-[#9f9fa9]">{blogMessages.emptyBody}</p>
               </div>
-              <Pagination locale={locale} messages={blogMessages} page={page} totalPages={totalPages} />
-            </>
-          )}
+            ) : (
+              <>
+                <div className="grid gap-6 sm:grid-cols-2 lg:gap-8 xl:grid-cols-3">
+                  {posts.map((post) => (
+                    <BlogPostCard key={post.id} locale={locale} messages={blogMessages} post={post} />
+                  ))}
+                </div>
+                <Pagination locale={locale} messages={blogMessages} page={page} totalPages={totalPages} />
+              </>
+            )}
+          </div>
         </section>
 
         <Footer messages={homeMessages} />

@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { BLOG_DETAIL_HERO_OVERLAY_MIN_HEIGHT_CLASSNAME } from "@/features/blog/blog.constants";
 import { BlogProse } from "@/features/blog/blog-prose";
-import type { MachineDetailWithLocaleSlugs } from "@/features/machines/machines.dto";
+import type { MachineDetailWithLocaleSlugs, MachineListItemDto } from "@/features/machines/machines.dto";
+import { MachineRelatedCarousel } from "@/features/machines/machine-related-carousel";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
@@ -18,6 +18,7 @@ type MachineDetailPageProps = {
   readonly machinesMessages: MachinesMessages;
   readonly sectionSlug: string;
   readonly payload: MachineDetailWithLocaleSlugs;
+  readonly relatedProducts: MachineListItemDto[];
 };
 
 function ProductGalleryGrid({
@@ -31,7 +32,7 @@ function ProductGalleryGrid({
     return null;
   }
   return (
-    <div className="mx-auto grid w-full max-w-[1200px] gap-5 px-4 sm:grid-cols-2 sm:gap-6 sm:px-5 md:px-6 lg:gap-8 lg:px-8 xl:px-10">
+    <div className="mx-auto grid w-full max-w-[1680px] gap-5 px-4 sm:grid-cols-2 sm:gap-6 sm:px-5 md:px-6 lg:gap-8 lg:px-8 xl:px-10">
       {images.map((img, index) => {
         const alt = img.alt?.trim() || fallbackAlt;
         const src = img.url.trim();
@@ -56,7 +57,46 @@ function ProductGalleryGrid({
   );
 }
 
-export function MachineDetailPage({ locale, homeMessages, machinesMessages, sectionSlug, payload }: MachineDetailPageProps) {
+function BreadcrumbNav({
+  locale,
+  sectionSlug,
+  categoryName,
+  title,
+  machinesMessages,
+}: {
+  readonly locale: HomeLocale;
+  readonly sectionSlug: string;
+  readonly categoryName: string;
+  readonly title: string;
+  readonly machinesMessages: MachinesMessages;
+}) {
+  return (
+    <nav aria-label="Breadcrumb" className="mb-6 text-[11px] font-medium uppercase tracking-[0.12em] text-[#71717b]">
+      <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesPageHref(locale)}>
+        {machinesMessages.breadcrumbMachines}
+      </Link>
+      <span className="mx-2 text-[#3f3f46]" aria-hidden>
+        /
+      </span>
+      <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesCategoryHref(locale, sectionSlug)}>
+        {categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines}
+      </Link>
+      <span className="mx-2 text-[#3f3f46]" aria-hidden>
+        /
+      </span>
+      <span className="text-[#d4d4d8]">{title}</span>
+    </nav>
+  );
+}
+
+export function MachineDetailPage({
+  locale,
+  homeMessages,
+  machinesMessages,
+  sectionSlug,
+  payload,
+  relatedProducts,
+}: MachineDetailPageProps) {
   const { detail, slugByLocale, sectionSlugByLocale } = payload;
   const hasLead = detail.images.length > 0;
   const heroImage = hasLead ? detail.images[0]! : null;
@@ -75,57 +115,46 @@ export function MachineDetailPage({ locale, homeMessages, machinesMessages, sect
       />
       <div className="overflow-x-hidden">
         <article>
-          <section className={`mx-auto w-full max-w-[1200px] px-4 pb-6 sm:px-5 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
-            <nav aria-label="Breadcrumb" className="mb-6 text-[11px] font-medium uppercase tracking-[0.12em] text-[#71717b]">
-              <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesPageHref(locale)}>
-                {machinesMessages.breadcrumbMachines}
-              </Link>
-              <span className="mx-2 text-[#3f3f46]" aria-hidden>
-                /
-              </span>
-              <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesCategoryHref(locale, sectionSlug)}>
-                {categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines}
-              </Link>
-              <span className="mx-2 text-[#3f3f46]" aria-hidden>
-                /
-              </span>
-              <span className="text-[#d4d4d8]">{detail.title}</span>
-            </nav>
+          <section className={`mx-auto w-full max-w-[1680px] px-4 pb-6 sm:px-5 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
+            <BreadcrumbNav
+              categoryName={categoryName}
+              locale={locale}
+              machinesMessages={machinesMessages}
+              sectionSlug={sectionSlug}
+              title={detail.title}
+            />
           </section>
 
           {heroImage && heroSrc.length > 0 ? (
-            <section className="mx-auto w-full max-w-[1200px] px-4 pb-12 sm:px-5 sm:pb-16 md:px-6 lg:px-8 xl:px-10">
-              <div className="relative w-full overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)]">
-                <div className="absolute inset-0">
+            <section className="mx-auto w-full max-w-[1680px] px-4 pb-12 sm:px-5 sm:pb-16 md:px-6 lg:px-8 xl:px-10">
+              <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start lg:gap-10 xl:gap-14">
+                <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)] lg:sticky lg:top-28 lg:aspect-auto lg:min-h-[min(70vh,720px)] lg:max-h-[calc(100vh-6rem)]">
                   <Image
                     alt={heroImage.alt?.trim() || machinesMessages.galleryFallbackAlt}
                     className="object-cover object-center"
                     fill
                     priority
-                    sizes="(max-width: 1280px) 100vw, 1200px"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
                     src={heroSrc}
                     unoptimized={isRemoteImageUrl(heroSrc)}
                   />
                 </div>
-                <div
-                  aria-hidden
-                  className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.72)_22%,rgba(0,0,0,0.88)_55%,rgb(0_0_0)_100%)]"
-                />
-                <div
-                  className={`relative z-[1] space-y-4 p-6 sm:p-8 md:p-10 ${BLOG_DETAIL_HERO_OVERLAY_MIN_HEIGHT_CLASSNAME} pb-10 sm:pb-12`}
-                >
+                <div className="flex min-w-0 flex-col gap-6 lg:max-w-none lg:pt-1">
                   <Link
                     className="inline-flex w-fit text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
                     href={machinesCategoryHref(locale, sectionSlug)}
                   >
                     ← {machinesMessages.backToSection}
                   </Link>
-                  <h1 className="max-w-[48rem] font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
+                  <h1 className="font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                     {detail.title}
                   </h1>
                   {detail.shortDescription.length > 0 ? (
-                    <p className="max-w-[40rem] text-base leading-relaxed text-[#e4e4e7] sm:text-[17px]">{detail.shortDescription}</p>
+                    <p className="text-base leading-relaxed text-[#e4e4e7] sm:text-[17px]">{detail.shortDescription}</p>
                   ) : null}
+                  <div className="border-t border-[#18181b] pt-8">
+                    <BlogProse html={detail.body} />
+                  </div>
                 </div>
               </div>
             </section>
@@ -143,18 +172,29 @@ export function MachineDetailPage({ locale, homeMessages, machinesMessages, sect
               {detail.shortDescription.length > 0 ? (
                 <p className="mt-4 text-base leading-relaxed text-[#9f9fa9] sm:text-[17px]">{detail.shortDescription}</p>
               ) : null}
+              <div className="mt-10 border-t border-[#18181b] pt-10">
+                <BlogProse html={detail.body} />
+              </div>
             </section>
           )}
-
-          <section className="mx-auto max-w-[800px] px-4 pb-12 sm:px-5 sm:pb-16 md:px-6 lg:px-8 xl:px-10">
-            <div className="border-t border-[#18181b] pt-10">
-              <BlogProse html={detail.body} />
-            </div>
-          </section>
 
           {restImages.length > 0 ? (
             <section className="w-full pb-16 pt-4 sm:pb-20 sm:pt-6">
               <ProductGalleryGrid fallbackAlt={machinesMessages.galleryFallbackAlt} images={restImages} />
+            </section>
+          ) : null}
+
+          {relatedProducts.length > 0 ? (
+            <section className="mx-auto w-full max-w-[1680px] border-t border-[#18181b] px-4 pb-4 pt-12 sm:px-5 md:px-6 lg:px-8 xl:px-10">
+              <h2 className="mb-8 font-display text-xl uppercase tracking-tight text-white sm:text-2xl">
+                {machinesMessages.relatedTitle}
+              </h2>
+              <MachineRelatedCarousel
+                items={relatedProducts}
+                locale={locale}
+                messages={machinesMessages}
+                sectionSlug={sectionSlug}
+              />
             </section>
           ) : null}
 

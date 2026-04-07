@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { homeLocaleToAppLocale } from "@/features/blog/blog.locale";
 import { MachineDetailPage } from "@/features/machines/machine-detail.page";
 import { loadMachinesMessages } from "@/features/machines/machines.messages";
-import { getMachineDetailForSectionPublic } from "@/features/machines/machines.service";
+import {
+  getMachineDetailForSectionPublic,
+  listRelatedMachinesInSectionPublic,
+} from "@/features/machines/machines.service";
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
@@ -48,9 +51,10 @@ export default async function Page({ params }: PageProps) {
   if (!payload) {
     notFound();
   }
-  const [homeMessages, machinesMessages] = await Promise.all([
+  const [homeMessages, machinesMessages, relatedProducts] = await Promise.all([
     loadHomeMessages(locale),
     loadMachinesMessages(locale),
+    listRelatedMachinesInSectionPublic(categorySlug, payload.detail.id, appLocale),
   ]);
   return (
     <MachineDetailPage
@@ -58,6 +62,7 @@ export default async function Page({ params }: PageProps) {
       locale={locale}
       machinesMessages={machinesMessages}
       payload={payload}
+      relatedProducts={relatedProducts}
       sectionSlug={categorySlug}
     />
   );

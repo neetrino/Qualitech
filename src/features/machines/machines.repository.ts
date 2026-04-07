@@ -120,6 +120,33 @@ export async function countMachinesForListInCategoryIds(
   });
 }
 
+export async function findRelatedMachinesInCategoryIds(
+  categoryIds: string[],
+  excludeMachineId: string,
+  locale: AppLocale,
+  take: number,
+) {
+  return prisma.machine.findMany({
+    where: {
+      published: true,
+      id: { not: excludeMachineId },
+      categoryId: { in: categoryIds },
+      translations: { some: { locale } },
+    },
+    orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
+    take,
+    include: {
+      translations: { where: { locale } },
+      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      category: {
+        include: {
+          translations: { where: { locale } },
+        },
+      },
+    },
+  });
+}
+
 /** Scan cap when picking a category card cover from machines (gallery or OG image). */
 const CATEGORY_COVER_MACHINE_SCAN_LIMIT = 200;
 
