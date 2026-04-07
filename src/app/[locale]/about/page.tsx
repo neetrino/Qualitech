@@ -6,6 +6,7 @@ import { loadAboutMessages } from "@/features/about/about.messages";
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
+import { SITE_TAB_TITLE } from "@/lib/site-metadata";
 
 /** ISR seconds (Next.js requires a numeric literal in route modules). */
 export const revalidate = 300;
@@ -21,11 +22,11 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: raw } = await params;
   if (!isHomeLocaleSegment(raw)) {
-    return { title: "Qualitech Machinery" };
+    return { title: SITE_TAB_TITLE };
   }
   const about = await loadAboutMessages(raw);
   return {
-    title: about.metaTitle,
+    title: SITE_TAB_TITLE,
     description: about.metaDescription,
   };
 }

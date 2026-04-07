@@ -7,9 +7,10 @@ import { formatBlogPublishedDate } from "@/features/blog/blog.format-date";
 import type { BlogMessages } from "@/features/blog/blog.messages";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { blogPostHref } from "@/lib/i18n/locale-routes";
+import { blogPostHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type BlogListPageProps = {
   readonly locale: HomeLocale;
@@ -138,6 +139,12 @@ export function BlogListPage({ locale, homeMessages, blogMessages, posts, page, 
           className={`mx-auto max-w-[1280px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
         >
           <div className={BLOG_LIST_INDEX_EXTRA_TOP_SPACING}>
+            <SiteBreadcrumb
+              segments={[
+                { label: homeMessages.nav.home, href: homePageHref(locale) },
+                { label: homeMessages.nav.blog },
+              ]}
+            />
             {total === 0 ? (
               <div className="rounded-2xl border border-[#18181b] bg-[#09090b] px-6 py-14 text-center sm:px-10">
                 <h2 className="font-display text-xl uppercase tracking-tight text-white">{blogMessages.emptyTitle}</h2>

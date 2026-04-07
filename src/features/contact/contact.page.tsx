@@ -6,8 +6,10 @@ import type { ContactMessages } from "@/features/contact/contact.messages";
 import { homeAssets } from "@/features/home/home.data";
 import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
+import { homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 const CONTACT_ICON_SIZE_PX = 14;
 
@@ -34,6 +36,12 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
           <div
             className={`relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-10 sm:px-5 sm:pb-12 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
           >
+            <SiteBreadcrumb
+              segments={[
+                { label: homeMessages.nav.home, href: homePageHref(locale) },
+                { label: homeMessages.nav.contact },
+              ]}
+            />
             <div className="mb-4 flex items-center gap-2">
               <span className="h-px w-10 rounded-full bg-[#ff6900]" />
               <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff6900] sm:text-xs">{c.heroEyebrow}</p>

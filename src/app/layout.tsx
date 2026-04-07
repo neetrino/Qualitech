@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { DM_Sans, Inter, Prosto_One } from "next/font/google";
 
+import { SITE_TAB_TITLE } from "@/lib/site-metadata";
+
 import "./globals.css";
 
 const inter = Inter({
@@ -22,7 +24,7 @@ const dmSans = DM_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Qualitech Machinery | Industrial Solutions",
+  title: SITE_TAB_TITLE,
   description: "Precision industrial machinery, robotics, and automation solutions by Qualitech Machinery.",
 };
 

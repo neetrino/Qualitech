@@ -6,9 +6,10 @@ import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { isRemoteImageUrl } from "@/lib/image/remote-image-url";
-import { machinesCategoryHref } from "@/lib/i18n/locale-routes";
+import { homePageHref, machinesCategoryHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type MachinesIndexPageProps = {
   readonly locale: HomeLocale;
@@ -78,6 +79,12 @@ export function MachinesIndexPage({ locale, homeMessages, machinesMessages, cate
         <section
           className={`mx-auto max-w-[1280px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD} mt-6 sm:mt-8`}
         >
+          <SiteBreadcrumb
+            segments={[
+              { label: homeMessages.nav.home, href: homePageHref(locale) },
+              { label: homeMessages.nav.machines },
+            ]}
+          />
           {categories.length === 0 ? (
             <div className="rounded-2xl border border-[#18181b] bg-[#09090b] px-6 py-14 text-center sm:px-10">
               <h2 className="font-display text-xl uppercase tracking-tight text-white">{machinesMessages.emptyTitle}</h2>

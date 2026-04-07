@@ -6,11 +6,13 @@ import type { MachineImageRow, MachineRow } from "@/features/admin/admin-api-typ
 import { ADMIN_API_MACHINES_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson, formatAdminValidationError } from "@/features/admin/admin-http.client";
 import { AdminGalleryImageRows } from "@/features/admin/admin-gallery-image-rows.client";
+import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import {
   AdminMachineLocaleFields,
   MACHINE_FORM_LOCALES,
   buildMachineTranslations,
   emptyMachineTr,
+  initialCoverImageUrlFromMachine,
   machineTrFromApi,
   type MachineFormLocale,
   type MachineTrForm,
@@ -74,6 +76,7 @@ export function AdminMachineFormClient({
   }, [machine]);
 
   const [tr, setTr] = useState<Record<MachineFormLocale, MachineTrForm>>(initialMap);
+  const [coverImageUrl, setCoverImageUrl] = useState(() => initialCoverImageUrlFromMachine(machine));
   const [images, setImages] = useState<MachineImageRow[]>(() =>
     machine ? machine.images.map((i) => ({ ...i })) : [],
   );
@@ -85,25 +88,28 @@ export function AdminMachineFormClient({
     setTr((prev) => ({ ...prev, [loc]: next }));
   }, []);
 
-  const onUploadOg = useCallback(async (loc: MachineFormLocale, file: File) => {
-    setUploadBusy(true);
-    setError(null);
-    try {
-      const url = await uploadImageToR2(file, "machines");
-      setTr((prev) => ({ ...prev, [loc]: { ...prev[loc], ogImageUrl: url } }));
-    } catch (err) {
-      setError(err instanceof Error ? err.message : m.common.uploadFailed);
-    } finally {
-      setUploadBusy(false);
-    }
-  }, [m.common.uploadFailed]);
+  const onUploadCover = useCallback(
+    async (file: File) => {
+      setUploadBusy(true);
+      setError(null);
+      try {
+        const url = await uploadImageToR2(file, "machines");
+        setCoverImageUrl(url);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : m.common.uploadFailed);
+      } finally {
+        setUploadBusy(false);
+      }
+    },
+    [m.common.uploadFailed],
+  );
 
   const onSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       setBusy(true);
       setError(null);
-      const translations = buildMachineTranslations(tr);
+      const translations = buildMachineTranslations(tr, coverImageUrl);
       const imagePayload = images
         .filter((i) => i.url.trim().length > 0)
         .map((i, idx) => ({
@@ -154,7 +160,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, featured, images, machine, onSaved, published, sortOrder, tr],
+    [categoryId, coverImageUrl, featured, images, machine, onSaved, published, sortOrder, tr],
   );
 
   return (
@@ -230,20 +236,55 @@ export function AdminMachineFormClient({
         </label>
       </div>
 
+      <div className="space-y-2">
+        <div>
+          <div className={labelCls}>{m.machineForm.coverImageTitle}</div>
+          <p className={adminHintTextClass(theme)}>{m.machineForm.coverImageHint}</p>
+        </div>
+        <AdminOgImagePreview theme={theme} url={coverImageUrl} />
+        <div className="flex flex-wrap items-center gap-2">
+          <label className={`${sec} cursor-pointer text-center`}>
+            <input
+              accept="image/*"
+              className="sr-only"
+              disabled={uploadBusy}
+              onChange={async (e) => {
+                const f = e.target.files?.[0];
+                e.target.value = "";
+                if (f) {
+                  await onUploadCover(f);
+                }
+              }}
+              type="file"
+            />
+            {m.machineFields.upload}
+          </label>
+          {coverImageUrl.trim().length > 0 ? (
+            <button
+              className={sec}
+              disabled={uploadBusy}
+              onClick={() => setCoverImageUrl("")}
+              type="button"
+            >
+              {m.gallery.remove}
+            </button>
+          ) : null}
+        </div>
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-2">
         {MACHINE_FORM_LOCALES.map((loc) => (
           <AdminMachineLocaleFields
             key={loc}
             locale={loc}
             onChange={(next) => setLocale(loc, next)}
-            onUploadOg={(file) => onUploadOg(loc, file)}
             theme={theme}
-            uploadBusy={uploadBusy}
             value={tr[loc]}
           />
         ))}
       </div>
 
+      <p className={adminHintTextClass(theme)}>{m.machineForm.galleryHint}</p>
       <AdminGalleryImageRows
         images={images}
         onImagesChange={setImages}

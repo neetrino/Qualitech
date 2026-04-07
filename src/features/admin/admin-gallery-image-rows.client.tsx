@@ -2,6 +2,7 @@
 
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
+import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import { uploadImageToR2, type R2UploadScopeUi } from "@/features/admin/admin-upload.client";
 import {
   adminButtonDeleteExtraClass,
@@ -55,66 +56,69 @@ export function AdminGalleryImageRows({
         </button>
       </div>
       {images.map((img, idx) => (
-        <div className={rowShell} key={idx}>
-          <div className="min-w-0 flex-1">
-            <label className={lab}>{m.gallery.url}</label>
-            <input
-              className={inC}
-              onChange={(e) => {
-                const next = [...images];
-                next[idx] = { ...next[idx], url: e.target.value };
-                onImagesChange(next);
-              }}
-              value={img.url}
-            />
-          </div>
-          <div className="w-full sm:w-40">
-            <label className={lab}>{m.gallery.alt}</label>
-            <input
-              className={inC}
-              onChange={(e) => {
-                const next = [...images];
-                next[idx] = { ...next[idx], alt: e.target.value };
-                onImagesChange(next);
-              }}
-              value={img.alt ?? ""}
-            />
-          </div>
-          <label className={`${sec} shrink-0 cursor-pointer`}>
-            <input
-              accept="image/*"
-              className="sr-only"
-              disabled={uploadBusy}
-              onChange={async (e) => {
-                const f = e.target.files?.[0];
-                e.target.value = "";
-                if (!f) {
-                  return;
-                }
-                onUploadBusyChange(true);
-                reportError(null);
-                try {
-                  const url = await uploadImageToR2(f, uploadScope);
+        <div className="space-y-2" key={idx}>
+          <div className={rowShell}>
+            <div className="min-w-0 flex-1">
+              <label className={lab}>{m.gallery.url}</label>
+              <input
+                className={inC}
+                onChange={(e) => {
                   const next = [...images];
-                  next[idx] = { ...next[idx], url };
+                  next[idx] = { ...next[idx], url: e.target.value };
                   onImagesChange(next);
-                } catch (err) {
-                  reportError(err instanceof Error ? err.message : m.common.uploadFailed);
-                } finally {
-                  onUploadBusyChange(false);
-                }
-              }}
-              type="file"
-            />
-            {m.gallery.upload}
-          </label>
-          <button
-            className={`${sec} shrink-0 ${adminButtonDeleteExtraClass(theme)}`}
-            onClick={() => onImagesChange(images.filter((_, i) => i !== idx))}
-            type="button"
-          >
-            {m.gallery.remove}
-          </button>
+                }}
+                value={img.url}
+              />
+            </div>
+            <div className="w-full sm:w-40">
+              <label className={lab}>{m.gallery.alt}</label>
+              <input
+                className={inC}
+                onChange={(e) => {
+                  const next = [...images];
+                  next[idx] = { ...next[idx], alt: e.target.value };
+                  onImagesChange(next);
+                }}
+                value={img.alt ?? ""}
+              />
+            </div>
+            <label className={`${sec} shrink-0 cursor-pointer`}>
+              <input
+                accept="image/*"
+                className="sr-only"
+                disabled={uploadBusy}
+                onChange={async (e) => {
+                  const f = e.target.files?.[0];
+                  e.target.value = "";
+                  if (!f) {
+                    return;
+                  }
+                  onUploadBusyChange(true);
+                  reportError(null);
+                  try {
+                    const url = await uploadImageToR2(f, uploadScope);
+                    const next = [...images];
+                    next[idx] = { ...next[idx], url };
+                    onImagesChange(next);
+                  } catch (err) {
+                    reportError(err instanceof Error ? err.message : m.common.uploadFailed);
+                  } finally {
+                    onUploadBusyChange(false);
+                  }
+                }}
+                type="file"
+              />
+              {m.gallery.upload}
+            </label>
+            <button
+              className={`${sec} shrink-0 ${adminButtonDeleteExtraClass(theme)}`}
+              onClick={() => onImagesChange(images.filter((_, i) => i !== idx))}
+              type="button"
+            >
+              {m.gallery.remove}
+            </button>
+          </div>
+          <AdminOgImagePreview theme={theme} url={img.url} />
         </div>
       ))}
     </div>

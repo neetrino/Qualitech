@@ -11,6 +11,7 @@ import {
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
+import { SITE_TAB_TITLE } from "@/lib/site-metadata";
 
 /** ISR seconds; keep in sync with `MACHINES_PUBLIC_REVALIDATE_SEC`. */
 export const revalidate = 60;
@@ -22,17 +23,17 @@ type PageProps = {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: raw, categorySlug, machineSlug } = await params;
   if (!isHomeLocaleSegment(raw)) {
-    return { title: "Qualitech Machinery" };
+    return { title: SITE_TAB_TITLE };
   }
   const appLocale = homeLocaleToAppLocale(raw);
   const payload = await getMachineDetailForSectionPublic(machineSlug, categorySlug, appLocale);
   const m = await loadMachinesMessages(raw);
   if (!payload) {
-    return { title: m.metaTitle };
+    return { title: SITE_TAB_TITLE, description: m.metaDescription };
   }
   const { detail } = payload;
   return {
-    title: detail.metaTitle ?? detail.title,
+    title: SITE_TAB_TITLE,
     description: detail.metaDescription ?? detail.shortDescription,
     openGraph: detail.ogImageUrl
       ? { images: [{ url: detail.ogImageUrl, alt: detail.title }] }

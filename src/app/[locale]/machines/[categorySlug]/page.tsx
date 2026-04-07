@@ -13,6 +13,7 @@ import {
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
+import { SITE_TAB_TITLE } from "@/lib/site-metadata";
 
 /** ISR seconds; keep in sync with `MACHINES_PUBLIC_REVALIDATE_SEC`. */
 export const revalidate = 60;
@@ -37,16 +38,16 @@ function parseFeaturedOnly(raw: string | undefined): boolean {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: raw, categorySlug } = await params;
   if (!isHomeLocaleSegment(raw)) {
-    return { title: "Qualitech Machinery" };
+    return { title: SITE_TAB_TITLE };
   }
   const appLocale = homeLocaleToAppLocale(raw);
   const section = await getMachineCategorySectionPublic(categorySlug, appLocale);
   const m = await loadMachinesMessages(raw);
   if (!section) {
-    return { title: m.metaTitle };
+    return { title: SITE_TAB_TITLE, description: m.metaDescription };
   }
   return {
-    title: `${section.name} | Qualitech`,
+    title: SITE_TAB_TITLE,
     description: m.metaDescription,
   };
 }

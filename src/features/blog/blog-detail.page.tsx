@@ -8,9 +8,10 @@ import type { BlogMessages } from "@/features/blog/blog.messages";
 import { BlogProse } from "@/features/blog/blog-prose";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { blogPageHref } from "@/lib/i18n/locale-routes";
+import { blogPageHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { type SiteBreadcrumbSegment, SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type BlogDetailPageProps = {
   readonly locale: HomeLocale;
@@ -24,6 +25,7 @@ function BlogPostHeroOverlay({
   fallbackAlt,
   backHref,
   backText,
+  breadcrumbSegments,
   dateLabel,
   publishedAtIso,
   title,
@@ -34,6 +36,7 @@ function BlogPostHeroOverlay({
   readonly fallbackAlt: string;
   readonly backHref: string;
   readonly backText: string;
+  readonly breadcrumbSegments: readonly SiteBreadcrumbSegment[];
   readonly dateLabel: string;
   readonly publishedAtIso: string | null;
   readonly title: string;
@@ -62,6 +65,7 @@ function BlogPostHeroOverlay({
       <div
         className={`relative z-[1] space-y-5 p-6 sm:p-8 md:p-10 ${BLOG_DETAIL_HERO_OVERLAY_MIN_HEIGHT_CLASSNAME} pb-12 sm:pb-14`}
       >
+        <SiteBreadcrumb segments={breadcrumbSegments} />
         <Link
           className="inline-flex w-fit text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
           href={backHref}
@@ -128,22 +132,25 @@ function ArticleRemainingImagesGrid({
 }
 
 function StandaloneArticleHeader({
-  locale,
   blogMessages,
+  breadcrumbSegments,
   dateLabel,
+  locale,
   publishedAtIso,
   title,
   excerpt,
 }: {
-  readonly locale: HomeLocale;
   readonly blogMessages: BlogMessages;
+  readonly breadcrumbSegments: readonly SiteBreadcrumbSegment[];
   readonly dateLabel: string;
+  readonly locale: HomeLocale;
   readonly publishedAtIso: string | null;
   readonly title: string;
   readonly excerpt: string;
 }) {
   return (
     <section className={`mx-auto w-full max-w-[800px] px-4 pb-6 sm:px-5 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
+      <SiteBreadcrumb segments={breadcrumbSegments} />
       <Link
         className="inline-flex text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
         href={blogPageHref(locale)}
@@ -170,6 +177,11 @@ export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: Blo
   const hasLeadMedia = post.images.length > 0;
   const heroImage = hasLeadMedia ? post.images[0]! : null;
   const restImages = hasLeadMedia && post.images.length > 1 ? post.images.slice(1) : [];
+  const detailBreadcrumbSegments: readonly SiteBreadcrumbSegment[] = [
+    { label: homeMessages.nav.home, href: homePageHref(locale) },
+    { label: homeMessages.nav.blog, href: blogPageHref(locale) },
+    { label: post.title },
+  ];
 
   return (
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
@@ -186,6 +198,7 @@ export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: Blo
               <BlogPostHeroOverlay
                 backHref={blogPageHref(locale)}
                 backText={blogMessages.backToBlog}
+                breadcrumbSegments={detailBreadcrumbSegments}
                 contentHtml={post.content}
                 dateLabel={dateLabel}
                 excerpt={post.excerpt}
@@ -206,6 +219,7 @@ export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: Blo
           {!hasLeadMedia ? (
             <StandaloneArticleHeader
               blogMessages={blogMessages}
+              breadcrumbSegments={detailBreadcrumbSegments}
               dateLabel={dateLabel}
               excerpt={post.excerpt}
               locale={locale}

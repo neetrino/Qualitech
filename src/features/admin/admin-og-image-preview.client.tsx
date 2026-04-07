@@ -9,12 +9,14 @@ const HTTP_URL = /^https?:\/\//i;
 type AdminOgImagePreviewProps = {
   readonly theme: AdminTheme;
   readonly url: string;
+  /** `thumb` — compact square for list rows; `default` — form cover / OG preview. */
+  readonly variant?: "default" | "thumb";
 };
 
 /**
  * Renders a preview when `url` looks like an http(s) image URL; hides on load error.
  */
-export function AdminOgImagePreview({ theme, url }: AdminOgImagePreviewProps) {
+export function AdminOgImagePreview({ theme, url, variant = "default" }: AdminOgImagePreviewProps) {
   const trimmed = url.trim();
   const [failed, setFailed] = useState(false);
 
@@ -26,10 +28,18 @@ export function AdminOgImagePreview({ theme, url }: AdminOgImagePreviewProps) {
     return null;
   }
 
-  const shell =
-    theme === "light"
+  const isThumb = variant === "thumb";
+  const shell = isThumb
+    ? theme === "light"
+      ? "shrink-0 overflow-hidden rounded-md border border-zinc-200 bg-zinc-100"
+      : "shrink-0 overflow-hidden rounded-md border border-white/15 bg-black"
+    : theme === "light"
       ? "mb-3 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100"
       : "mb-3 overflow-hidden rounded-lg border border-white/15 bg-black";
+
+  const imgClass = isThumb
+    ? "size-12 object-cover object-center"
+    : "max-h-52 w-full object-contain object-center";
 
   return (
     <div className={shell}>
@@ -37,7 +47,7 @@ export function AdminOgImagePreview({ theme, url }: AdminOgImagePreviewProps) {
       {/* eslint-disable-next-line @next/next/no-img-element -- OG preview is any https URL */}
       <img
         alt=""
-        className="max-h-52 w-full object-contain object-center"
+        className={imgClass}
         decoding="async"
         loading="lazy"
         onError={() => setFailed(true)}

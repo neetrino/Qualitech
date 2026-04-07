@@ -99,6 +99,29 @@ export function AdminMachinePanelClient() {
     [loadList],
   );
 
+  const applyMachinePatch = useCallback(
+    async (id: string, patch: { featured?: boolean; published?: boolean }) => {
+      const res = await adminApiJson<MachineRow>(`${ADMIN_API_MACHINES_PATH}/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify(patch),
+      });
+      if (res.ok) {
+        setMachines((prev) => prev.map((row) => (row.id === id ? res.data : row)));
+      }
+    },
+    [],
+  );
+
+  const onToggleFeatured = useCallback(
+    (id: string, nextFeatured: boolean) => applyMachinePatch(id, { featured: nextFeatured }),
+    [applyMachinePatch],
+  );
+
+  const onTogglePublished = useCallback(
+    (id: string, nextPublished: boolean) => applyMachinePatch(id, { published: nextPublished }),
+    [applyMachinePatch],
+  );
+
   if (mode.kind === "edit") {
     if (mode.id !== null && editLoading) {
       return (
@@ -128,6 +151,8 @@ export function AdminMachinePanelClient() {
         onDelete={onDelete}
         onEdit={openEdit}
         onNew={openNew}
+        onToggleFeatured={onToggleFeatured}
+        onTogglePublished={onTogglePublished}
       />
     </div>
   );

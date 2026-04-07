@@ -6,8 +6,10 @@ import { MachineListCard } from "@/features/machines/machine-list-card";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
+import { homePageHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type MachinesCategoryPageProps = {
   readonly locale: HomeLocale;
@@ -151,6 +153,13 @@ export function MachinesCategoryPage({
         <section
           className={`mx-auto max-w-[1280px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD} mt-6 sm:mt-8`}
         >
+          <SiteBreadcrumb
+            segments={[
+              { label: homeMessages.nav.home, href: homePageHref(locale) },
+              { label: homeMessages.nav.machines, href: machinesPageHref(locale) },
+              { label: sectionName },
+            ]}
+          />
           <header className="mb-6 sm:mb-8">
             <h1 className="font-display text-2xl uppercase leading-tight tracking-tight text-white sm:text-3xl lg:text-[2rem]">
               {sectionName}

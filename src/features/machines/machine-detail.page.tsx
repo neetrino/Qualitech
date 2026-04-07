@@ -8,9 +8,10 @@ import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { isRemoteImageUrl } from "@/lib/image/remote-image-url";
-import { contactPageHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
+import { homePageHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type MachineDetailPageProps = {
   readonly locale: HomeLocale;
@@ -57,38 +58,6 @@ function ProductGalleryGrid({
   );
 }
 
-function BreadcrumbNav({
-  locale,
-  sectionSlug,
-  categoryName,
-  title,
-  machinesMessages,
-}: {
-  readonly locale: HomeLocale;
-  readonly sectionSlug: string;
-  readonly categoryName: string;
-  readonly title: string;
-  readonly machinesMessages: MachinesMessages;
-}) {
-  return (
-    <nav aria-label="Breadcrumb" className="mb-6 text-[11px] font-medium uppercase tracking-[0.12em] text-[#71717b]">
-      <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesPageHref(locale)}>
-        {machinesMessages.breadcrumbMachines}
-      </Link>
-      <span className="mx-2 text-[#3f3f46]" aria-hidden>
-        /
-      </span>
-      <Link className="text-[#ff6900] transition hover:brightness-110" href={machinesCategoryHref(locale, sectionSlug)}>
-        {categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines}
-      </Link>
-      <span className="mx-2 text-[#3f3f46]" aria-hidden>
-        /
-      </span>
-      <span className="text-[#d4d4d8]">{title}</span>
-    </nav>
-  );
-}
-
 export function MachineDetailPage({
   locale,
   homeMessages,
@@ -103,6 +72,7 @@ export function MachineDetailPage({
   const heroSrc = heroImage ? heroImage.url.trim() : "";
   const restImages = hasLead && detail.images.length > 1 ? detail.images.slice(1) : [];
   const categoryName = detail.category?.name ?? "";
+  const categoryCrumbLabel = categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines;
 
   return (
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
@@ -114,14 +84,15 @@ export function MachineDetailPage({
         navContext="site"
       />
       <div className="overflow-x-hidden">
-        <article>
+        <article className="pb-20">
           <section className={`mx-auto w-full max-w-[1680px] px-4 pb-6 sm:px-5 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
-            <BreadcrumbNav
-              categoryName={categoryName}
-              locale={locale}
-              machinesMessages={machinesMessages}
-              sectionSlug={sectionSlug}
-              title={detail.title}
+            <SiteBreadcrumb
+              segments={[
+                { label: homeMessages.nav.home, href: homePageHref(locale) },
+                { label: homeMessages.nav.machines, href: machinesPageHref(locale) },
+                { label: categoryCrumbLabel, href: machinesCategoryHref(locale, sectionSlug) },
+                { label: detail.title },
+              ]}
             />
           </section>
 
@@ -197,17 +168,6 @@ export function MachineDetailPage({
               />
             </section>
           ) : null}
-
-          <section className="mx-auto max-w-[800px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:px-10">
-            <div className="flex justify-center rounded-2xl border border-[#27272a] bg-[#09090b] px-6 py-8 sm:px-8">
-              <Link
-                className="inline-flex h-11 shrink-0 items-center justify-center rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-black transition hover:brightness-110 sm:h-12 sm:px-9 sm:text-xs"
-                href={contactPageHref(locale)}
-              >
-                {machinesMessages.ctaContact}
-              </Link>
-            </div>
-          </section>
         </article>
         <Footer messages={homeMessages} />
       </div>

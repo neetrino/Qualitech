@@ -9,6 +9,7 @@ import { listBlogPostsPublic } from "@/features/blog/blog.service";
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { blogPageHref, isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
+import { SITE_TAB_TITLE } from "@/lib/site-metadata";
 
 /** ISR seconds; keep in sync with `BLOG_PUBLIC_DATA_REVALIDATE_SEC` (Next requires a literal here). */
 export const revalidate = 60;
@@ -33,11 +34,11 @@ function parseListPage(raw: string | undefined): number {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { locale: raw } = await params;
   if (!isHomeLocaleSegment(raw)) {
-    return { title: "Qualitech Machinery" };
+    return { title: SITE_TAB_TITLE };
   }
   const blog = await loadBlogMessages(raw);
   return {
-    title: blog.metaTitle,
+    title: SITE_TAB_TITLE,
     description: blog.metaDescription,
   };
 }

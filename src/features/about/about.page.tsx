@@ -5,9 +5,10 @@ import { aboutAssets } from "@/features/about/about.data";
 import type { AboutMessages } from "@/features/about/about.messages";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
-import { contactPageHref } from "@/lib/i18n/locale-routes";
+import { contactPageHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
+import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type AboutPageProps = {
   readonly locale: HomeLocale;
@@ -15,11 +16,17 @@ type AboutPageProps = {
   readonly aboutMessages: AboutMessages;
 };
 
-function AboutStory({ messages }: { readonly messages: AboutMessages }) {
+function AboutStory({ locale, homeMessages, messages }: { readonly locale: HomeLocale; readonly homeMessages: HomeMessages; readonly messages: AboutMessages }) {
   return (
     <section
       className={`mx-auto max-w-[1280px] px-4 pb-14 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
     >
+      <SiteBreadcrumb
+        segments={[
+          { label: homeMessages.nav.home, href: homePageHref(locale) },
+          { label: homeMessages.nav.about },
+        ]}
+      />
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
           <h2 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{messages.storyTitle}</h2>
@@ -124,7 +131,7 @@ export function AboutPage({ locale, homeMessages, aboutMessages }: AboutPageProp
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
       <Header locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
-        <AboutStory messages={aboutMessages} />
+        <AboutStory homeMessages={homeMessages} locale={locale} messages={aboutMessages} />
         <AboutValues messages={aboutMessages} />
         <AboutStats messages={aboutMessages} />
         <AboutCta locale={locale} messages={aboutMessages} />

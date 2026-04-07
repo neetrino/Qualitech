@@ -1,11 +1,9 @@
 "use client";
 
-import type { MachineTranslationRow } from "@/features/admin/admin-api-types.client";
+import type { MachineRow, MachineTranslationRow } from "@/features/admin/admin-api-types.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
-import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import {
-  adminButtonSecondaryClass,
   adminFieldsetShellClass,
   adminInputClass,
   adminLabelClass,
@@ -22,7 +20,6 @@ export type MachineTrForm = {
   body: string;
   metaTitle: string;
   metaDescription: string;
-  ogImageUrl: string;
 };
 
 export function emptyMachineTr(): MachineTrForm {
@@ -33,7 +30,6 @@ export function emptyMachineTr(): MachineTrForm {
     body: "",
     metaTitle: "",
     metaDescription: "",
-    ogImageUrl: "",
   };
 }
 
@@ -45,8 +41,19 @@ export function machineTrFromApi(t: MachineTranslationRow): MachineTrForm {
     body: t.body,
     metaTitle: t.metaTitle ?? "",
     metaDescription: t.metaDescription ?? "",
-    ogImageUrl: t.ogImageUrl ?? "",
   };
+}
+
+/** Prefer RU, then EN — used to prefill the shared cover field when editing. */
+export function initialCoverImageUrlFromMachine(machine: MachineRow | null): string {
+  if (!machine) {
+    return "";
+  }
+  const ru = machine.translations.find((t) => t.locale === "ru");
+  const en = machine.translations.find((t) => t.locale === "en");
+  const ruOg = ru?.ogImageUrl?.trim() ?? "";
+  const enOg = en?.ogImageUrl?.trim() ?? "";
+  return ruOg || enOg || "";
 }
 
 function toNullableMeta(s: string): string | null {
@@ -56,7 +63,9 @@ function toNullableMeta(s: string): string | null {
 
 export function buildMachineTranslations(
   map: Record<MachineFormLocale, MachineTrForm>,
+  sharedOgImageUrl: string,
 ): MachineTranslationRow[] {
+  const og = toNullableMeta(sharedOgImageUrl);
   return MACHINE_FORM_LOCALES.map((loc) => ({
     locale: loc,
     title: map[loc].title.trim(),
@@ -65,7 +74,7 @@ export function buildMachineTranslations(
     body: map[loc].body.trim(),
     metaTitle: toNullableMeta(map[loc].metaTitle),
     metaDescription: toNullableMeta(map[loc].metaDescription),
-    ogImageUrl: toNullableMeta(map[loc].ogImageUrl),
+    ogImageUrl: og,
   }));
 }
 
@@ -74,8 +83,6 @@ type AdminMachineLocaleFieldsProps = {
   readonly locale: MachineFormLocale;
   readonly value: MachineTrForm;
   readonly onChange: (next: MachineTrForm) => void;
-  readonly onUploadOg: (file: File) => Promise<void>;
-  readonly uploadBusy: boolean;
 };
 
 export function AdminMachineLocaleFields({
@@ -83,15 +90,12 @@ export function AdminMachineLocaleFields({
   locale,
   value,
   onChange,
-  onUploadOg,
-  uploadBusy,
 }: AdminMachineLocaleFieldsProps) {
   const m = useAdminMessages();
   const label = locale.toUpperCase();
   const inC = adminInputClass(theme);
   const lab = adminLabelClass(theme);
   const ta = adminTextareaClass(theme);
-  const sec = adminButtonSecondaryClass(theme);
   const leg =
     theme === "light"
       ? "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ea580c]"
@@ -150,38 +154,6 @@ export function AdminMachineLocaleFields({
             onChange={(e) => onChange({ ...value, metaDescription: e.target.value })}
             value={value.metaDescription}
           />
-        </div>
-      </div>
-      <div>
-        <div className={lab}>{m.machineFields.ogImage}</div>
-        <AdminOgImagePreview theme={theme} url={value.ogImageUrl} />
-        <div className="mt-2 flex flex-wrap items-center gap-2">
-          <label className={`${sec} cursor-pointer text-center`}>
-            <input
-              accept="image/*"
-              className="sr-only"
-              disabled={uploadBusy}
-              onChange={async (e) => {
-                const f = e.target.files?.[0];
-                e.target.value = "";
-                if (f) {
-                  await onUploadOg(f);
-                }
-              }}
-              type="file"
-            />
-            {m.machineFields.upload}
-          </label>
-          {value.ogImageUrl.trim().length > 0 ? (
-            <button
-              className={sec}
-              disabled={uploadBusy}
-              onClick={() => onChange({ ...value, ogImageUrl: "" })}
-              type="button"
-            >
-              {m.gallery.remove}
-            </button>
-          ) : null}
         </div>
       </div>
     </fieldset>
