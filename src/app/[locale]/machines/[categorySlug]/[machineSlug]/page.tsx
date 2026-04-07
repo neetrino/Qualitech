@@ -11,6 +11,7 @@ import {
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
+import { htmlToPlainText } from "@/lib/html/html-to-plain-excerpt";
 import { SITE_TAB_TITLE } from "@/lib/site-metadata";
 
 /** ISR seconds; keep in sync with `MACHINES_PUBLIC_REVALIDATE_SEC`. */
@@ -34,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { detail } = payload;
   return {
     title: SITE_TAB_TITLE,
-    description: detail.metaDescription ?? detail.shortDescription,
+    description: detail.metaDescription ?? htmlToPlainText(detail.description),
     openGraph: detail.ogImageUrl
       ? { images: [{ url: detail.ogImageUrl, alt: detail.title }] }
       : undefined,

@@ -1,6 +1,7 @@
 "use client";
 
 import type { BlogRow } from "@/features/admin/admin-api-types.client";
+import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import {
@@ -35,6 +36,18 @@ function slugPreview(post: BlogRow): string {
   return ru?.slug ?? en?.slug ?? "—";
 }
 
+/** First gallery image by sort order, else OG image from ru then en. */
+function blogListThumbUrl(post: BlogRow): string {
+  const sorted = [...post.images].sort((a, b) => a.sortOrder - b.sortOrder);
+  const first = sorted.find((i) => i.url.trim().length > 0);
+  if (first) {
+    return first.url.trim();
+  }
+  const ru = post.translations.find((t) => t.locale === "ru");
+  const en = post.translations.find((t) => t.locale === "en");
+  return (ru?.ogImageUrl ?? en?.ogImageUrl ?? "").trim();
+}
+
 export function AdminBlogListClient({ posts, loading, onNew, onEdit, onDelete }: AdminBlogListClientProps) {
   const m = useAdminMessages();
   const { theme } = useAdminTheme();
@@ -64,13 +77,16 @@ export function AdminBlogListClient({ posts, loading, onNew, onEdit, onDelete }:
       <ul className="space-y-2">
         {posts.map((post) => (
           <li className={row} key={post.id}>
-            <div className="min-w-0">
-              <p className={titleC}>{titlePreview(post)}</p>
-              <p className={metaC}>
-                <span className="text-[#ff6900]">{post.published ? m.blogList.published : m.blogList.draft}</span>
-                <span className={dot}>·</span>
-                <span className="font-mono">{slugPreview(post)}</span>
-              </p>
+            <div className="flex min-w-0 max-w-[min(100%,28rem)] items-start gap-3">
+              <AdminOgImagePreview theme={theme} url={blogListThumbUrl(post)} variant="thumb" />
+              <div className="min-w-0">
+                <p className={titleC}>{titlePreview(post)}</p>
+                <p className={metaC}>
+                  <span className="text-[#ff6900]">{post.published ? m.blogList.published : m.blogList.draft}</span>
+                  <span className={dot}>·</span>
+                  <span className="font-mono">{slugPreview(post)}</span>
+                </p>
+              </div>
             </div>
             <div className="flex shrink-0 flex-wrap gap-2">
               <button className={sec} onClick={() => onEdit(post.id)} type="button">

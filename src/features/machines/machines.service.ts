@@ -64,7 +64,12 @@ export async function listTopLevelMachineCategoryCardsPublic(
     const ids = await collectDescendantCategoryIds(row.id);
     const customCover =
       row.imageUrl != null && row.imageUrl.trim().length > 0
-        ? { url: normalizeStoredImageUrl(row.imageUrl), alt: null as string | null, sortOrder: 0 }
+        ? {
+            url: normalizeStoredImageUrl(row.imageUrl),
+            alt: null as string | null,
+            sortOrder: 0,
+            isPrimary: true,
+          }
         : null;
     const fallbackCover = await findFirstPublishedMachineCoverInCategoryIds(ids, locale);
     const cover =

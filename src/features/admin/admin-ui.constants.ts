@@ -163,22 +163,10 @@ export function adminListMetaSeparatorClass(theme: AdminTheme): string {
   return theme === "light" ? "mx-2 text-zinc-300" : "mx-2 text-white/20";
 }
 
-export function adminUploadResultBoxClass(theme: AdminTheme): string {
-  return theme === "light"
-    ? "rounded-lg border border-zinc-200 bg-zinc-50 p-4"
-    : "rounded-lg border border-white/10 bg-black/50 p-4";
-}
-
 export function adminMonoMutedClass(theme: AdminTheme): string {
   return theme === "light"
     ? "mt-2 break-all font-mono text-xs text-zinc-600"
     : "mt-2 break-all font-mono text-xs text-[#9f9fa9]";
-}
-
-export function adminUploadSelectClass(theme: AdminTheme): string {
-  return theme === "light"
-    ? "mt-2 w-full max-w-xs rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm text-zinc-900 outline-none focus:border-[#ff6900]/60 focus:ring-2 focus:ring-[#ff6900]"
-    : "mt-2 w-full max-w-xs rounded-lg border border-white/15 bg-black/60 px-3 py-2.5 text-sm text-white outline-none focus:border-[#ff6900]/60 focus:ring-2 focus:ring-[#ff6900]";
 }
 
 export function adminThemeToggleButtonClass(theme: AdminTheme): string {

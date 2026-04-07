@@ -6,20 +6,17 @@ import type { MachineImageRow, MachineRow } from "@/features/admin/admin-api-typ
 import { ADMIN_API_MACHINES_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson, formatAdminValidationError } from "@/features/admin/admin-http.client";
 import { AdminGalleryImageRows } from "@/features/admin/admin-gallery-image-rows.client";
-import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import {
   AdminMachineLocaleFields,
   MACHINE_FORM_LOCALES,
   buildMachineTranslations,
   emptyMachineTr,
-  initialCoverImageUrlFromMachine,
   machineTrFromApi,
   type MachineFormLocale,
   type MachineTrForm,
 } from "@/features/admin/admin-machine-locale-fields.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
-import { uploadImageToR2 } from "@/features/admin/admin-upload.client";
 import {
   adminButtonPrimaryClass,
   adminButtonSecondaryClass,
@@ -40,6 +37,26 @@ type AdminMachineFormClientProps = {
   readonly onSaved: () => void;
 };
 
+function primaryImageUrlFromRows(images: MachineImageRow[]): string | null {
+  const withUrl = images.filter((i) => i.url.trim().length > 0);
+  if (withUrl.length === 0) {
+    return null;
+  }
+  const primary = withUrl.find((i) => i.isPrimary) ?? withUrl[0];
+  return primary?.url.trim() ?? null;
+}
+
+function mapApiImagesToForm(images: MachineImageRow[]): MachineImageRow[] {
+  if (images.length === 0) {
+    return [];
+  }
+  const hasPrimary = images.some((i) => i.isPrimary);
+  if (hasPrimary) {
+    return images.map((i) => ({ ...i }));
+  }
+  return images.map((i, idx) => ({ ...i, isPrimary: idx === 0 }));
+}
+
 export function AdminMachineFormClient({
   machine,
   categoryOptions,
@@ -56,7 +73,6 @@ export function AdminMachineFormClient({
 
   const [categoryId, setCategoryId] = useState<string>(() => machine?.categoryId ?? "");
   const [featured, setFeatured] = useState(machine?.featured ?? false);
-  const [published, setPublished] = useState(machine?.published ?? false);
   const [sortOrder, setSortOrder] = useState(String(machine?.sortOrder ?? 0));
 
   const initialMap = useMemo((): Record<MachineFormLocale, MachineTrForm> => {
@@ -76,9 +92,8 @@ export function AdminMachineFormClient({
   }, [machine]);
 
   const [tr, setTr] = useState<Record<MachineFormLocale, MachineTrForm>>(initialMap);
-  const [coverImageUrl, setCoverImageUrl] = useState(() => initialCoverImageUrlFromMachine(machine));
   const [images, setImages] = useState<MachineImageRow[]>(() =>
-    machine ? machine.images.map((i) => ({ ...i })) : [],
+    machine ? mapApiImagesToForm(machine.images.map((i) => ({ ...i }))) : [],
   );
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
@@ -88,34 +103,20 @@ export function AdminMachineFormClient({
     setTr((prev) => ({ ...prev, [loc]: next }));
   }, []);
 
-  const onUploadCover = useCallback(
-    async (file: File) => {
-      setUploadBusy(true);
-      setError(null);
-      try {
-        const url = await uploadImageToR2(file, "machines");
-        setCoverImageUrl(url);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : m.common.uploadFailed);
-      } finally {
-        setUploadBusy(false);
-      }
-    },
-    [m.common.uploadFailed],
-  );
-
   const onSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       setBusy(true);
       setError(null);
-      const translations = buildMachineTranslations(tr, coverImageUrl);
+      const ogUrl = primaryImageUrlFromRows(images);
+      const translations = buildMachineTranslations(tr, ogUrl);
       const imagePayload = images
         .filter((i) => i.url.trim().length > 0)
         .map((i, idx) => ({
           url: i.url.trim(),
           alt: i.alt?.trim() ? i.alt.trim() : null,
           sortOrder: i.sortOrder ?? idx,
+          isPrimary: i.isPrimary,
         }));
 
       const sortParsed = Number.parseInt(sortOrder, 10);
@@ -128,7 +129,7 @@ export function AdminMachineFormClient({
           body: JSON.stringify({
             categoryId: categoryPayload,
             featured,
-            published,
+            published: machine.published,
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
@@ -145,7 +146,6 @@ export function AdminMachineFormClient({
           body: JSON.stringify({
             categoryId: categoryPayload,
             featured,
-            published,
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
@@ -160,7 +160,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, coverImageUrl, featured, images, machine, onSaved, published, sortOrder, tr],
+    [categoryId, featured, images, machine, onSaved, sortOrder, tr],
   );
 
   return (
@@ -181,7 +181,7 @@ export function AdminMachineFormClient({
         <p className={theme === "light" ? "text-sm text-red-600" : "text-sm text-red-400"}>{error}</p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <div>
           <label className={labelCls} htmlFor="machine-category">
             {m.machineForm.category}
@@ -225,51 +225,6 @@ export function AdminMachineFormClient({
           />
           {m.machineForm.featured}
         </label>
-        <label className={`${adminCheckboxLabelClass(theme)} self-end`}>
-          <input
-            checked={published}
-            className={adminCheckboxClass(theme)}
-            onChange={(e) => setPublished(e.target.checked)}
-            type="checkbox"
-          />
-          {m.machineForm.published}
-        </label>
-      </div>
-
-      <div className="space-y-2">
-        <div>
-          <div className={labelCls}>{m.machineForm.coverImageTitle}</div>
-          <p className={adminHintTextClass(theme)}>{m.machineForm.coverImageHint}</p>
-        </div>
-        <AdminOgImagePreview theme={theme} url={coverImageUrl} />
-        <div className="flex flex-wrap items-center gap-2">
-          <label className={`${sec} cursor-pointer text-center`}>
-            <input
-              accept="image/*"
-              className="sr-only"
-              disabled={uploadBusy}
-              onChange={async (e) => {
-                const f = e.target.files?.[0];
-                e.target.value = "";
-                if (f) {
-                  await onUploadCover(f);
-                }
-              }}
-              type="file"
-            />
-            {m.machineFields.upload}
-          </label>
-          {coverImageUrl.trim().length > 0 ? (
-            <button
-              className={sec}
-              disabled={uploadBusy}
-              onClick={() => setCoverImageUrl("")}
-              type="button"
-            >
-              {m.gallery.remove}
-            </button>
-          ) : null}
-        </div>
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
@@ -287,8 +242,18 @@ export function AdminMachineFormClient({
       <p className={adminHintTextClass(theme)}>{m.machineForm.galleryHint}</p>
       <AdminGalleryImageRows
         images={images}
-        onImagesChange={setImages}
+        onImagesChange={(next) =>
+          setImages(
+            next.map((row, idx) => ({
+              url: row.url,
+              alt: row.alt,
+              sortOrder: row.sortOrder ?? idx,
+              isPrimary: row.isPrimary ?? false,
+            })),
+          )
+        }
         reportError={(msg) => setError(msg)}
+        showPrimary
         theme={theme}
         uploadBusy={uploadBusy}
         uploadScope="machines"

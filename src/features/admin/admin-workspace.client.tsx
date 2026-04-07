@@ -12,7 +12,6 @@ import { AdminMachinePanelClient } from "@/features/admin/admin-machine-panel.cl
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { AdminThemeToggle } from "@/features/admin/admin-theme-toggle.client";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
-import { AdminUploadSectionClient } from "@/features/admin/admin-upload-section.client";
 import {
   adminButtonSecondaryClass,
   adminCardPanelClass,
@@ -30,14 +29,14 @@ import {
 
 type AdminSession = { id: string; email: string };
 
-type Tab = "overview" | "machineSections" | "blog" | "products" | "messages" | "upload";
+type Tab = "overview" | "machineSections" | "blog" | "products" | "messages";
 
 type AdminWorkspaceClientProps = {
   readonly admin: AdminSession;
   readonly onSignedOut: () => void;
 };
 
-const TAB_ORDER: Tab[] = ["overview", "machineSections", "blog", "products", "messages", "upload"];
+const TAB_ORDER: Tab[] = ["overview", "machineSections", "blog", "products", "messages"];
 
 const ADMIN_PAGE_GUTTER_X = "px-3 sm:px-4 lg:px-6";
 
@@ -119,18 +118,12 @@ export function AdminWorkspaceClient({ admin, onSignedOut }: AdminWorkspaceClien
                 <strong className={strong}>{m.workspace.overview.blogLabel}</strong> {m.workspace.overview.blogBody}{" "}
                 <code className={code}>/api/admin/blog</code>.
               </p>
-              <p className={`mt-3 ${prose}`}>
-                <strong className={strong}>{m.workspace.overview.uploadLabel}</strong> {m.workspace.overview.uploadBodyBefore}
-                <code className={code}>/api/admin/upload</code>
-                {m.workspace.overview.uploadBodyAfter}
-              </p>
             </section>
           ) : null}
           {tab === "machineSections" ? <AdminMachineCategoriesPanelClient /> : null}
           {tab === "blog" ? <AdminBlogPanelClient /> : null}
           {tab === "products" ? <AdminMachinePanelClient /> : null}
           {tab === "messages" ? <AdminMessagesPanelClient /> : null}
-          {tab === "upload" ? <AdminUploadSectionClient /> : null}
         </div>
       </div>
     </div>

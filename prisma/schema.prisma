@@ -67,8 +67,8 @@ model MachineTranslation {
   locale           AppLocale
   title            String
   slug             String
-  shortDescription String    @db.Text
-  body             String    @db.Text
+  /// Rich HTML (admin WYSIWYG); sanitized on save.
+  description      String    @db.Text
   metaTitle        String?
   metaDescription  String?   @db.Text
   ogImageUrl       String?
@@ -86,6 +86,8 @@ model MachineImage {
   url       String
   alt       String?
   sortOrder Int      @default(0)
+  /// Hero / catalog card / OG when synced from admin.
+  isPrimary Boolean  @default(false)
   createdAt DateTime @default(now())
 
   @@index([machineId, sortOrder])

@@ -55,8 +55,8 @@ async function seedMachine(categoryId: string): Promise<void> {
             locale: AppLocale.ru,
             title: "Демо-станок",
             slug: "demo-stanok",
-            shortDescription: "Краткое описание для каталога.",
-            body: "Полное описание оборудования для детальной страницы.",
+            description:
+              "<p>Краткое описание для каталога.</p><p>Полное описание оборудования для детальной страницы.</p>",
             metaTitle: "Демо-станок | Qualitech",
             metaDescription: "SEO описание на русском.",
             ogImageUrl: PLACEHOLDER_IMAGE,
@@ -65,8 +65,8 @@ async function seedMachine(categoryId: string): Promise<void> {
             locale: AppLocale.en,
             title: "Demo machine",
             slug: "demo-machine",
-            shortDescription: "Short catalog description.",
-            body: "Full machine description for the product page.",
+            description:
+              "<p>Short catalog description.</p><p>Full machine description for the product page.</p>",
             metaTitle: "Demo machine | Qualitech",
             metaDescription: "English SEO description.",
             ogImageUrl: PLACEHOLDER_IMAGE,
@@ -74,9 +74,7 @@ async function seedMachine(categoryId: string): Promise<void> {
         ],
       },
       images: {
-        create: [
-          { url: PLACEHOLDER_IMAGE, alt: "Demo", sortOrder: 0 },
-        ],
+        create: [{ url: PLACEHOLDER_IMAGE, alt: "Demo", sortOrder: 0, isPrimary: true }],
       },
     },
   });

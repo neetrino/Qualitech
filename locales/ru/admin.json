@@ -22,8 +22,7 @@
       "machineSections": "Разделы станков",
       "blog": "Блог",
       "products": "Продукция",
-      "messages": "Сообщения",
-      "upload": "Загрузка"
+      "messages": "Сообщения"
     },
     "overview": {
       "productsLabel": "Продукция",
@@ -31,10 +30,7 @@
       "machineSectionsLabel": "Разделы станков",
       "machineSectionsBody": "— верхний уровень каталога на сайте /machines (название и slug для каждого языка). API:",
       "blogLabel": "Блог",
-      "blogBody": "— добавление, правка и удаление статей (те же SEO / OG поля по языкам). API:",
-      "uploadLabel": "Загрузка",
-      "uploadBodyBefore": "— загрузка на сервер в R2 (",
-      "uploadBodyAfter": ")."
+      "blogBody": "— добавление, правка и удаление статей (те же SEO / OG поля по языкам). API:"
     }
   },
   "messagesList": {
@@ -140,30 +136,16 @@
     "categoryHint": "Сначала добавьте разделы во вкладке «Разделы станков», затем выберите здесь.",
     "sortOrder": "Порядок сортировки",
     "featured": "Избранное",
-    "published": "Опубликовано",
-    "coverImageTitle": "Обложка и Open Graph",
-    "coverImageHint": "Одно изображение для RU и EN (карточка в каталоге, страница продукта, превью в соцсетях).",
-    "galleryHint": "По желанию — дополнительные фото для галереи (можно несколько строк)."
-  },
-  "uploadSection": {
-    "title": "Загрузка в R2",
-    "introUses": "Используется",
-    "introThen": "multipart form. Допустимые типы:",
-    "introMax": "Макс. 10 МБ.",
-    "scopeLabel": "Область (префикс ключа)",
-    "scopeBlog": "blog",
-    "scopeMachines": "machines",
-    "chooseImage": "Выбрать изображение",
-    "uploading": "Загрузка…",
-    "publicUrl": "Публичный URL",
-    "copyUrl": "Копировать URL"
+    "galleryHint": "Загрузите одно или несколько изображений. Отметьте основное — оно используется для карточки в каталоге, героя страницы и превью в соцсетях (Open Graph)."
   },
   "gallery": {
     "heading": "Изображения галереи",
     "addRow": "Добавить строку",
     "url": "URL",
     "alt": "Alt",
+    "primary": "Главное (герой)",
     "upload": "Загрузить",
+    "uploadMultiple": "Загрузить несколько",
     "remove": "Убрать"
   },
   "blogFields": {
@@ -179,8 +161,8 @@
   "machineFields": {
     "title": "Заголовок",
     "slug": "Слаг",
-    "shortDescription": "Краткое описание",
-    "bodyHtml": "Текст (HTML)",
+    "description": "Описание",
+    "descriptionPlaceholder": "Описание продукта (поддерживается HTML)",
     "metaTitle": "Meta title (SEO)",
     "metaDescription": "Meta description (SEO)",
     "ogImage": "Open Graph — изображение",

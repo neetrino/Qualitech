@@ -56,8 +56,7 @@ export type MachineTranslationRow = {
   locale: string;
   title: string;
   slug: string;
-  shortDescription: string;
-  body: string;
+  description: string;
   metaTitle: string | null;
   metaDescription: string | null;
   ogImageUrl: string | null;
@@ -67,6 +66,7 @@ export type MachineImageRow = {
   url: string;
   alt: string | null;
   sortOrder: number;
+  isPrimary: boolean;
 };
 
 export type MachineRow = {

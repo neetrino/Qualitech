@@ -7,6 +7,8 @@ import { uploadImageToR2, type R2UploadScopeUi } from "@/features/admin/admin-up
 import {
   adminButtonDeleteExtraClass,
   adminButtonSecondaryClass,
+  adminCheckboxClass,
+  adminCheckboxLabelClass,
   adminGalleryRowShellClass,
   adminInputClass,
   adminLabelClass,
@@ -16,7 +18,24 @@ export type GalleryImageRow = {
   url: string;
   alt: string | null;
   sortOrder: number;
+  /** Product gallery: mark the hero / OG image. Omitted for blog. */
+  isPrimary?: boolean;
 };
+
+function ensurePrimaryWhenMissing(rows: GalleryImageRow[], showPrimary: boolean): GalleryImageRow[] {
+  if (!showPrimary) {
+    return rows;
+  }
+  const hasPrimary = rows.some((r) => r.isPrimary === true && r.url.trim().length > 0);
+  if (hasPrimary) {
+    return rows;
+  }
+  const firstWithUrl = rows.findIndex((r) => r.url.trim().length > 0);
+  if (firstWithUrl < 0) {
+    return rows;
+  }
+  return rows.map((r, i) => ({ ...r, isPrimary: i === firstWithUrl }));
+}
 
 type AdminGalleryImageRowsProps = {
   readonly theme: AdminTheme;
@@ -26,6 +45,8 @@ type AdminGalleryImageRowsProps = {
   readonly uploadBusy: boolean;
   readonly onUploadBusyChange: (busy: boolean) => void;
   readonly reportError: (message: string | null) => void;
+  /** When true (products), show a single “primary” radio per row. */
+  readonly showPrimary?: boolean;
 };
 
 export function AdminGalleryImageRows({
@@ -36,6 +57,7 @@ export function AdminGalleryImageRows({
   uploadBusy,
   onUploadBusyChange,
   reportError,
+  showPrimary = false,
 }: AdminGalleryImageRowsProps) {
   const m = useAdminMessages();
   const lab = adminLabelClass(theme);
@@ -44,16 +66,73 @@ export function AdminGalleryImageRows({
   const rowShell = adminGalleryRowShellClass(theme);
 
   const addRow = () => {
-    onImagesChange([...images, { url: "", alt: "", sortOrder: images.length }]);
+    const nextPrimary = showPrimary && images.length === 0;
+    onImagesChange([
+      ...images,
+      {
+        url: "",
+        alt: "",
+        sortOrder: images.length,
+        ...(showPrimary ? { isPrimary: nextPrimary } : {}),
+      },
+    ]);
+  };
+
+  const setPrimary = (idx: number) => {
+    if (!showPrimary) {
+      return;
+    }
+    const next = images.map((img, i) => ({ ...img, isPrimary: i === idx }));
+    onImagesChange(next);
   };
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <span className={lab}>{m.gallery.heading}</span>
-        <button className={sec} onClick={addRow} type="button">
-          {m.gallery.addRow}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <label className={`${sec} cursor-pointer`}>
+            <input
+              accept="image/*"
+              className="sr-only"
+              disabled={uploadBusy}
+              multiple
+              onChange={(e) => {
+                const files = e.target.files ? Array.from(e.target.files) : [];
+                e.target.value = "";
+                if (files.length === 0) {
+                  return;
+                }
+                void (async () => {
+                  onUploadBusyChange(true);
+                  reportError(null);
+                  try {
+                    let next = [...images];
+                    for (const f of files) {
+                      const url = await uploadImageToR2(f, uploadScope);
+                      next.push({
+                        url,
+                        alt: "",
+                        sortOrder: next.length,
+                        ...(showPrimary ? { isPrimary: false } : {}),
+                      });
+                    }
+                    onImagesChange(ensurePrimaryWhenMissing(next, showPrimary));
+                  } catch (err) {
+                    reportError(err instanceof Error ? err.message : m.common.uploadFailed);
+                  } finally {
+                    onUploadBusyChange(false);
+                  }
+                })();
+              }}
+              type="file"
+            />
+            {m.gallery.uploadMultiple}
+          </label>
+          <button className={sec} onClick={addRow} type="button">
+            {m.gallery.addRow}
+          </button>
+        </div>
       </div>
       {images.map((img, idx) => (
         <div className="space-y-2" key={idx}>
@@ -82,7 +161,21 @@ export function AdminGalleryImageRows({
                 value={img.alt ?? ""}
               />
             </div>
-            <label className={`${sec} shrink-0 cursor-pointer`}>
+            {showPrimary ? (
+              <label className={`${adminCheckboxLabelClass(theme)} shrink-0 self-end`}>
+                <input
+                  checked={img.isPrimary === true}
+                  className={adminCheckboxClass(theme)}
+                  name="machine-gallery-primary"
+                  onChange={() => {
+                    setPrimary(idx);
+                  }}
+                  type="radio"
+                />
+                {m.gallery.primary}
+              </label>
+            ) : null}
+            <label className={`${sec} shrink-0 cursor-pointer self-end text-center`}>
               <input
                 accept="image/*"
                 className="sr-only"
@@ -99,7 +192,7 @@ export function AdminGalleryImageRows({
                     const url = await uploadImageToR2(f, uploadScope);
                     const next = [...images];
                     next[idx] = { ...next[idx], url };
-                    onImagesChange(next);
+                    onImagesChange(ensurePrimaryWhenMissing(next, showPrimary));
                   } catch (err) {
                     reportError(err instanceof Error ? err.message : m.common.uploadFailed);
                   } finally {
@@ -111,8 +204,14 @@ export function AdminGalleryImageRows({
               {m.gallery.upload}
             </label>
             <button
-              className={`${sec} shrink-0 ${adminButtonDeleteExtraClass(theme)}`}
-              onClick={() => onImagesChange(images.filter((_, i) => i !== idx))}
+              className={`${sec} shrink-0 self-end ${adminButtonDeleteExtraClass(theme)}`}
+              onClick={() => {
+                const filtered = images.filter((_, i) => i !== idx);
+                if (showPrimary && filtered.length > 0 && !filtered.some((i) => i.isPrimary)) {
+                  filtered[0] = { ...filtered[0], isPrimary: true };
+                }
+                onImagesChange(filtered);
+              }}
               type="button"
             >
               {m.gallery.remove}

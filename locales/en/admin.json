@@ -22,8 +22,7 @@
       "machineSections": "Machine sections",
       "blog": "Blog",
       "products": "Products",
-      "messages": "Messages",
-      "upload": "Upload"
+      "messages": "Messages"
     },
     "overview": {
       "productsLabel": "Products",
@@ -31,10 +30,7 @@
       "machineSectionsLabel": "Machine sections",
       "machineSectionsBody": "— top-level groups for the public /machines catalog (name + URL slug per locale). API:",
       "blogLabel": "Blog",
-      "blogBody": "— add, edit, or delete articles (same SEO / OG fields per locale). API:",
-      "uploadLabel": "Upload",
-      "uploadBodyBefore": "— server upload to R2 (",
-      "uploadBodyAfter": ")."
+      "blogBody": "— add, edit, or delete articles (same SEO / OG fields per locale). API:"
     }
   },
   "messagesList": {
@@ -140,30 +136,16 @@
     "categoryHint": "Add sections under “Machine sections” first, then pick one here.",
     "sortOrder": "Sort order",
     "featured": "Featured",
-    "published": "Published",
-    "coverImageTitle": "Cover & Open Graph image",
-    "coverImageHint": "One image for both RU and EN (catalog card, product page hero, and social previews).",
-    "galleryHint": "Optional — add more photos for the gallery (multiple rows allowed)."
-  },
-  "uploadSection": {
-    "title": "Upload to R2",
-    "introUses": "Uses",
-    "introThen": "multipart form. Allowed types:",
-    "introMax": "Max 10 MB.",
-    "scopeLabel": "Scope (key prefix)",
-    "scopeBlog": "blog",
-    "scopeMachines": "machines",
-    "chooseImage": "Choose image",
-    "uploading": "Uploading…",
-    "publicUrl": "Public URL",
-    "copyUrl": "Copy URL"
+    "galleryHint": "Upload one or more images. Mark one as primary — it is used for the catalog card, product hero, and social previews (Open Graph)."
   },
   "gallery": {
     "heading": "Gallery images",
     "addRow": "Add row",
     "url": "URL",
     "alt": "Alt",
+    "primary": "Primary (hero)",
     "upload": "Upload",
+    "uploadMultiple": "Upload multiple",
     "remove": "Remove"
   },
   "blogFields": {
@@ -179,8 +161,8 @@
   "machineFields": {
     "title": "Title",
     "slug": "Slug",
-    "shortDescription": "Short description",
-    "bodyHtml": "Body (HTML)",
+    "description": "Description",
+    "descriptionPlaceholder": "Product description (HTML supported)",
     "metaTitle": "Meta title (SEO)",
     "metaDescription": "Meta description (SEO)",
     "ogImage": "Open Graph image",

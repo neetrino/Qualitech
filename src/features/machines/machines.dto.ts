@@ -9,13 +9,15 @@ export type MachineImageDto = {
   url: string;
   alt: string | null;
   sortOrder: number;
+  isPrimary: boolean;
 };
 
 export type MachineListItemDto = {
   id: string;
   slug: string;
   title: string;
-  shortDescription: string;
+  /** Plain text excerpt for cards (from rich description). */
+  descriptionExcerpt: string;
   featured: boolean;
   category: MachineCategoryBriefDto | null;
   coverImage: MachineImageDto | null;
@@ -25,8 +27,8 @@ export type MachineDetailDto = {
   id: string;
   slug: string;
   title: string;
-  shortDescription: string;
-  body: string;
+  /** Sanitized rich HTML. */
+  description: string;
   metaTitle: string | null;
   metaDescription: string | null;
   ogImageUrl: string | null;

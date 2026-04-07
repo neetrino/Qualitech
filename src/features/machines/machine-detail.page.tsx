@@ -26,7 +26,7 @@ function ProductGalleryGrid({
   images,
   fallbackAlt,
 }: {
-  readonly images: { url: string; alt: string | null; sortOrder: number }[];
+  readonly images: { url: string; alt: string | null; sortOrder: number; isPrimary: boolean }[];
   readonly fallbackAlt: string;
 }) {
   if (images.length === 0) {
@@ -39,7 +39,7 @@ function ProductGalleryGrid({
         const src = img.url.trim();
         return (
           <div
-            key={`${img.url}-${img.sortOrder}`}
+            key={`${img.url}-${img.sortOrder}-${String(img.isPrimary)}`}
             className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b]"
           >
             <Image
@@ -68,9 +68,11 @@ export function MachineDetailPage({
 }: MachineDetailPageProps) {
   const { detail, slugByLocale, sectionSlugByLocale } = payload;
   const hasLead = detail.images.length > 0;
-  const heroImage = hasLead ? detail.images[0]! : null;
+  const primaryIdx = detail.images.findIndex((i) => i.isPrimary);
+  const heroIndex = hasLead ? (primaryIdx >= 0 ? primaryIdx : 0) : -1;
+  const heroImage = heroIndex >= 0 ? detail.images[heroIndex]! : null;
   const heroSrc = heroImage ? heroImage.url.trim() : "";
-  const restImages = hasLead && detail.images.length > 1 ? detail.images.slice(1) : [];
+  const restImages = hasLead ? detail.images.filter((_, i) => i !== heroIndex) : [];
   const categoryName = detail.category?.name ?? "";
   const categoryCrumbLabel = categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines;
 
@@ -120,11 +122,8 @@ export function MachineDetailPage({
                   <h1 className="font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                     {detail.title}
                   </h1>
-                  {detail.shortDescription.length > 0 ? (
-                    <p className="text-base leading-relaxed text-[#e4e4e7] sm:text-[17px]">{detail.shortDescription}</p>
-                  ) : null}
                   <div className="border-t border-[#18181b] pt-8">
-                    <BlogProse html={detail.body} />
+                    <BlogProse html={detail.description} />
                   </div>
                 </div>
               </div>
@@ -140,11 +139,8 @@ export function MachineDetailPage({
               <h1 className="mt-6 font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                 {detail.title}
               </h1>
-              {detail.shortDescription.length > 0 ? (
-                <p className="mt-4 text-base leading-relaxed text-[#9f9fa9] sm:text-[17px]">{detail.shortDescription}</p>
-              ) : null}
               <div className="mt-10 border-t border-[#18181b] pt-10">
-                <BlogProse html={detail.body} />
+                <BlogProse html={detail.description} />
               </div>
             </section>
           )}

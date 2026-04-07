@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 
 const machineAdminInclude = {
   translations: true,
-  images: { orderBy: { sortOrder: "asc" as const } },
+  images: { orderBy: [{ isPrimary: "desc" as const }, { sortOrder: "asc" as const }] },
   category: { include: { translations: true } },
 } satisfies Prisma.MachineInclude;
 
@@ -30,7 +30,7 @@ export async function adminCreateMachine(data: AdminMachineCreateInput): Promise
     data: {
       categoryId: data.categoryId ?? null,
       featured: data.featured,
-      published: data.published,
+      published: true,
       sortOrder: data.sortOrder,
       translations: { create: data.translations },
       images: { create: data.images },

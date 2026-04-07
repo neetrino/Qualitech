@@ -30,7 +30,7 @@ export async function findMachinesForList(query: MachinesListQuery) {
     take: query.limit,
     include: {
       translations: { where: { locale: query.locale } },
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }], take: 1 },
       category: {
         include: {
           translations: { where: { locale: query.locale } },
@@ -101,7 +101,7 @@ export async function findMachinesForListInCategoryIds(query: MachinesListQuery,
     take: query.limit,
     include: {
       translations: { where: { locale: query.locale } },
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }], take: 1 },
       category: {
         include: {
           translations: { where: { locale: query.locale } },
@@ -137,7 +137,7 @@ export async function findRelatedMachinesInCategoryIds(
     take,
     include: {
       translations: { where: { locale } },
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }], take: 1 },
       category: {
         include: {
           translations: { where: { locale } },
@@ -153,7 +153,7 @@ const CATEGORY_COVER_MACHINE_SCAN_LIMIT = 200;
 export async function findFirstPublishedMachineCoverInCategoryIds(
   categoryIds: string[],
   locale: AppLocale,
-): Promise<{ url: string; alt: string | null; sortOrder: number } | null> {
+): Promise<{ url: string; alt: string | null; sortOrder: number; isPrimary: boolean } | null> {
   const machines = await prisma.machine.findMany({
     where: {
       published: true,
@@ -163,7 +163,7 @@ export async function findFirstPublishedMachineCoverInCategoryIds(
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
     take: CATEGORY_COVER_MACHINE_SCAN_LIMIT,
     include: {
-      images: { orderBy: { sortOrder: "asc" }, take: 1 },
+      images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }], take: 1 },
       translations: { where: { locale } },
     },
   });
@@ -172,11 +172,11 @@ export async function findFirstPublishedMachineCoverInCategoryIds(
     const tr = machine.translations[0];
     const img = machine.images[0];
     if (img?.url?.trim()) {
-      return { url: img.url, alt: img.alt, sortOrder: img.sortOrder };
+      return { url: img.url, alt: img.alt, sortOrder: img.sortOrder, isPrimary: img.isPrimary };
     }
     const og = tr?.ogImageUrl?.trim();
     if (og && og.length > 0) {
-      return { url: og, alt: tr.title, sortOrder: 0 };
+      return { url: og, alt: tr.title, sortOrder: 0, isPrimary: true };
     }
   }
   return null;
@@ -206,7 +206,7 @@ export async function findMachineDetailBySlug(slug: string, locale: AppLocale) {
     include: {
       machine: {
         include: {
-          images: { orderBy: { sortOrder: "asc" } },
+          images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }] },
           category: {
             include: {
               translations: { where: { locale } },
