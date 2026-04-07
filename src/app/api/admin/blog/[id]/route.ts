@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import { requireAdmin } from "@/features/admin/admin.guard";
 import { adminBlogIdParamSchema, adminBlogPatchSchema } from "@/features/blog/blog.admin.schemas";
@@ -12,6 +13,7 @@ import { parseJsonBody } from "@/lib/http/parse-json-body";
 import { logMetaWithRequest } from "@/lib/http/request-log-meta";
 import { logger } from "@/lib/logger";
 import { isPrismaUniqueConstraintError } from "@/lib/prisma-errors";
+import { BLOG_PUBLIC_CACHE_TAG } from "@/features/blog/blog.constants";
 
 type RouteContext = { params: Promise<{ id: string }> };
 
@@ -62,6 +64,7 @@ export async function PATCH(request: Request, context: RouteContext): Promise<Ne
     if (!row) {
       return jsonError(404, "NOT_FOUND", "Blog post not found");
     }
+    revalidateTag(BLOG_PUBLIC_CACHE_TAG);
     return NextResponse.json({ data: row });
   } catch (err) {
     if (isPrismaUniqueConstraintError(err)) {
@@ -96,5 +99,6 @@ export async function DELETE(request: Request, context: RouteContext): Promise<N
   if (!removed) {
     return jsonError(404, "NOT_FOUND", "Blog post not found");
   }
+  revalidateTag(BLOG_PUBLIC_CACHE_TAG);
   return NextResponse.json({ data: { ok: true as const } });
 }

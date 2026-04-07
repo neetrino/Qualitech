@@ -49,7 +49,8 @@ export const navItemsMeta: readonly NavItemMeta[] = [
   { id: "machines", href: "#solutions" },
   { id: "about", href: "#about" },
   { id: "blog", href: "#insights" },
-  { id: "contact", href: "#footer" },
+  /** `href` ignored for `contact`; header uses `/{locale}/contact`. */
+  { id: "contact", href: "/contact" },
 ] as const;
 
 export const solutionCardsLayout: readonly SolutionCardLayout[] = [

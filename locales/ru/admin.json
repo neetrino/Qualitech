@@ -1,0 +1,179 @@
+{
+  "brandEyebrow": "Qualitech",
+  "dashboardTitle": "Админ",
+  "checkingSession": "Проверка сессии…",
+  "auth": {
+    "heading": "Вход",
+    "sessionHint": "Сессия администратора действует для маршрутов `/api/admin/*`.",
+    "email": "Эл. почта",
+    "password": "Пароль",
+    "signIn": "Войти",
+    "signingIn": "Вход…",
+    "unavailable": "Вход временно недоступен.",
+    "failed": "Не удалось войти."
+  },
+  "workspace": {
+    "site": "Сайт",
+    "signOut": "Выйти",
+    "signingOut": "Выход…",
+    "navAriaLabel": "Разделы админки",
+    "tabs": {
+      "overview": "Обзор",
+      "machineSections": "Разделы станков",
+      "blog": "Блог",
+      "products": "Продукция",
+      "messages": "Сообщения",
+      "upload": "Загрузка"
+    },
+    "overview": {
+      "productsLabel": "Продукция",
+      "productsBody": "— добавление, правка и удаление позиций каталога (по языкам: meta title, meta description, Open Graph, галерея). API:",
+      "machineSectionsLabel": "Разделы станков",
+      "machineSectionsBody": "— верхний уровень каталога на сайте /machines (название и slug для каждого языка). API:",
+      "blogLabel": "Блог",
+      "blogBody": "— добавление, правка и удаление статей (те же SEO / OG поля по языкам). API:",
+      "uploadLabel": "Загрузка",
+      "uploadBodyBefore": "— загрузка на сервер в R2 (",
+      "uploadBodyAfter": ")."
+    }
+  },
+  "messagesList": {
+    "title": "Сообщения с сайта",
+    "loading": "Загрузка…",
+    "empty": "Пока нет сообщений.",
+    "refresh": "Обновить",
+    "unread": "Новое",
+    "markRead": "Отметить как прочитанное",
+    "marking": "Отмечаем…",
+    "read": "Прочитано"
+  },
+  "blogPanel": {
+    "loadingArticle": "Загрузка статьи…"
+  },
+  "machinePanel": {
+    "loadingProduct": "Загрузка продукта…"
+  },
+  "machineCategoryPanel": {
+    "loading": "Загрузка раздела…"
+  },
+  "machineCategoryList": {
+    "title": "Разделы станков (каталог)",
+    "newSection": "Новый раздел",
+    "loading": "Загрузка…",
+    "empty": "Разделов пока нет. Создайте основные категории для страницы /machines.",
+    "sortLabel": "Порядок",
+    "edit": "Правка",
+    "delete": "Удалить",
+    "confirmDelete": "Удалить этот раздел? Сначала переназначьте или удалите связанные продукты."
+  },
+  "machineCategoryForm": {
+    "editTitle": "Правка раздела",
+    "newTitle": "Новый раздел",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "saving": "Сохранение…",
+    "sortOrder": "Порядок сортировки",
+    "coverImage": "Изображение раздела (каталог)",
+    "coverHint": "Показывается на странице /machines. Файл сохраняется в R2 (префикс machines/). Если пусто — берётся первое фото продукта в разделе.",
+    "uploadCover": "Загрузить изображение",
+    "uploading": "Загрузка…",
+    "removeCover": "Убрать изображение",
+    "name": "Название",
+    "slug": "URL slug",
+    "localeRu": "Русский (ru)",
+    "localeEn": "Английский (en)"
+  },
+  "blogList": {
+    "title": "Блог — статьи",
+    "newArticle": "Новая статья",
+    "loading": "Загрузка…",
+    "empty": "Пока нет статей. Создайте через «Новая статья».",
+    "published": "Опубликовано",
+    "draft": "Черновик",
+    "edit": "Правка",
+    "delete": "Удалить",
+    "confirmDelete": "Удалить эту статью безвозвратно?"
+  },
+  "machineList": {
+    "title": "Продукция",
+    "newProduct": "Новый продукт",
+    "loading": "Загрузка…",
+    "empty": "Пока нет продуктов. Добавьте или заполните базу (seed).",
+    "published": "Опубликовано",
+    "draft": "Черновик",
+    "featured": "Избранное",
+    "edit": "Правка",
+    "delete": "Удалить",
+    "confirmDelete": "Удалить этот продукт безвозвратно?"
+  },
+  "blogForm": {
+    "editTitle": "Правка статьи",
+    "newTitle": "Новая статья",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "saving": "Сохранение…",
+    "published": "Опубликовано",
+    "publishedAt": "Дата публикации"
+  },
+  "machineForm": {
+    "editTitle": "Правка продукта",
+    "newTitle": "Новый продукт",
+    "cancel": "Отмена",
+    "save": "Сохранить",
+    "saving": "Сохранение…",
+    "category": "Категория",
+    "noCategory": "Без категории",
+    "categoryHint": "Сначала добавьте разделы во вкладке «Разделы станков», затем выберите здесь.",
+    "sortOrder": "Порядок сортировки",
+    "featured": "Избранное",
+    "published": "Опубликовано"
+  },
+  "uploadSection": {
+    "title": "Загрузка в R2",
+    "introUses": "Используется",
+    "introThen": "multipart form. Допустимые типы:",
+    "introMax": "Макс. 10 МБ.",
+    "scopeLabel": "Область (префикс ключа)",
+    "scopeBlog": "blog",
+    "scopeMachines": "machines",
+    "chooseImage": "Выбрать изображение",
+    "uploading": "Загрузка…",
+    "publicUrl": "Публичный URL",
+    "copyUrl": "Копировать URL"
+  },
+  "gallery": {
+    "heading": "Изображения галереи",
+    "addRow": "Добавить строку",
+    "url": "URL",
+    "alt": "Alt",
+    "upload": "Загрузить",
+    "remove": "Убрать"
+  },
+  "blogFields": {
+    "title": "Заголовок",
+    "slug": "Слаг",
+    "excerpt": "Кратко",
+    "contentHtml": "Контент (HTML)",
+    "metaTitle": "Meta title (SEO)",
+    "metaDescription": "Meta description (SEO)",
+    "ogImage": "Open Graph — изображение",
+    "upload": "Загрузить"
+  },
+  "machineFields": {
+    "title": "Заголовок",
+    "slug": "Слаг",
+    "shortDescription": "Краткое описание",
+    "bodyHtml": "Текст (HTML)",
+    "metaTitle": "Meta title (SEO)",
+    "metaDescription": "Meta description (SEO)",
+    "ogImage": "Open Graph — изображение",
+    "upload": "Загрузить"
+  },
+  "theme": {
+    "toLight": "Светлая тема",
+    "toDark": "Тёмная тема"
+  },
+  "common": {
+    "uploadFailed": "Ошибка загрузки"
+  }
+}

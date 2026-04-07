@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
 
 import { requireAdmin } from "@/features/admin/admin.guard";
 import { adminBlogCreateSchema } from "@/features/blog/blog.admin.schemas";
 import { createBlogPostForAdmin, listBlogPostsForAdmin } from "@/features/blog/blog.admin.service";
+import { BLOG_PUBLIC_CACHE_TAG } from "@/features/blog/blog.constants";
 import { jsonError } from "@/lib/http/api-error";
 import { parseJsonBody } from "@/lib/http/parse-json-body";
 import { logMetaWithRequest } from "@/lib/http/request-log-meta";
@@ -31,6 +33,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   try {
     const row = await createBlogPostForAdmin(parsed.data);
+    revalidateTag(BLOG_PUBLIC_CACHE_TAG);
     return NextResponse.json({ data: row }, { status: 201 });
   } catch (err) {
     if (isPrismaUniqueConstraintError(err)) {

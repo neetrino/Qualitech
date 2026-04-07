@@ -1,0 +1,21 @@
+{
+  "metaTitle": "Machines | Qualitech Machinery",
+  "metaDescription": "Industrial machinery by category — CNC, robotics, automation.",
+  "heroEyebrow": "Catalog",
+  "heroTitle": "Equipment by category",
+  "heroSubtitle": "Choose a section to browse machines with photos, short descriptions, and full specifications.",
+  "backToMachines": "Back to catalog",
+  "backToSection": "Back to section",
+  "cardFallbackAlt": "Machine",
+  "readDetails": "View details",
+  "emptyTitle": "No sections yet",
+  "emptyBody": "Machine categories will appear here once they are added in the admin panel.",
+  "sectionEmptyTitle": "No machines in this section",
+  "sectionEmptyBody": "There are no published machines in this category yet.",
+  "breadcrumbMachines": "Machines",
+  "ctaContact": "Request a quote",
+  "galleryFallbackAlt": "Machine photo",
+  "paginationPrev": "Previous",
+  "paginationNext": "Next",
+  "pageIndicator": "Page {page} of {totalPages}"
+}

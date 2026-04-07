@@ -19,6 +19,8 @@ model MachineCategory {
   parent    MachineCategory?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
   children  MachineCategory[] @relation("CategoryTree")
   sortOrder Int               @default(0)
+  /// Public catalog card image (R2 URL); optional — falls back to first machine cover in subtree.
+  imageUrl  String?           @db.Text
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
 

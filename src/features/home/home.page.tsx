@@ -7,21 +7,17 @@ import {
   homeAssets,
   solutionCardsLayout,
 } from "@/features/home/home.data";
+import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
+import { machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
-
-/** Dark fade from hero image into lower content (matches common reference layouts). */
-const HERO_BOTTOM_SCRIM_CLASS =
-  "pointer-events-none absolute inset-x-0 bottom-0 z-[1] h-[min(50vh,520px)] bg-[linear-gradient(to_top,rgb(0_0_0)_0%,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.48)_48%,rgba(0,0,0,0)_100%)] sm:h-[min(48vh,560px)] lg:h-[min(42vh,600px)]";
-
-/** Clears the fixed header so hero copy stays readable; tuned to Header outer padding + inner bar height. */
-const HERO_CONTENT_TOP_PAD =
-  "pt-[7.75rem] sm:pt-[8.25rem] md:pt-[8.5rem] lg:pt-[6.75rem] xl:pt-28";
 
 type HomePageProps = {
   readonly locale: HomeLocale;
   readonly messages: HomeMessages;
+  /** First three top-level machine category slugs (same order as solution cards). */
+  readonly machineSectionSlugs: readonly string[];
 };
 
 type SectionHeadingProps = {
@@ -59,19 +55,7 @@ function SectionHeading({
 function HeroSection({ messages }: { readonly messages: HomeMessages }) {
   return (
     <section className="relative min-h-[min(88svh,980px)] overflow-hidden lg:min-h-[920px]" id="hero">
-      <div className="pointer-events-none absolute inset-0 w-full">
-        <div className="absolute inset-0 overflow-hidden">
-          <Image
-            alt=""
-            className="absolute inset-0 h-full w-full max-w-none object-cover object-[50%_62%] brightness-[1.12] contrast-[0.98] sm:object-[50%_58%] lg:object-[50%_55%]"
-            fill
-            priority
-            sizes="100vw"
-            src={homeAssets.heroBackdrop}
-          />
-        </div>
-      </div>
-      <div aria-hidden className={HERO_BOTTOM_SCRIM_CLASS} />
+      <HeroBackgroundLayers imagePriority />
       <div
         className={`relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-12 sm:px-5 sm:pb-16 md:px-6 lg:min-h-[920px] lg:px-8 lg:pb-16 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
       >
@@ -135,7 +119,15 @@ function HeroSection({ messages }: { readonly messages: HomeMessages }) {
   );
 }
 
-function SolutionsSection({ messages }: { readonly messages: HomeMessages }) {
+function SolutionsSection({
+  messages,
+  locale,
+  machineSectionSlugs,
+}: {
+  readonly messages: HomeMessages;
+  readonly locale: HomeLocale;
+  readonly machineSectionSlugs: readonly string[];
+}) {
   return (
     <section className="mx-auto max-w-[1280px] px-4 pb-16 pt-12 sm:px-5 sm:pb-20 sm:pt-14 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="solutions">
       <SectionHeading
@@ -147,6 +139,8 @@ function SolutionsSection({ messages }: { readonly messages: HomeMessages }) {
       <div className="mt-10 grid gap-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-16">
         {solutionCardsLayout.map((card, index) => {
           const content = messages.solutions.cards[index];
+          const sectionSlug = machineSectionSlugs[index];
+          const detailsHref = sectionSlug ? machinesCategoryHref(locale, sectionSlug) : machinesPageHref(locale);
           return (
             <article key={card.index} className="overflow-hidden rounded-xl border border-[#18181b] bg-[#09090b]">
               <div className="relative h-[188px] overflow-hidden sm:h-[208px] lg:h-[224px]">
@@ -166,7 +160,7 @@ function SolutionsSection({ messages }: { readonly messages: HomeMessages }) {
                     </li>
                   ))}
                 </ul>
-                <Link className="mt-6 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff6900] sm:mt-7 sm:text-xs sm:tracking-[0.14em]" href="#footer">
+                <Link className="mt-6 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff6900] sm:mt-7 sm:text-xs sm:tracking-[0.14em]" href={detailsHref}>
                   {messages.solutions.ctaDetails}
                   <Image alt="" src={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt} width={20} height={20} />
                 </Link>
@@ -306,13 +300,13 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
   );
 }
 
-export function HomePage({ locale, messages }: HomePageProps) {
+export function HomePage({ locale, machineSectionSlugs, messages }: HomePageProps) {
   return (
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
-      <Header locale={locale} messages={messages} />
+      <Header locale={locale} messages={messages} navContext="home" />
       <div className="overflow-x-hidden">
         <HeroSection messages={messages} />
-        <SolutionsSection messages={messages} />
+        <SolutionsSection locale={locale} machineSectionSlugs={machineSectionSlugs} messages={messages} />
         <AboutSection messages={messages} />
         <AdvantagesSection messages={messages} />
         <InsightsSection messages={messages} />

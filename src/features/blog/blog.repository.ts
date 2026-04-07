@@ -40,6 +40,7 @@ export async function findBlogPostDetailBySlug(slug: string, locale: AppLocale) 
       post: {
         include: {
           images: { orderBy: { sortOrder: "asc" } },
+          translations: { select: { locale: true, slug: true } },
         },
       },
     },

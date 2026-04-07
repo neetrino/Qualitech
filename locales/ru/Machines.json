@@ -1,0 +1,21 @@
+{
+  "metaTitle": "Станки | Qualitech Machinery",
+  "metaDescription": "Промышленное оборудование по разделам — ЧПУ, робототехника, автоматизация.",
+  "heroEyebrow": "Каталог",
+  "heroTitle": "Оборудование по разделам",
+  "heroSubtitle": "Выберите раздел, чтобы открыть список станков с фото, кратким описанием и полными характеристиками.",
+  "backToMachines": "Назад в каталог",
+  "backToSection": "Назад в раздел",
+  "cardFallbackAlt": "Станок",
+  "readDetails": "Подробнее",
+  "emptyTitle": "Разделы пока не добавлены",
+  "emptyBody": "Категории оборудования появятся здесь после добавления в админ-панели.",
+  "sectionEmptyTitle": "В этом разделе пока нет станков",
+  "sectionEmptyBody": "Опубликованные станки для этой категории скоро появятся.",
+  "breadcrumbMachines": "Станки",
+  "ctaContact": "Запросить предложение",
+  "galleryFallbackAlt": "Фото оборудования",
+  "paginationPrev": "Назад",
+  "paginationNext": "Вперёд",
+  "pageIndicator": "Страница {page} из {totalPages}"
+}

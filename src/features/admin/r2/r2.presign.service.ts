@@ -27,6 +27,11 @@ function createR2S3Client(config: R2Config): S3Client {
       accessKeyId: config.accessKeyId,
       secretAccessKey: config.secretAccessKey,
     },
+    // SDK v3 ≥ 3.750 adds CRC32 checksums by default; these extra headers
+    // trigger a CORS preflight that R2 does not handle on the storage endpoint.
+    // "WHEN_REQUIRED" suppresses automatic checksum injection on presigned PUTs.
+    requestChecksumCalculation: "WHEN_REQUIRED",
+    responseChecksumValidation: "WHEN_REQUIRED",
   });
 }
 
@@ -53,11 +58,14 @@ export async function createPresignedR2Upload(
 ): Promise<PresignedR2UploadResult> {
   const client = createR2S3Client(config);
   const key = buildObjectKey(body.scope, body.contentType);
+  // ContentLength is intentionally omitted: including it adds `content-length`
+  // to SignedHeaders which triggers a CORS preflight that R2 does not answer
+  // on the cloudflarestorage.com endpoint. File size is validated client-side
+  // before the presign request is made.
   const command = new PutObjectCommand({
     Bucket: config.bucketName,
     Key: key,
     ContentType: body.contentType,
-    ContentLength: body.byteLength,
   });
   const uploadUrl = await getSignedUrl(client, command, { expiresIn: R2_PRESIGN_EXPIRES_SECONDS });
   const publicUrl = buildR2PublicObjectUrl(config.publicUrl, key);
@@ -67,4 +75,30 @@ export async function createPresignedR2Upload(
     key,
     expiresIn: R2_PRESIGN_EXPIRES_SECONDS,
   };
+}
+
+export type R2ServerUploadResult = {
+  publicUrl: string;
+  key: string;
+};
+
+/**
+ * Writes the object from the app server (no browser→R2 CORS). Prefer this for admin UI uploads.
+ */
+export async function putR2ObjectFromServer(
+  config: R2Config,
+  body: AdminPresignUploadBody,
+  data: Buffer | Uint8Array,
+): Promise<R2ServerUploadResult> {
+  const client = createR2S3Client(config);
+  const key = buildObjectKey(body.scope, body.contentType);
+  await client.send(
+    new PutObjectCommand({
+      Bucket: config.bucketName,
+      Key: key,
+      Body: data,
+      ContentType: body.contentType,
+    }),
+  );
+  return { publicUrl: buildR2PublicObjectUrl(config.publicUrl, key), key };
 }

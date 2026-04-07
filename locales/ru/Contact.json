@@ -1,0 +1,34 @@
+{
+  "metaTitle": "Контакты | Qualitech Machinery",
+  "metaDescription": "Телефон, email, адрес и короткая форма для связи с Qualitech Machinery.",
+  "heroEyebrow": "Контакты",
+  "heroTitle": "",
+  "heroSubtitle": "",
+  "infoTitle": "",
+  "labels": {
+    "phone": "Телефон",
+    "email": "Email",
+    "address": "Адрес"
+  },
+  "mapTitle": "На карте",
+  "mapAria": "Карта с адресом компании",
+  "mapEmbedUrl": "https://maps.google.com/maps?q=1250+Industrial+Parkway+Baltimore+MD+21201&z=14&output=embed",
+  "socialTitle": "Соцсети",
+  "formTitle": "Написать нам",
+  "form": {
+    "name": "Имя",
+    "email": "Email",
+    "message": "Сообщение",
+    "submit": "Отправить",
+    "sending": "Отправка…",
+    "success": "Спасибо — мы получили ваше сообщение и скоро свяжемся с вами.",
+    "errorGeneric": "Что-то пошло не так. Попробуйте ещё раз чуть позже.",
+    "errorValidation": "Проверьте поля формы."
+  },
+  "socialLinks": [
+    { "href": "https://www.linkedin.com/", "label": "LinkedIn" },
+    { "href": "https://www.youtube.com/", "label": "YouTube" },
+    { "href": "https://t.me/", "label": "Telegram" },
+    { "href": "https://wa.me/1234567890", "label": "WhatsApp" }
+  ]
+}

@@ -1,12 +1,30 @@
 "use client";
 
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useId, useRef, useState, type RefObject } from "react";
 
 import { homeAssets } from "@/features/home/home.data";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { HOME_LOCALE_COOKIE_NAME } from "@/lib/i18n/home-locale.constants";
+import {
+  aboutPageHref,
+  blogPageHref,
+  blogPostPathForLocaleSwitch,
+  contactPageHref,
+  homePageHref,
+  LOCALIZED_ABOUT_PATH,
+  LOCALIZED_BLOG_LIST_PATH,
+  LOCALIZED_BLOG_POST_PATH,
+  LOCALIZED_CONTACT_PATH,
+  LOCALIZED_HOME_PATH,
+  LOCALIZED_MACHINES_DETAIL_PATH,
+  LOCALIZED_MACHINES_INDEX_PATH,
+  LOCALIZED_MACHINES_SECTION_PATH,
+  machineDetailPathForLocaleSwitch,
+  machinesPageHref,
+  machinesSectionPathForLocaleSwitch,
+} from "@/lib/i18n/locale-routes";
 
 const LOCALE_COOKIE_MAX_AGE_SEC = 60 * 60 * 24 * 365;
 const LOCALE_ORDER: readonly HomeLocale[] = ["ru", "en"];
@@ -84,10 +102,22 @@ function LocaleMenu({ listId, ariaLabel, locale, messages, onPick }: LocaleMenuP
 type LanguageSwitcherProps = {
   readonly locale: HomeLocale;
   readonly messages: HomeMessages;
+  readonly blogListPage?: number;
+  readonly blogSlugByLocale?: Partial<Record<HomeLocale, string>>;
+  readonly machineSectionSlugByLocale?: Partial<Record<HomeLocale, string>>;
+  readonly machineSlugByLocale?: Partial<Record<HomeLocale, string>>;
 };
 
-export function LanguageSwitcher({ locale, messages }: LanguageSwitcherProps) {
+export function LanguageSwitcher({
+  locale,
+  messages,
+  blogListPage,
+  blogSlugByLocale,
+  machineSectionSlugByLocale,
+  machineSlugByLocale,
+}: LanguageSwitcherProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
@@ -102,9 +132,46 @@ export function LanguageSwitcher({ locale, messages }: LanguageSwitcherProps) {
       }
       writeHomeLocaleCookie(next);
       setOpen(false);
+      if (blogSlugByLocale && LOCALIZED_BLOG_POST_PATH.test(pathname)) {
+        router.push(blogPostPathForLocaleSwitch(next, blogSlugByLocale));
+        return;
+      }
+      if (LOCALIZED_BLOG_LIST_PATH.test(pathname)) {
+        const p = blogListPage ?? 1;
+        router.push(p > 1 ? `${blogPageHref(next)}?page=${p}` : blogPageHref(next));
+        return;
+      }
+      if (
+        machineSlugByLocale &&
+        machineSectionSlugByLocale &&
+        LOCALIZED_MACHINES_DETAIL_PATH.test(pathname)
+      ) {
+        router.push(machineDetailPathForLocaleSwitch(next, machineSectionSlugByLocale, machineSlugByLocale));
+        return;
+      }
+      if (machineSectionSlugByLocale && LOCALIZED_MACHINES_SECTION_PATH.test(pathname)) {
+        router.push(machinesSectionPathForLocaleSwitch(next, machineSectionSlugByLocale));
+        return;
+      }
+      if (LOCALIZED_MACHINES_INDEX_PATH.test(pathname)) {
+        router.push(machinesPageHref(next));
+        return;
+      }
+      if (LOCALIZED_CONTACT_PATH.test(pathname)) {
+        router.push(contactPageHref(next));
+        return;
+      }
+      if (LOCALIZED_ABOUT_PATH.test(pathname)) {
+        router.push(aboutPageHref(next));
+        return;
+      }
+      if (LOCALIZED_HOME_PATH.test(pathname)) {
+        router.push(homePageHref(next));
+        return;
+      }
       router.refresh();
     },
-    [locale, router],
+    [locale, pathname, router, blogListPage, blogSlugByLocale, machineSectionSlugByLocale, machineSlugByLocale],
   );
 
   useClosePopoverWhenOpen(open, rootRef, close);

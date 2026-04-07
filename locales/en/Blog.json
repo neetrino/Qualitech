@@ -1,0 +1,16 @@
+{
+  "metaTitle": "Blog | Qualitech Machinery",
+  "metaDescription": "Articles, news, and insights on industrial machinery and automation.",
+  "heroEyebrow": "Blog",
+  "heroTitle": "Insights & updates",
+  "heroSubtitle": "Articles from our team: technology, projects, and industry trends.",
+  "emptyTitle": "No articles yet",
+  "emptyBody": "New posts will appear here once they are published.",
+  "readArticle": "Read article",
+  "backToBlog": "All articles",
+  "cardFallbackAlt": "Article image",
+  "galleryFallbackAlt": "Article image",
+  "paginationPrev": "Previous",
+  "paginationNext": "Next",
+  "pageIndicator": "Page {page} of {totalPages}"
+}

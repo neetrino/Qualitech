@@ -1,0 +1,16 @@
+{
+  "metaTitle": "Блог | Qualitech Machinery",
+  "metaDescription": "Статьи, новости и материалы о промышленном оборудовании и автоматизации.",
+  "heroEyebrow": "Блог",
+  "heroTitle": "Материалы и новости",
+  "heroSubtitle": "Статьи команды: технологии, проекты и тренды отрасли.",
+  "emptyTitle": "Пока нет статей",
+  "emptyBody": "Здесь появятся новые публикации после выхода в свет.",
+  "readArticle": "Читать статью",
+  "backToBlog": "Все статьи",
+  "cardFallbackAlt": "Изображение статьи",
+  "galleryFallbackAlt": "Изображение статьи",
+  "paginationPrev": "Назад",
+  "paginationNext": "Далее",
+  "pageIndicator": "Страница {page} из {totalPages}"
+}

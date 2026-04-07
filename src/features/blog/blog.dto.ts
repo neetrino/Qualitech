@@ -1,3 +1,5 @@
+import type { AppLocale } from "@prisma/client";
+
 export type BlogPostImageDto = {
   url: string;
   alt: string | null;
@@ -24,6 +26,8 @@ export type BlogPostDetailDto = {
   ogImageUrl: string | null;
   publishedAt: string | null;
   images: BlogPostImageDto[];
+  /** Slugs per locale for the same post (language switcher, hreflang). */
+  slugByLocale: Partial<Record<AppLocale, string>>;
 };
 
 export type BlogPostsListResult = {

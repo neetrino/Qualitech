@@ -1,0 +1,179 @@
+{
+  "brandEyebrow": "Qualitech",
+  "dashboardTitle": "Admin",
+  "checkingSession": "Checking session…",
+  "auth": {
+    "heading": "Sign in",
+    "sessionHint": "Admin session applies to `/api/admin/*` routes.",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "unavailable": "Sign-in is temporarily unavailable.",
+    "failed": "Sign-in failed."
+  },
+  "workspace": {
+    "site": "Site",
+    "signOut": "Sign out",
+    "signingOut": "Signing out…",
+    "navAriaLabel": "Admin sections",
+    "tabs": {
+      "overview": "Overview",
+      "machineSections": "Machine sections",
+      "blog": "Blog",
+      "products": "Products",
+      "messages": "Messages",
+      "upload": "Upload"
+    },
+    "overview": {
+      "productsLabel": "Products",
+      "productsBody": "— add, edit, or delete catalog items (per locale: meta title, meta description, Open Graph image, gallery). API:",
+      "machineSectionsLabel": "Machine sections",
+      "machineSectionsBody": "— top-level groups for the public /machines catalog (name + URL slug per locale). API:",
+      "blogLabel": "Blog",
+      "blogBody": "— add, edit, or delete articles (same SEO / OG fields per locale). API:",
+      "uploadLabel": "Upload",
+      "uploadBodyBefore": "— server upload to R2 (",
+      "uploadBodyAfter": ")."
+    }
+  },
+  "messagesList": {
+    "title": "Contact messages",
+    "loading": "Loading…",
+    "empty": "No messages yet.",
+    "refresh": "Refresh",
+    "unread": "New",
+    "markRead": "Mark as read",
+    "marking": "Marking…",
+    "read": "Read"
+  },
+  "blogPanel": {
+    "loadingArticle": "Loading article…"
+  },
+  "machinePanel": {
+    "loadingProduct": "Loading product…"
+  },
+  "machineCategoryPanel": {
+    "loading": "Loading section…"
+  },
+  "machineCategoryList": {
+    "title": "Machine sections (catalog)",
+    "newSection": "New section",
+    "loading": "Loading…",
+    "empty": "No sections yet. Create the main categories shown on /machines.",
+    "sortLabel": "Sort",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this section permanently? It must have no products assigned."
+  },
+  "machineCategoryForm": {
+    "editTitle": "Edit section",
+    "newTitle": "New section",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "sortOrder": "Sort order",
+    "coverImage": "Section image (catalog)",
+    "coverHint": "Shown on the public /machines page. Stored in R2 (machines/…). If empty, the first product image in this section is used.",
+    "uploadCover": "Upload image",
+    "uploading": "Uploading…",
+    "removeCover": "Remove image",
+    "name": "Name",
+    "slug": "URL slug",
+    "localeRu": "Russian (ru)",
+    "localeEn": "English (en)"
+  },
+  "blogList": {
+    "title": "Blog — articles",
+    "newArticle": "New article",
+    "loading": "Loading…",
+    "empty": "No articles yet. Create one with \"New article\".",
+    "published": "Published",
+    "draft": "Draft",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this article permanently?"
+  },
+  "machineList": {
+    "title": "Products",
+    "newProduct": "New product",
+    "loading": "Loading…",
+    "empty": "No products yet. Add one or seed the database.",
+    "published": "Published",
+    "draft": "Draft",
+    "featured": "Featured",
+    "edit": "Edit",
+    "delete": "Delete",
+    "confirmDelete": "Delete this product permanently?"
+  },
+  "blogForm": {
+    "editTitle": "Edit article",
+    "newTitle": "New article",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "published": "Published",
+    "publishedAt": "Published at"
+  },
+  "machineForm": {
+    "editTitle": "Edit product",
+    "newTitle": "New product",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving…",
+    "category": "Category",
+    "noCategory": "No category",
+    "categoryHint": "Add sections under “Machine sections” first, then pick one here.",
+    "sortOrder": "Sort order",
+    "featured": "Featured",
+    "published": "Published"
+  },
+  "uploadSection": {
+    "title": "Upload to R2",
+    "introUses": "Uses",
+    "introThen": "multipart form. Allowed types:",
+    "introMax": "Max 10 MB.",
+    "scopeLabel": "Scope (key prefix)",
+    "scopeBlog": "blog",
+    "scopeMachines": "machines",
+    "chooseImage": "Choose image",
+    "uploading": "Uploading…",
+    "publicUrl": "Public URL",
+    "copyUrl": "Copy URL"
+  },
+  "gallery": {
+    "heading": "Gallery images",
+    "addRow": "Add row",
+    "url": "URL",
+    "alt": "Alt",
+    "upload": "Upload",
+    "remove": "Remove"
+  },
+  "blogFields": {
+    "title": "Title",
+    "slug": "Slug",
+    "excerpt": "Excerpt",
+    "contentHtml": "Content (HTML)",
+    "metaTitle": "Meta title (SEO)",
+    "metaDescription": "Meta description (SEO)",
+    "ogImage": "Open Graph image",
+    "upload": "Upload"
+  },
+  "machineFields": {
+    "title": "Title",
+    "slug": "Slug",
+    "shortDescription": "Short description",
+    "bodyHtml": "Body (HTML)",
+    "metaTitle": "Meta title (SEO)",
+    "metaDescription": "Meta description (SEO)",
+    "ogImage": "Open Graph image",
+    "upload": "Upload"
+  },
+  "theme": {
+    "toLight": "Switch to light mode",
+    "toDark": "Switch to dark mode"
+  },
+  "common": {
+    "uploadFailed": "Upload failed"
+  }
+}

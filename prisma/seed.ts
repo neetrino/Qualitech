@@ -5,27 +5,41 @@ const prisma = new PrismaClient();
 
 const PLACEHOLDER_IMAGE = "https://placehold.co/800x600/e2e8f0/64748b?text=Qualitech";
 
-async function seedCategories(): Promise<{ id: string }> {
-  const category = await prisma.machineCategory.create({
+async function seedCategories(): Promise<string[]> {
+  const c1 = await prisma.machineCategory.create({
     data: {
       sortOrder: 0,
       translations: {
         create: [
-          {
-            locale: AppLocale.ru,
-            name: "Станки",
-            slug: "stanki",
-          },
-          {
-            locale: AppLocale.en,
-            name: "Machines",
-            slug: "machines",
-          },
+          { locale: AppLocale.ru, name: "ЧПУ станки", slug: "cnc-stanki" },
+          { locale: AppLocale.en, name: "CNC machines", slug: "cnc-machines" },
         ],
       },
     },
   });
-  return category;
+  const c2 = await prisma.machineCategory.create({
+    data: {
+      sortOrder: 1,
+      translations: {
+        create: [
+          { locale: AppLocale.ru, name: "Робототехника", slug: "robototekhnika" },
+          { locale: AppLocale.en, name: "Robotics", slug: "robotics" },
+        ],
+      },
+    },
+  });
+  const c3 = await prisma.machineCategory.create({
+    data: {
+      sortOrder: 2,
+      translations: {
+        create: [
+          { locale: AppLocale.ru, name: "Автоматизация", slug: "avtomatizatsiya" },
+          { locale: AppLocale.en, name: "Automation", slug: "automation" },
+        ],
+      },
+    },
+  });
+  return [c1.id, c2.id, c3.id];
 }
 
 async function seedMachine(categoryId: string): Promise<void> {
@@ -106,10 +120,23 @@ async function seedAdminIfConfigured(): Promise<void> {
   if (!email || !password) {
     return;
   }
-  const count = await prisma.adminUser.count();
-  if (count > 0) {
+
+  const syncPassword = process.env.ADMIN_SEED_SYNC_PASSWORD?.trim() === "true";
+  const existing = await prisma.adminUser.findUnique({ where: { email } });
+
+  if (existing) {
+    if (syncPassword) {
+      const passwordHash = await argon2.hash(password);
+      await prisma.adminUser.update({ where: { email }, data: { passwordHash } });
+    }
     return;
   }
+
+  const count = await prisma.adminUser.count();
+  if (count > 0 && !syncPassword) {
+    return;
+  }
+
   const passwordHash = await argon2.hash(password);
   await prisma.adminUser.create({ data: { email, passwordHash } });
 }
@@ -122,8 +149,8 @@ async function main(): Promise<void> {
     return;
   }
 
-  const category = await seedCategories();
-  await seedMachine(category.id);
+  const categoryIds = await seedCategories();
+  await seedMachine(categoryIds[0]!);
   await seedBlog();
 }
 

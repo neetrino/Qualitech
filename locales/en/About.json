@@ -1,0 +1,48 @@
+{
+  "metaTitle": "About us | Qualitech Machinery",
+  "metaDescription": "Learn about Qualitech Machinery — our mission, quality standards, certifications, and the team behind industrial machine tools.",
+  "heroEyebrow": "About us",
+  "heroTitle": "Precision engineering you can rely on",
+  "heroSubtitle": "We design, build, and support industrial machinery for manufacturers who cannot afford downtime — with transparent processes, certified quality, and long-term partnership.",
+  "storyTitle": "Who we are",
+  "storyParagraphs": [
+    "Qualitech Machinery supplies CNC centers, robotic automation, and laser systems to factories worldwide. From first specification through commissioning and aftermarket support, we stay accountable to the same metrics our customers use: uptime, repeatability, and total cost of ownership.",
+    "Our engineers work alongside production teams to integrate equipment into existing lines, train operators, and document every critical parameter. We treat every project as a long-term relationship, not a one-off sale."
+  ],
+  "storyImageAlt": "Industrial robotic arm in a manufacturing environment",
+  "valuesTitle": "What we stand for",
+  "values": [
+    {
+      "title": "Quality without compromise",
+      "body": "Structured inspections, traceable components, and documented acceptance tests — so specifications are met before equipment leaves our floor."
+    },
+    {
+      "title": "Safety and compliance",
+      "body": "Machinery is built to applicable standards with clear guarding, risk assessment support, and documentation for audits and insurance."
+    },
+    {
+      "title": "Honest timelines",
+      "body": "We communicate realistic lead times and milestones. When constraints change, you hear from us early with options — not last-minute surprises."
+    },
+    {
+      "title": "Lifecycle support",
+      "body": "Spare parts, remote diagnostics, and field service keep your assets productive for years after installation."
+    }
+  ],
+  "statsTitle": "Why teams trust us",
+  "stats": [
+    { "value": "25+", "label": "Years in industrial machinery" },
+    { "value": "500+", "label": "Projects delivered" },
+    { "value": "40+", "label": "Countries served" },
+    { "value": "ISO 9001", "label": "Quality management" }
+  ],
+  "galleryTitle": "Inside our world",
+  "galleryAlts": [
+    "CNC machining center in production",
+    "Precision metal fabrication workspace",
+    "Laser cutting system in operation"
+  ],
+  "ctaTitle": "Ready to talk specifics?",
+  "ctaBody": "Share your application, materials, and targets — we will respond with a clear path forward.",
+  "ctaButton": "Contact us"
+}

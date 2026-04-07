@@ -1,3 +1,5 @@
+import type { HomeLocale } from "@/features/home/home.messages";
+
 export type MachineCategoryBriefDto = {
   slug: string;
   name: string;
@@ -36,4 +38,22 @@ export type MachineDetailDto = {
 export type MachinesListResult = {
   data: MachineListItemDto[];
   meta: { page: number; limit: number; total: number };
+};
+
+/** Top-level catalog section card on `/[locale]/machines`. */
+export type MachineCategoryCardDto = {
+  slug: string;
+  name: string;
+  coverImage: MachineImageDto | null;
+};
+
+export type MachineDetailWithLocaleSlugs = {
+  detail: MachineDetailDto;
+  slugByLocale: Partial<Record<HomeLocale, string>>;
+  sectionSlugByLocale: Partial<Record<HomeLocale, string>>;
+};
+
+export type MachineCategorySectionContextDto = {
+  name: string;
+  slugByLocale: Partial<Record<HomeLocale, string>>;
 };

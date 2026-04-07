@@ -18,6 +18,7 @@ const prostoOne = Prosto_One({
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-legal",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ru">
+    <html lang="ru" data-scroll-behavior="smooth">
       <body className={`${inter.variable} ${prostoOne.variable} ${dmSans.variable} min-h-dvh bg-black antialiased`}>
         {children}
       </body>

@@ -54,6 +54,7 @@ flowchart LR
 
 - UI — JSON / next-intl  
 - Դինամիկ կոնտենտ — DB, տրանսլյացիայի աղյուսակներ `locale`-ով (տես `docs/TECH_CARD.md`)  
+- **Հանրային էջերի URL** — `/{locale}` (օր. `/ru`, `/en`), contact — `/{locale}/contact`։ Նոր localized էջ ավելացնելու քայլերը՝ [`docs/i18n-localized-routes.md`](./i18n-localized-routes.md)։
 
 ---
 
