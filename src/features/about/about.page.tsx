@@ -29,7 +29,15 @@ function AboutStory({ locale, homeMessages, messages }: { readonly locale: HomeL
       />
       <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
-          <h2 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{messages.storyTitle}</h2>
+          <h2 className="font-display text-[clamp(1.45rem,3.4vw,2.5rem)] uppercase leading-[1.05] tracking-[-0.04em] text-white">
+            {messages.storyTitle}
+            {messages.storyTitleAccent.length > 0 ? (
+              <span className="block text-[#ff6900]">{messages.storyTitleAccent}</span>
+            ) : null}
+          </h2>
+          {messages.storyLead.length > 0 ? (
+            <p className="mt-4 text-sm font-semibold leading-7 text-white/90 sm:text-[15px] sm:leading-8">{messages.storyLead}</p>
+          ) : null}
           <div className="mt-5 space-y-4 text-sm leading-7 text-[#9f9fa9] sm:text-[15px] sm:leading-8">
             {messages.storyParagraphs.map((paragraph, index) => (
               <p key={index}>{paragraph}</p>
@@ -76,7 +84,7 @@ function AboutStats({ messages }: { readonly messages: AboutMessages }) {
   return (
     <section className="mx-auto max-w-[1280px] px-4 py-14 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10">
       <h2 className="text-center text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{messages.statsTitle}</h2>
-      <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+      <ul className="mt-10 grid max-w-3xl gap-6 sm:grid-cols-2 sm:justify-items-stretch lg:mx-auto">
         {messages.stats.map((stat) => (
           <li
             key={stat.label}

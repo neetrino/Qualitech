@@ -12,8 +12,8 @@
   },
   "mapTitle": "На карте",
   "mapAria": "Карта с адресом компании",
-  "mapEmbedUrl": "https://maps.google.com/maps?q=1250+Industrial+Parkway+Baltimore+MD+21201&z=14&output=embed",
-  "socialTitle": "Соцсети",
+  "mapEmbedUrl": "https://maps.google.com/maps?q=Hrazdan+Kotayk+Armenia&z=12&output=embed",
+  "socialTitle": "Мессенджеры",
   "formTitle": "Написать нам",
   "form": {
     "name": "Имя",
@@ -26,9 +26,9 @@
     "errorValidation": "Проверьте поля формы."
   },
   "socialLinks": [
-    { "href": "https://www.linkedin.com/", "label": "LinkedIn" },
-    { "href": "https://www.youtube.com/", "label": "YouTube" },
-    { "href": "https://t.me/", "label": "Telegram" },
-    { "href": "https://wa.me/1234567890", "label": "WhatsApp" }
+    { "href": "https://wa.me/79197292963", "label": "WhatsApp" },
+    { "href": "https://viber.me/+79197292963", "label": "Viber" },
+    { "href": "https://t.me/+79197292963", "label": "Telegram" },
+    { "href": "https://imo.im/", "label": "IMO" }
   ]
 }

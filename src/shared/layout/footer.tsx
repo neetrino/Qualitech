@@ -46,7 +46,9 @@ export function Footer({ messages }: FooterProps) {
             </p>
             <p className="flex items-center gap-3">
               <Image alt="" className="size-3.5 shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
-              {messages.footer.contact.email}
+              <a className="break-all text-[#ff6900] transition hover:brightness-110" href={`mailto:${messages.footer.contact.email}`}>
+                {messages.footer.contact.email}
+              </a>
             </p>
           </div>
         </div>

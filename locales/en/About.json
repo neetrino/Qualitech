@@ -1,15 +1,20 @@
 {
   "metaTitle": "About us | Qualitech Machinery",
-  "metaDescription": "Learn about Qualitech Machinery — our mission, quality standards, certifications, and the team behind industrial machine tools.",
+  "metaDescription": "QM — industrial manufacturing in Armenia: full-cycle metalworking, CNC machine tools, export, leasing, and 24/7 support.",
   "heroEyebrow": "About us",
-  "heroTitle": "Precision engineering you can rely on",
-  "heroSubtitle": "We design, build, and support industrial machinery for manufacturers who cannot afford downtime — with transparent processes, certified quality, and long-term partnership.",
-  "storyTitle": "Who we are",
+  "heroTitle": "BUILDING THE FUTURE",
+  "heroSubtitle": "About us — industrial manufacturing in Armenia",
+  "storyTitle": "BUILDING",
+  "storyTitleAccent": "THE FUTURE",
+  "storyLead": "About us — industrial manufacturing in Armenia",
   "storyParagraphs": [
-    "Qualitech Machinery supplies CNC centers, robotic automation, and laser systems to factories worldwide. From first specification through commissioning and aftermarket support, we stay accountable to the same metrics our customers use: uptime, repeatability, and total cost of ownership.",
-    "Our engineers work alongside production teams to integrate equipment into existing lines, train operators, and document every critical parameter. We treat every project as a long-term relationship, not a one-off sale."
+    "QM is an Armenian manufacturing company founded in 1998 in Razdan. We specialize in industrial equipment and machine tools made in Armenia, combining engineering expertise, high precision, and modern technology.",
+    "Our production structure covers the full metalworking cycle: blanking, foundry, turning, milling, jig boring, grinding, heat treatment, and gear cutting, plus modern CNC equipment. That lets us keep industrial product quality stable and under control at every stage.",
+    "The site covers 3 hectares, with more than 20,000 m² of enclosed production space. Over 200 units of industrial equipment are in service, so we can run both serial production and custom metalworking jobs in Armenia.",
+    "Our products are supplied across Armenia and exported to Russia, Kazakhstan, Ukraine, the UAE, and Canada — evidence of the quality and reliability of our industrial machinery.",
+    "We keep investing in production, adopting new technology, and expanding partnerships, including flexible leasing options for customers and partners in Armenia."
   ],
-  "storyImageAlt": "Industrial robotic arm in a manufacturing environment",
+  "storyImageAlt": "Qualitech industrial manufacturing",
   "valuesTitle": "What we stand for",
   "values": [
     {
@@ -31,10 +36,8 @@
   ],
   "statsTitle": "Why teams trust us",
   "stats": [
-    { "value": "25+", "label": "Years in industrial machinery" },
-    { "value": "500+", "label": "Projects delivered" },
-    { "value": "40+", "label": "Countries served" },
-    { "value": "ISO 9001", "label": "Quality management" }
+    { "value": "1998", "label": "Founded in Armenia" },
+    { "value": "24/7", "label": "Production and support" }
   ],
   "galleryTitle": "Inside our world",
   "galleryAlts": [
