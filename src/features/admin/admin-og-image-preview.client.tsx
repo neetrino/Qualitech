@@ -9,8 +9,8 @@ const HTTP_URL = /^https?:\/\//i;
 type AdminOgImagePreviewProps = {
   readonly theme: AdminTheme;
   readonly url: string;
-  /** `thumb` — compact square for list rows; `default` — form cover / OG preview. */
-  readonly variant?: "default" | "thumb";
+  /** `thumb` — list rows; `galleryCard` — product admin grid; `default` — form cover / OG preview. */
+  readonly variant?: "default" | "thumb" | "galleryCard";
 };
 
 /**
@@ -29,17 +29,24 @@ export function AdminOgImagePreview({ theme, url, variant = "default" }: AdminOg
   }
 
   const isThumb = variant === "thumb";
-  const shell = isThumb
+  const isGalleryCard = variant === "galleryCard";
+  const shell = isGalleryCard
     ? theme === "light"
-      ? "shrink-0 overflow-hidden rounded-md border border-zinc-200 bg-zinc-100"
-      : "shrink-0 overflow-hidden rounded-md border border-white/15 bg-black"
-    : theme === "light"
-      ? "mb-3 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100"
-      : "mb-3 overflow-hidden rounded-lg border border-white/15 bg-black";
+      ? "h-36 w-full overflow-hidden bg-zinc-100"
+      : "h-36 w-full overflow-hidden bg-black"
+    : isThumb
+      ? theme === "light"
+        ? "shrink-0 overflow-hidden rounded-md border border-zinc-200 bg-zinc-100"
+        : "shrink-0 overflow-hidden rounded-md border border-white/15 bg-black"
+      : theme === "light"
+        ? "mb-3 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-100"
+        : "mb-3 overflow-hidden rounded-lg border border-white/15 bg-black";
 
-  const imgClass = isThumb
-    ? "size-12 object-cover object-center"
-    : "max-h-52 w-full object-contain object-center";
+  const imgClass = isGalleryCard
+    ? "h-full w-full object-cover object-center"
+    : isThumb
+      ? "size-12 object-cover object-center"
+      : "max-h-52 w-full object-contain object-center";
 
   return (
     <div className={shell}>

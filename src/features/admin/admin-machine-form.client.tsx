@@ -241,6 +241,7 @@ export function AdminMachineFormClient({
 
       <p className={adminHintTextClass(theme)}>{m.machineForm.galleryHint}</p>
       <AdminGalleryImageRows
+        hideUrlAndAltFields
         images={images}
         onImagesChange={(next) =>
           setImages(
