@@ -7,7 +7,8 @@ import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import { contactPageHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
-import { Header } from "@/shared/layout/header";
+import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
+import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type AboutPageProps = {
@@ -136,8 +137,8 @@ function AboutCta({ locale, messages }: { readonly locale: HomeLocale; readonly 
 
 export function AboutPage({ locale, homeMessages, aboutMessages }: AboutPageProps) {
   return (
-    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
-      <Header locale={locale} messages={homeMessages} navContext="site" />
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
+      <SiteHeader locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <AboutStory homeMessages={homeMessages} locale={locale} messages={aboutMessages} />
         <AboutValues messages={aboutMessages} />

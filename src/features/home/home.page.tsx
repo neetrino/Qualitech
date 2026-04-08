@@ -16,7 +16,8 @@ import {
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
-import { Header } from "@/shared/layout/header";
+import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
+import { SiteHeader } from "@/shared/layout/site-header";
 
 type HomePageProps = {
   readonly locale: HomeLocale;
@@ -63,7 +64,7 @@ const HERO_PRIMARY_CTA_CLASS =
   "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#ff6900] px-5 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_14px_rgba(255,105,0,0.28),0_3px_5px_rgba(255,105,0,0.25)] transition hover:brightness-110 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[200px] lg:min-w-[220px]";
 
 const HERO_SECONDARY_CTA_CLASS =
-  "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-white/10 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]";
+  "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-black/20 bg-white/45 px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-black shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md transition hover:bg-white/70 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]";
 
 function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
   const demoSlugs = heroDemoMachineSlugsByLocale[locale];
@@ -71,13 +72,13 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
   const machinesHref = machinesPageHref(locale);
   /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. */
   const ctaRowMarginTop =
-    locale === "ru" ? "mt-20 sm:mt-24 lg:mt-40" : "mt-8 sm:mt-10 lg:mt-24";
+    locale === "ru" ? "mt-32 sm:mt-36 lg:mt-32" : "mt-20 sm:mt-24 lg:mt-20";
 
   return (
     <section className="relative min-h-[min(88svh,980px)] overflow-hidden lg:min-h-[920px]" id="hero">
       <HeroBackgroundLayers imagePriority />
       <div
-        className={`relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-12 sm:px-5 sm:pb-16 md:px-6 lg:min-h-[920px] lg:px-8 lg:pb-16 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
+        className={`relative z-[2] mx-auto flex min-h-[min(88svh,980px)] w-full max-w-[1380px] flex-col px-4 pb-4 sm:px-5 sm:pb-8 md:px-6 lg:min-h-[920px] lg:px-8 lg:pb-16 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
       >
         <div className="relative mx-auto w-full max-w-[880px] text-center">
           <div className="pointer-events-none absolute left-1/2 top-0 w-full max-w-[920px] -translate-x-1/2 sm:top-[6px]">
@@ -91,7 +92,7 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
               />
             </div>
           </div>
-          <div className="relative flex flex-col items-center gap-2 pt-4 sm:gap-[10px] sm:pt-5">
+          <div className="relative flex flex-col items-center gap-2 pt-7 sm:gap-[10px] sm:pt-9 lg:pt-12">
             <p className="text-[11px] font-black uppercase leading-5 tracking-[-0.15px] text-white sm:text-xs">{messages.hero.eyebrow}</p>
             <p className="font-display text-center text-[clamp(0.95rem,3.2vw,1.9rem)] font-normal uppercase leading-tight tracking-[-0.06em] text-[#ff6900] lg:text-[32px] lg:leading-[1.15] lg:tracking-[-2px]">
               {messages.hero.lineOrange}
@@ -112,20 +113,27 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
             <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
           </Link>
           <Link className={HERO_SECONDARY_CTA_CLASS} href={demoHref}>
-            <Image alt="" className="shrink-0" src={homeAssets.playIcon} width={16} height={16} />
+            <Image alt="" className="shrink-0 brightness-0" src={homeAssets.playIcon} width={16} height={16} />
             {messages.hero.ctaDemo}
           </Link>
         </div>
-        <div className="mt-10 grid gap-8 lg:mt-auto lg:grid-cols-[minmax(0,228px)_1fr_minmax(0,440px)] lg:items-end lg:gap-5 lg:pt-10 xl:grid-cols-[228px_1fr_440px]">
+        <div className="mt-auto grid gap-5 pt-6 sm:gap-6 sm:pt-8 lg:grid-cols-[minmax(0,228px)_1fr_minmax(0,440px)] lg:items-end lg:gap-5 lg:pt-10 xl:grid-cols-[228px_1fr_440px]">
           <p className="max-w-[248px] text-xs font-normal leading-relaxed tracking-[-0.02em] text-white sm:text-sm sm:leading-6 sm:tracking-[-0.03em] lg:max-w-none xl:max-w-[228px]">
             {messages.hero.lede}
           </p>
           <div className="hidden lg:block" aria-hidden />
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-3 sm:gap-4 lg:max-w-[440px] lg:justify-self-end xl:gap-6">
+          <div className="grid min-w-0 grid-cols-3 gap-2 sm:gap-4 lg:max-w-[440px] lg:justify-self-end xl:gap-6">
             {messages.hero.stats.map((stat, statIndex) => (
-              <div key={`${stat.value}-${stat.label}-${statIndex}`} className="relative border-l-[3px] border-[#ff6900] pl-3">
-                <p className="text-2xl font-black leading-tight tracking-wide text-white sm:text-3xl sm:leading-none sm:tracking-[0.25px]">{stat.value}</p>
-                <p className="mt-2 text-[11px] font-normal uppercase leading-4 tracking-[0.6px] text-white">{stat.label}</p>
+              <div
+                key={`${stat.value}-${stat.label}-${statIndex}`}
+                className="relative min-w-0 border-l-2 border-[#ff6900] pl-2 sm:border-l-[3px] sm:pl-3"
+              >
+                <p className="text-lg font-black leading-tight tracking-wide text-white sm:text-3xl sm:leading-none sm:tracking-[0.25px]">
+                  {stat.value}
+                </p>
+                <p className="mt-1 text-[9px] font-normal uppercase leading-tight tracking-[0.35px] text-white sm:mt-2 sm:text-[11px] sm:leading-4 sm:tracking-[0.6px]">
+                  {stat.label}
+                </p>
               </div>
             ))}
           </div>
@@ -327,8 +335,8 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
 
 export function HomePage({ locale, machineSectionSlugs, messages }: HomePageProps) {
   return (
-    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
-      <Header locale={locale} messages={messages} navContext="home" />
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
+      <SiteHeader locale={locale} messages={messages} navContext="home" />
       <div className="overflow-x-hidden">
         <HeroSection locale={locale} messages={messages} />
         <SolutionsSection locale={locale} machineSectionSlugs={machineSectionSlugs} messages={messages} />

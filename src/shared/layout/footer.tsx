@@ -52,7 +52,7 @@ export function Footer({ locale, messages }: FooterProps) {
   ] as const;
 
   return (
-    <footer className="mx-auto max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
+    <footer className="mx-auto hidden max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:block md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
       <div className="grid gap-10 border-t border-[#18181b] pt-12 sm:gap-12 sm:pt-14 xl:grid-cols-[1.1fr_0.9fr_1fr_1fr]">
         <div>
           <Link className="inline-block" href={homePageHref(locale)}>

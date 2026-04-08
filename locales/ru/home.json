@@ -1,6 +1,7 @@
 {
   "header": {
     "ctaRequest": "ОСТАВИТЬ ЗАЯВКУ",
+    "menuTitle": "Меню",
     "languageMenuAria": "Выбор языка",
     "locales": {
       "ru": { "short": "РУС", "name": "Русский" },
