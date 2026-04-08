@@ -72,7 +72,7 @@ type LocaleMenuProps = {
 function LocaleMenu({ listId, ariaLabel, locale, messages, onPick }: LocaleMenuProps) {
   return (
     <ul
-      className="absolute right-0 top-[calc(100%+8px)] z-[60] min-w-[148px] overflow-hidden rounded-2xl border border-neutral-200 bg-white py-1.5 text-black shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:min-w-[160px]"
+      className="absolute right-0 top-[calc(100%+8px)] z-[110] min-w-[148px] overflow-hidden rounded-2xl border border-neutral-200 bg-white py-1.5 text-black shadow-[0_12px_40px_rgba(0,0,0,0.18)] sm:min-w-[160px]"
       id={listId}
       role="listbox"
       aria-label={ariaLabel}
@@ -188,7 +188,7 @@ export function LanguageSwitcher({
   const chevronClass = open ? "rotate-[270deg]" : "rotate-90";
 
   return (
-    <div className="relative shrink-0" ref={rootRef}>
+    <div className="relative z-[1] shrink-0" ref={rootRef}>
       <button
         aria-controls={listId}
         aria-expanded={open}
