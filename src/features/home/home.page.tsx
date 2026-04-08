@@ -45,9 +45,11 @@ function SectionHeading({
         {title}
         {accent.length > 0 ? <span className="block text-[#ff6900]">{accent}</span> : null}
       </h2>
-      <p className={`mt-4 text-sm leading-6 text-[#9f9fa9] sm:leading-7 ${centered ? "mx-auto max-w-full" : "max-w-[540px]"}`}>
-        {description}
-      </p>
+      {description.length > 0 ? (
+        <p className={`mt-4 text-sm leading-6 text-[#9f9fa9] sm:leading-7 ${centered ? "mx-auto max-w-full" : "max-w-[540px]"}`}>
+          {description}
+        </p>
+      ) : null}
     </div>
   );
 }
