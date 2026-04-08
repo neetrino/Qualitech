@@ -1,0 +1,34 @@
+{
+  "metaTitle": "Контакты | Qualitech Machinery",
+  "metaDescription": "Телефон, email, адрес и короткая форма для связи с Qualitech Machinery.",
+  "heroEyebrow": "Контакты",
+  "heroTitle": "",
+  "heroSubtitle": "",
+  "infoTitle": "",
+  "labels": {
+    "phone": "Телефон",
+    "email": "Email",
+    "address": "Адрес"
+  },
+  "mapTitle": "На карте",
+  "mapAria": "Карта с адресом компании",
+  "mapEmbedUrl": "https://maps.google.com/maps?q=Hrazdan+Kotayk+Armenia&z=12&output=embed",
+  "socialTitle": "Мессенджеры",
+  "formTitle": "Написать нам",
+  "form": {
+    "name": "Имя",
+    "email": "Email",
+    "message": "Сообщение",
+    "submit": "Отправить",
+    "sending": "Отправка…",
+    "success": "Спасибо — мы получили ваше сообщение и скоро свяжемся с вами.",
+    "errorGeneric": "Что-то пошло не так. Попробуйте ещё раз чуть позже.",
+    "errorValidation": "Проверьте поля формы."
+  },
+  "socialLinks": [
+    { "href": "https://wa.me/79197292963", "label": "WhatsApp" },
+    { "href": "https://viber.me/+79197292963", "label": "Viber" },
+    { "href": "https://t.me/+79197292963", "label": "Telegram" },
+    { "href": "https://imo.im/", "label": "IMO" }
+  ]
+}

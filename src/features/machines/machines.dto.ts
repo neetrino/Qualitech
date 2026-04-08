@@ -1,0 +1,61 @@
+import type { HomeLocale } from "@/features/home/home.messages";
+
+export type MachineCategoryBriefDto = {
+  slug: string;
+  name: string;
+};
+
+export type MachineImageDto = {
+  url: string;
+  alt: string | null;
+  sortOrder: number;
+  isPrimary: boolean;
+};
+
+export type MachineListItemDto = {
+  id: string;
+  slug: string;
+  title: string;
+  /** Plain text excerpt for cards (from rich description). */
+  descriptionExcerpt: string;
+  featured: boolean;
+  category: MachineCategoryBriefDto | null;
+  coverImage: MachineImageDto | null;
+};
+
+export type MachineDetailDto = {
+  id: string;
+  slug: string;
+  title: string;
+  /** Sanitized rich HTML. */
+  description: string;
+  metaTitle: string | null;
+  metaDescription: string | null;
+  ogImageUrl: string | null;
+  featured: boolean;
+  category: MachineCategoryBriefDto | null;
+  images: MachineImageDto[];
+};
+
+export type MachinesListResult = {
+  data: MachineListItemDto[];
+  meta: { page: number; limit: number; total: number };
+};
+
+/** Top-level catalog section card on `/[locale]/machines`. */
+export type MachineCategoryCardDto = {
+  slug: string;
+  name: string;
+  coverImage: MachineImageDto | null;
+};
+
+export type MachineDetailWithLocaleSlugs = {
+  detail: MachineDetailDto;
+  slugByLocale: Partial<Record<HomeLocale, string>>;
+  sectionSlugByLocale: Partial<Record<HomeLocale, string>>;
+};
+
+export type MachineCategorySectionContextDto = {
+  name: string;
+  slugByLocale: Partial<Record<HomeLocale, string>>;
+};

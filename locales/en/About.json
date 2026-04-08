@@ -1,0 +1,51 @@
+{
+  "metaTitle": "About us | Qualitech Machinery",
+  "metaDescription": "QM — industrial manufacturing in Armenia: full-cycle metalworking, CNC machine tools, export, leasing, and 24/7 support.",
+  "heroEyebrow": "About us",
+  "heroTitle": "BUILDING THE FUTURE",
+  "heroSubtitle": "About us — industrial manufacturing in Armenia",
+  "storyTitle": "BUILDING",
+  "storyTitleAccent": "THE FUTURE",
+  "storyLead": "About us — industrial manufacturing in Armenia",
+  "storyParagraphs": [
+    "QM is an Armenian manufacturing company founded in 1998 in Razdan. We specialize in industrial equipment and machine tools made in Armenia, combining engineering expertise, high precision, and modern technology.",
+    "Our production structure covers the full metalworking cycle: blanking, foundry, turning, milling, jig boring, grinding, heat treatment, and gear cutting, plus modern CNC equipment. That lets us keep industrial product quality stable and under control at every stage.",
+    "The site covers 3 hectares, with more than 20,000 m² of enclosed production space. Over 200 units of industrial equipment are in service, so we can run both serial production and custom metalworking jobs in Armenia.",
+    "Our products are supplied across Armenia and exported to Russia, Kazakhstan, Ukraine, the UAE, and Canada — evidence of the quality and reliability of our industrial machinery.",
+    "We keep investing in production, adopting new technology, and expanding partnerships, including flexible leasing options for customers and partners in Armenia."
+  ],
+  "storyImageAlt": "Qualitech industrial manufacturing",
+  "valuesTitle": "What we stand for",
+  "values": [
+    {
+      "title": "Quality without compromise",
+      "body": "Structured inspections, traceable components, and documented acceptance tests — so specifications are met before equipment leaves our floor."
+    },
+    {
+      "title": "Safety and compliance",
+      "body": "Machinery is built to applicable standards with clear guarding, risk assessment support, and documentation for audits and insurance."
+    },
+    {
+      "title": "Honest timelines",
+      "body": "We communicate realistic lead times and milestones. When constraints change, you hear from us early with options — not last-minute surprises."
+    },
+    {
+      "title": "Lifecycle support",
+      "body": "Spare parts, remote diagnostics, and field service keep your assets productive for years after installation."
+    }
+  ],
+  "statsTitle": "Why teams trust us",
+  "stats": [
+    { "value": "1998", "label": "Founded in Armenia" },
+    { "value": "24/7", "label": "Production and support" }
+  ],
+  "galleryTitle": "Inside our world",
+  "galleryAlts": [
+    "CNC machining center in production",
+    "Precision metal fabrication workspace",
+    "Laser cutting system in operation"
+  ],
+  "ctaTitle": "Ready to talk specifics?",
+  "ctaBody": "Share your application, materials, and targets — we will respond with a clear path forward.",
+  "ctaButton": "Contact us"
+}

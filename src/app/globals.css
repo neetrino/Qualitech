@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+/* `smooth` slows every scroll-to-top after route changes and makes hash jumps feel sluggish. */
+html {
+  scroll-behavior: auto;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-inter), sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+/* In @layer base so Tailwind text-* utilities can override (unlayered `a` wins over @layer utilities). */
+@layer base {
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+}
+
+.font-display {
+  font-family: var(--font-display), sans-serif;
+}
+
+.font-legal {
+  font-family: var(--font-legal), sans-serif;
+}
