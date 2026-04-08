@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="ru" data-scroll-behavior="smooth">
+    <html lang="ru">
       <body className={`${inter.variable} ${prostoOne.variable} ${dmSans.variable} min-h-dvh bg-black antialiased`}>
         {children}
       </body>

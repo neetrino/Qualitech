@@ -5,6 +5,7 @@ import { homeLocaleToAppLocale } from "@/features/blog/blog.locale";
 import { MachineDetailPage } from "@/features/machines/machine-detail.page";
 import { loadMachinesMessages } from "@/features/machines/machines.messages";
 import {
+  getMachineBySlugPublic,
   getMachineDetailForSectionPublic,
   listRelatedMachinesInSectionPublic,
 } from "@/features/machines/machines.service";
@@ -22,17 +23,16 @@ type PageProps = {
 };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale: raw, categorySlug, machineSlug } = await params;
+  const { locale: raw, machineSlug } = await params;
   if (!isHomeLocaleSegment(raw)) {
     return { title: SITE_TAB_TITLE };
   }
   const appLocale = homeLocaleToAppLocale(raw);
-  const payload = await getMachineDetailForSectionPublic(machineSlug, categorySlug, appLocale);
+  const detail = await getMachineBySlugPublic(machineSlug, appLocale);
   const m = await loadMachinesMessages(raw);
-  if (!payload) {
+  if (!detail) {
     return { title: SITE_TAB_TITLE, description: m.metaDescription };
   }
-  const { detail } = payload;
   return {
     title: SITE_TAB_TITLE,
     description: detail.metaDescription ?? htmlToPlainText(detail.description),

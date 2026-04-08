@@ -4,8 +4,9 @@
   color-scheme: dark;
 }
 
+/* `smooth` slows every scroll-to-top after route changes and makes hash jumps feel sluggish. */
 html {
-  scroll-behavior: smooth;
+  scroll-behavior: auto;
 }
 
 body {

@@ -12,7 +12,6 @@ import {
   HERO_CONTENT_TOP_PAD,
   HOME_PAGE_BACKGROUND_CLASS,
   HeroBackgroundLayers,
-  SOLUTIONS_TOP_FOLD_SCRIM_CLASS,
 } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
@@ -162,30 +161,36 @@ function SolutionsSection({
           const sectionSlug = machineSectionSlugs[index];
           const detailsHref = sectionSlug ? machinesCategoryHref(locale, sectionSlug) : machinesPageHref(locale);
           return (
-            <article key={card.index} className="overflow-hidden rounded-xl border border-[#18181b] bg-[#09090b]">
-              <div className="relative h-[188px] overflow-hidden sm:h-[208px] lg:h-[224px]">
-                <Image alt={content.title} className="object-cover" fill sizes="(min-width: 1280px) 400px, 100vw" src={card.imageSrc} />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#09090b] via-[rgba(9,9,11,0.4)] to-transparent" />
-                <span className={`absolute top-3 text-5xl font-black leading-none text-white sm:top-4 sm:text-6xl ${index === 0 ? "right-4" : index === 1 ? "right-5" : "right-6"}`}>{card.index}</span>
-              </div>
-              <div className="px-5 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
-                <div className="mb-5 h-0.5 w-[70%] rounded-full bg-[#ff6900]" />
-                <h3 className="max-w-[320px] text-base font-black leading-snug text-white sm:text-lg">{content.title}</h3>
-                <p className="mt-3 max-w-none text-xs leading-relaxed tracking-[-0.02em] text-[#71717b] sm:mt-4 sm:text-sm">{content.description}</p>
-                <ul className="mt-6 space-y-2 sm:mt-7">
-                  {content.bullets.map((bullet) => (
-                    <li key={bullet} className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#52525c] sm:gap-2.5 sm:text-xs sm:tracking-[0.12em]">
-                      <span className="size-1 rounded-full bg-[#ff6900]" />
-                      {bullet}
-                    </li>
-                  ))}
-                </ul>
-                <Link className="mt-6 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff6900] sm:mt-7 sm:text-xs sm:tracking-[0.14em]" href={detailsHref}>
-                  {messages.solutions.ctaDetails}
-                  <Image alt="" src={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt} width={20} height={20} />
-                </Link>
-              </div>
-            </article>
+            <Link
+              key={card.index}
+              className="block overflow-hidden rounded-xl border border-[#18181b] bg-[#09090b] transition hover:border-[#27272a]"
+              href={detailsHref}
+            >
+              <article>
+                <div className="relative h-[188px] overflow-hidden sm:h-[208px] lg:h-[224px]">
+                  <Image alt={content.title} className="object-cover" fill sizes="(min-width: 1280px) 400px, 100vw" src={card.imageSrc} />
+                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090b] via-[rgba(9,9,11,0.4)] to-transparent" />
+                  <span className={`pointer-events-none absolute top-3 text-5xl font-black leading-none text-white sm:top-4 sm:text-6xl ${index === 0 ? "right-4" : index === 1 ? "right-5" : "right-6"}`}>{card.index}</span>
+                </div>
+                <div className="px-5 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
+                  <div className="mb-5 h-0.5 w-[70%] rounded-full bg-[#ff6900]" />
+                  <h3 className="max-w-[320px] text-base font-black leading-snug text-white sm:text-lg">{content.title}</h3>
+                  <p className="mt-3 max-w-none text-xs leading-relaxed tracking-[-0.02em] text-[#71717b] sm:mt-4 sm:text-sm">{content.description}</p>
+                  <ul className="mt-6 space-y-2 sm:mt-7">
+                    {content.bullets.map((bullet) => (
+                      <li key={bullet} className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#52525c] sm:gap-2.5 sm:text-xs sm:tracking-[0.12em]">
+                        <span className="size-1 rounded-full bg-[#ff6900]" />
+                        {bullet}
+                      </li>
+                    ))}
+                  </ul>
+                  <span className="mt-6 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff6900] sm:mt-7 sm:text-xs sm:tracking-[0.14em]">
+                    {messages.solutions.ctaDetails}
+                    <Image alt="" src={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt} width={20} height={20} />
+                  </span>
+                </div>
+              </article>
+            </Link>
           );
         })}
       </div>

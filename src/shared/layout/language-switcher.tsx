@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useId, useRef, useState, type RefObject } from "react";
+import { useCallback, useEffect, useId, useRef, useState, useTransition, type RefObject } from "react";
 
 import { homeAssets } from "@/features/home/home.data";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
@@ -118,6 +118,7 @@ export function LanguageSwitcher({
 }: LanguageSwitcherProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [, startTransition] = useTransition();
   const [open, setOpen] = useState(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const listId = useId();
@@ -132,13 +133,18 @@ export function LanguageSwitcher({
       }
       writeHomeLocaleCookie(next);
       setOpen(false);
+      const navigate = (href: string): void => {
+        startTransition(() => {
+          router.push(href);
+        });
+      };
       if (blogSlugByLocale && LOCALIZED_BLOG_POST_PATH.test(pathname)) {
-        router.push(blogPostPathForLocaleSwitch(next, blogSlugByLocale));
+        navigate(blogPostPathForLocaleSwitch(next, blogSlugByLocale));
         return;
       }
       if (LOCALIZED_BLOG_LIST_PATH.test(pathname)) {
         const p = blogListPage ?? 1;
-        router.push(p > 1 ? `${blogPageHref(next)}?page=${p}` : blogPageHref(next));
+        navigate(p > 1 ? `${blogPageHref(next)}?page=${p}` : blogPageHref(next));
         return;
       }
       if (
@@ -146,30 +152,32 @@ export function LanguageSwitcher({
         machineSectionSlugByLocale &&
         LOCALIZED_MACHINES_DETAIL_PATH.test(pathname)
       ) {
-        router.push(machineDetailPathForLocaleSwitch(next, machineSectionSlugByLocale, machineSlugByLocale));
+        navigate(machineDetailPathForLocaleSwitch(next, machineSectionSlugByLocale, machineSlugByLocale));
         return;
       }
       if (machineSectionSlugByLocale && LOCALIZED_MACHINES_SECTION_PATH.test(pathname)) {
-        router.push(machinesSectionPathForLocaleSwitch(next, machineSectionSlugByLocale));
+        navigate(machinesSectionPathForLocaleSwitch(next, machineSectionSlugByLocale));
         return;
       }
       if (LOCALIZED_MACHINES_INDEX_PATH.test(pathname)) {
-        router.push(machinesPageHref(next));
+        navigate(machinesPageHref(next));
         return;
       }
       if (LOCALIZED_CONTACT_PATH.test(pathname)) {
-        router.push(contactPageHref(next));
+        navigate(contactPageHref(next));
         return;
       }
       if (LOCALIZED_ABOUT_PATH.test(pathname)) {
-        router.push(aboutPageHref(next));
+        navigate(aboutPageHref(next));
         return;
       }
       if (LOCALIZED_HOME_PATH.test(pathname)) {
-        router.push(homePageHref(next));
+        navigate(homePageHref(next));
         return;
       }
-      router.refresh();
+      startTransition(() => {
+        router.refresh();
+      });
     },
     [locale, pathname, router, blogListPage, blogSlugByLocale, machineSectionSlugByLocale, machineSlugByLocale],
   );

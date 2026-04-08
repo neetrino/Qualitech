@@ -36,16 +36,11 @@ function parseFeaturedOnly(raw: string | undefined): boolean {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale: raw, categorySlug } = await params;
+  const { locale: raw } = await params;
   if (!isHomeLocaleSegment(raw)) {
     return { title: SITE_TAB_TITLE };
   }
-  const appLocale = homeLocaleToAppLocale(raw);
-  const section = await getMachineCategorySectionPublic(categorySlug, appLocale);
   const m = await loadMachinesMessages(raw);
-  if (!section) {
-    return { title: SITE_TAB_TITLE, description: m.metaDescription };
-  }
   return {
     title: SITE_TAB_TITLE,
     description: m.metaDescription,
