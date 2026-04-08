@@ -190,13 +190,31 @@ export function LanguageSwitcher({
         type="button"
         onClick={() => setOpen((v) => !v)}
       >
-        <span className="absolute left-1 top-1/2 size-7 -translate-y-1/2 sm:left-[6px] sm:size-8">
-          <Image alt="" src={homeAssets.languageIcon} width={32} height={32} />
-          <Image alt="" className="pointer-events-none absolute inset-0 m-auto" src={homeAssets.languageAccent} width={7} height={11} />
+        <span className="absolute left-1 top-1/2 flex size-7 shrink-0 -translate-y-1/2 items-center justify-center sm:left-[6px]">
+          <Image
+            alt=""
+            className="object-contain"
+            height={28}
+            src={homeAssets.languageIcon}
+            width={28}
+          />
+          <Image
+            alt=""
+            className="pointer-events-none absolute inset-0 m-auto object-contain"
+            height={19}
+            src={homeAssets.languageAccent}
+            width={19}
+          />
         </span>
-        <span className="absolute left-10 top-1/2 -translate-y-1/2 text-xs font-semibold leading-[15.6px] sm:left-[46px] sm:text-sm">{current.short}</span>
-        <span className="absolute right-2 top-1/2 -translate-y-1/2 sm:right-3">
-          <Image alt="" className={`transition-transform duration-200 ${chevronClass}`} src={homeAssets.languageArrow} width={1} height={15} />
+        <span className="absolute left-9 top-1/2 -translate-y-1/2 text-xs font-semibold leading-[15.6px] sm:left-[38px] sm:text-sm">{current.short}</span>
+        <span className="absolute right-2 top-1/2 flex shrink-0 -translate-y-1/2 items-center justify-center sm:right-3">
+          <Image
+            alt=""
+            className={`h-3 w-[7px] object-contain transition-transform duration-200 ${chevronClass}`}
+            height={12}
+            src={homeAssets.languageArrow}
+            width={7}
+          />
         </span>
       </button>
       {open ? (
