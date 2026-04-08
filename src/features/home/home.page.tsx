@@ -8,7 +8,12 @@ import {
   homeAssets,
   solutionCardsLayout,
 } from "@/features/home/home.data";
-import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
+import {
+  HERO_CONTENT_TOP_PAD,
+  HOME_PAGE_BACKGROUND_CLASS,
+  HeroBackgroundLayers,
+  SOLUTIONS_TOP_FOLD_SCRIM_CLASS,
+} from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
@@ -141,7 +146,10 @@ function SolutionsSection({
   readonly machineSectionSlugs: readonly string[];
 }) {
   return (
-    <section className="mx-auto max-w-[1280px] px-4 pb-16 pt-12 sm:px-5 sm:pb-20 sm:pt-14 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="solutions">
+    <section
+      className="mx-auto max-w-[1280px] px-4 pb-16 pt-12 sm:px-5 sm:pb-20 sm:pt-14 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10"
+      id="solutions"
+    >
       <SectionHeading
         eyebrow={messages.solutions.eyebrow}
         title={messages.solutions.title}
@@ -314,7 +322,7 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
 
 export function HomePage({ locale, machineSectionSlugs, messages }: HomePageProps) {
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header locale={locale} messages={messages} navContext="home" />
       <div className="overflow-x-hidden">
         <HeroSection locale={locale} messages={messages} />

@@ -6,7 +6,7 @@ import type { BlogPostDetailDto, BlogPostImageDto } from "@/features/blog/blog.d
 import { formatBlogPublishedDate } from "@/features/blog/blog.format-date";
 import type { BlogMessages } from "@/features/blog/blog.messages";
 import { BlogProse } from "@/features/blog/blog-prose";
-import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { blogPageHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
@@ -184,7 +184,7 @@ export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: Blo
   ];
 
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header
         blogSlugByLocale={post.slugByLocale}
         locale={locale}

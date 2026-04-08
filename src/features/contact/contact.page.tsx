@@ -4,7 +4,11 @@ import Link from "next/link";
 import { ContactFormClient } from "@/features/contact/contact-form.client";
 import type { ContactMessages } from "@/features/contact/contact.messages";
 import { homeAssets } from "@/features/home/home.data";
-import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
+import {
+  HERO_CONTENT_TOP_PAD,
+  HOME_PAGE_BACKGROUND_CLASS,
+  HeroBackgroundLayers,
+} from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
@@ -28,7 +32,7 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
   const fc = homeMessages.footer.contact;
 
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <section className="relative min-h-[min(52svh,560px)] overflow-hidden lg:min-h-[480px]">

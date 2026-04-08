@@ -4,7 +4,7 @@ import type { MachineListItemDto } from "@/features/machines/machines.dto";
 import { machinesCategoryListHref } from "@/features/machines/machines-category-list-url";
 import { MachineListCard } from "@/features/machines/machine-list-card";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
-import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { homePageHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
@@ -142,7 +142,7 @@ export function MachinesCategoryPage({
   featuredOnly,
 }: MachinesCategoryPageProps) {
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header
         locale={locale}
         machineSectionSlugByLocale={machineSectionSlugByLocale}

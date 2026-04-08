@@ -5,7 +5,7 @@ import { BLOG_LIST_INDEX_EXTRA_TOP_SPACING } from "@/features/blog/blog.constant
 import type { BlogPostListItemDto } from "@/features/blog/blog.dto";
 import { formatBlogPublishedDate } from "@/features/blog/blog.format-date";
 import type { BlogMessages } from "@/features/blog/blog.messages";
-import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { blogPostHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
@@ -132,7 +132,7 @@ function Pagination({
 
 export function BlogListPage({ locale, homeMessages, blogMessages, posts, page, totalPages, total }: BlogListPageProps) {
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header blogListPage={page} locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <section

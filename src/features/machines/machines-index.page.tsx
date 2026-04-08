@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import type { MachineCategoryCardDto } from "@/features/machines/machines.dto";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
-import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { isRemoteImageUrl } from "@/lib/image/remote-image-url";
 import { homePageHref, machinesCategoryHref } from "@/lib/i18n/locale-routes";
@@ -73,7 +73,7 @@ function CategoryCard({
 
 export function MachinesIndexPage({ locale, homeMessages, machinesMessages, categories }: MachinesIndexPageProps) {
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <section

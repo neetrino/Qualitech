@@ -3,7 +3,7 @@ import type { AdminTheme } from "@/features/admin/admin-theme.constants";
 export function adminMainSurfaceClass(theme: AdminTheme): string {
   return theme === "light"
     ? "min-h-dvh bg-gradient-to-b from-zinc-50 via-zinc-100 to-zinc-200 text-zinc-900"
-    : "min-h-dvh bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white";
+    : "min-h-dvh bg-[linear-gradient(200.76deg,rgb(37_37_37)_14.56%,rgb(0_0_0)_90.79%)] text-white";
 }
 
 export function adminInputClass(theme: AdminTheme): string {

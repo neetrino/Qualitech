@@ -4,7 +4,7 @@ import Link from "next/link";
 import { aboutAssets } from "@/features/about/about.data";
 import type { AboutMessages } from "@/features/about/about.messages";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
+import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import { contactPageHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
@@ -136,7 +136,7 @@ function AboutCta({ locale, messages }: { readonly locale: HomeLocale; readonly 
 
 export function AboutPage({ locale, homeMessages, aboutMessages }: AboutPageProps) {
   return (
-    <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
       <Header locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <AboutStory homeMessages={homeMessages} locale={locale} messages={aboutMessages} />
