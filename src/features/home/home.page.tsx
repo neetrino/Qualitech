@@ -70,9 +70,9 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
   const demoSlugs = heroDemoMachineSlugsByLocale[locale];
   const demoHref = machineDetailHref(locale, demoSlugs.categorySlug, demoSlugs.machineSlug);
   const machinesHref = machinesPageHref(locale);
-  /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. */
+  /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. Tighter on small screens so buttons sit slightly higher. */
   const ctaRowMarginTop =
-    locale === "ru" ? "mt-32 sm:mt-36 lg:mt-32" : "mt-20 sm:mt-24 lg:mt-20";
+    locale === "ru" ? "mt-28 sm:mt-36 lg:mt-32" : "mt-16 sm:mt-24 lg:mt-20";
 
   return (
     <section className="relative min-h-[min(88svh,980px)] overflow-hidden lg:min-h-[920px]" id="hero">
