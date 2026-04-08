@@ -12,7 +12,8 @@ import {
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
-import { Header } from "@/shared/layout/header";
+import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
+import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 const CONTACT_ICON_SIZE_PX = 14;
@@ -32,8 +33,8 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
   const fc = homeMessages.footer.contact;
 
   return (
-    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
-      <Header locale={locale} messages={homeMessages} navContext="site" />
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
+      <SiteHeader locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <section className="relative min-h-[min(52svh,560px)] overflow-hidden lg:min-h-[480px]">
           <HeroBackgroundLayers />

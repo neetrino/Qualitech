@@ -1,20 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { homeAssets, navItemsMeta, type NavItemMeta } from "@/features/home/home.data";
+import { homeAssets, navItemsMeta } from "@/features/home/home.data";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import {
-  aboutPageHref,
-  blogPageHref,
-  contactPageHref,
-  homePageHref,
-  machinesPageHref,
-} from "@/lib/i18n/locale-routes";
+import { contactPageHref } from "@/lib/i18n/locale-routes";
 import { LanguageSwitcher } from "@/shared/layout/language-switcher";
+import {
+  type HeaderNavContext,
+  resolveLogoHref,
+  resolveNavHref,
+} from "@/shared/layout/header-nav-helpers";
 
-type HeaderNavContext = "home" | "site";
-
-type HeaderProps = {
+export type HeaderProps = {
   readonly locale: HomeLocale;
   readonly messages: HomeMessages;
   readonly navContext?: HeaderNavContext;
@@ -27,32 +24,6 @@ type HeaderProps = {
   /** Machine product page: same machine id, localized slugs. */
   readonly machineSlugByLocale?: Partial<Record<HomeLocale, string>>;
 };
-
-function resolveNavHref(item: NavItemMeta, ctx: HeaderNavContext, locale: HomeLocale): string {
-  if (item.id === "contact") {
-    return contactPageHref(locale);
-  }
-  if (item.id === "blog") {
-    return blogPageHref(locale);
-  }
-  if (item.id === "about") {
-    return aboutPageHref(locale);
-  }
-  if (item.id === "machines") {
-    return machinesPageHref(locale);
-  }
-  if (ctx === "home") {
-    return item.href;
-  }
-  if (item.id === "home") {
-    return homePageHref(locale);
-  }
-  return `${homePageHref(locale)}${item.href}`;
-}
-
-function resolveLogoHref(ctx: HeaderNavContext, locale: HomeLocale): string {
-  return ctx === "home" ? "#hero" : homePageHref(locale);
-}
 
 export function Header({
   locale,
@@ -67,7 +38,7 @@ export function Header({
   const canPrefetchLogo = logoHref.startsWith("/");
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 flex w-full justify-center px-4 pt-3 sm:px-5 sm:pt-5 md:px-6 lg:px-8 lg:pt-6 xl:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 hidden w-full justify-center px-4 pt-3 sm:px-5 sm:pt-5 md:flex md:px-6 lg:px-8 lg:pt-6 xl:px-10">
       <div className="relative flex w-full max-w-[1120px] flex-col gap-3 rounded-[20px] bg-white p-3 text-black shadow-[0_16px_48px_rgba(0,0,0,0.28)] sm:rounded-3xl sm:p-4 lg:h-[64px] lg:flex-row lg:items-center lg:justify-between lg:rounded-[80px] lg:px-6 lg:py-0 xl:max-w-[1220px]">
         <div className="flex items-center justify-between gap-2 lg:contents">
           <Link className="shrink-0" href={logoHref} prefetch={canPrefetchLogo ? true : undefined}>

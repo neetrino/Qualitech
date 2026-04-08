@@ -7,7 +7,8 @@ import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
 import { HOME_LOCALE_COOKIE_NAME } from "@/lib/i18n/home-locale.constants";
-import { Header } from "@/shared/layout/header";
+import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
+import { SiteHeader } from "@/shared/layout/site-header";
 
 function localeFromCookie(raw: string | undefined): HomeLocale {
   return raw === "en" || raw === "ru" ? raw : "ru";
@@ -21,8 +22,8 @@ export default async function AdminLayout({ children }: { children: ReactNode })
 
   return (
     <>
-      <Header locale={locale} messages={homeMessages} navContext="site" />
-      <div className={HERO_CONTENT_TOP_PAD}>
+      <SiteHeader locale={locale} messages={homeMessages} navContext="site" />
+      <div className={`${HERO_CONTENT_TOP_PAD} ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
         <AdminMessagesProvider messages={adminMessages}>{children}</AdminMessagesProvider>
       </div>
     </>

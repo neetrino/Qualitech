@@ -10,9 +10,9 @@ export const HOME_PAGE_BACKGROUND_CLASS =
 const HERO_IMAGE_MASK_CLASS =
   "[mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,rgba(0_0_0_/_0.45)_78%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,rgba(0_0_0_/_0.45)_78%,transparent_100%)]";
 
-/** Clears the fixed header so hero copy stays readable; tuned to Header outer padding + inner bar height. */
+/** Below `md` no top chrome (header is `md`+ only); from `md` up: fixed desktop header clearance. */
 export const HERO_CONTENT_TOP_PAD =
-  "pt-[7.75rem] sm:pt-[8.25rem] md:pt-[8.5rem] lg:pt-[6.75rem] xl:pt-28";
+  "pt-8 sm:pt-10 md:pt-[8.5rem] lg:pt-[6.75rem] xl:pt-28";
 
 /** Softens the seam between the hero and the solutions block (full-bleed top gradient). */
 export const SOLUTIONS_TOP_FOLD_SCRIM_CLASS =

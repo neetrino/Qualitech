@@ -9,7 +9,8 @@ import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/hom
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { blogPostHref, homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
-import { Header } from "@/shared/layout/header";
+import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
+import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type BlogListPageProps = {
@@ -132,8 +133,8 @@ function Pagination({
 
 export function BlogListPage({ locale, homeMessages, blogMessages, posts, page, totalPages, total }: BlogListPageProps) {
   return (
-    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
-      <Header blogListPage={page} locale={locale} messages={homeMessages} navContext="site" />
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
+      <SiteHeader blogListPage={page} locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
         <section
           className={`mx-auto max-w-[1280px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10 ${HERO_CONTENT_TOP_PAD}`}

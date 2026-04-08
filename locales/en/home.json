@@ -1,6 +1,7 @@
 {
   "header": {
     "ctaRequest": "REQUEST A QUOTE",
+    "menuTitle": "Menu",
     "languageMenuAria": "Choose language",
     "locales": {
       "ru": { "short": "RU", "name": "Russian" },

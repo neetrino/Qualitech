@@ -8,7 +8,8 @@ import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/hom
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import { homePageHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
-import { Header } from "@/shared/layout/header";
+import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
+import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 type MachinesCategoryPageProps = {
@@ -142,8 +143,8 @@ export function MachinesCategoryPage({
   featuredOnly,
 }: MachinesCategoryPageProps) {
   return (
-    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white`}>
-      <Header
+    <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
+      <SiteHeader
         locale={locale}
         machineSectionSlugByLocale={machineSectionSlugByLocale}
         messages={homeMessages}
