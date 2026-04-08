@@ -1,6 +1,17 @@
+import type { HomeLocale } from "@/features/home/home.messages";
+
 export type NavItemMeta = {
   readonly id: "home" | "machines" | "about" | "blog" | "contact";
   readonly href: string;
+};
+
+/** Matches `prisma/seed.ts` — first CNC category + demo machine slugs per locale. */
+export const heroDemoMachineSlugsByLocale: Record<
+  HomeLocale,
+  { readonly categorySlug: string; readonly machineSlug: string }
+> = {
+  en: { categorySlug: "cnc-machines", machineSlug: "demo-machine" },
+  ru: { categorySlug: "cnc-stanki", machineSlug: "demo-stanok" },
 };
 
 export type SolutionCardLayout = {

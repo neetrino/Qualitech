@@ -163,7 +163,7 @@ export function BlogListPage({ locale, homeMessages, blogMessages, posts, page, 
           </div>
         </section>
 
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );

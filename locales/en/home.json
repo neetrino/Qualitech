@@ -15,17 +15,17 @@
     "contact": "Contact"
   },
   "hero": {
-    "eyebrow": "Industrial excellence",
-    "lineOrange": "Precise and reliable",
-    "titleLine1": "Industrial",
-    "titleLine2": "machine tools",
+    "eyebrow": "Armenian industrial manufacturing",
+    "lineOrange": "Precise. Reliable. Modern.",
+    "titleLine1": "INDUSTRIAL",
+    "titleLine2": "MACHINE TOOLS IN ARMENIA",
     "ctaExplore": "Explore machines",
     "ctaDemo": "Watch demo",
-    "lede": "Advanced industrial solutions engineered for peak performance. We deliver reliability, precision, and innovation.",
+    "lede": "QM — an Armenian manufacturer of high-precision machine tools and industrial solutions for modern production. We develop and deploy equipment for businesses across Armenia and export our products to international markets.",
     "stats": [
-      { "value": "25+", "label": "Years of experience" },
-      { "value": "500+", "label": "Completed projects" },
-      { "value": "98%", "label": "Client satisfaction" }
+      { "value": "Since 1998", "label": "in the Armenian market" },
+      { "value": "200+", "label": "industrial machine tools" },
+      { "value": "98%", "label": "satisfied customers" }
     ]
   },
   "solutions": {
@@ -46,7 +46,7 @@
       },
       {
         "title": "Industrial robotic system",
-        "description": "Fully automated robotics for assembly, welding, and material handling. Boosts throughput while maintaining consistent quality.",
+        "description": "Fully automated robotics for assembly, welding, and material handling. Boosts throughput while maintaining consistent quality standards.",
         "bullets": [
           "6 degrees of freedom",
           "AI-powered vision",
@@ -55,7 +55,7 @@
       },
       {
         "title": "Laser cutting and engraving system",
-        "description": "Modern fiber laser technology for cutting and engraving diverse materials. Suited for precision metalwork and custom fabrication.",
+        "description": "Modern fiber laser technology for cutting and engraving diverse materials. Ideal for precision metalwork and custom fabrication.",
         "bullets": [
           "Ultra-fast processing",
           "Multi-material support",
@@ -65,84 +65,83 @@
     ]
   },
   "about": {
-    "eyebrow": "About Qualitech",
-    "title": "BUILDING",
-    "accent": "THE FUTURE",
+    "eyebrow": "BUILDING THE FUTURE",
+    "title": "About the company — industrial",
+    "accent": " production in Armenia",
     "description": "",
     "paragraphs": [
-      "Since 2001, Qualitech Machinery has been at the forefront of industrial innovation. Our commitment to excellence and precision engineering has made us a trusted partner worldwide.",
-      "We blend traditional craftsmanship with modern technology to build equipment that meets the demanding requirements of today’s industrial environment. Every machine undergoes rigorous quality control.",
-      "Our team of experienced engineers and technicians continuously innovates so our customers always have access to the most advanced solutions."
+      "QM is an Armenian manufacturing company founded in 1998 in Hrazdan. We specialize in industrial equipment and machine tools in Armenia, combining engineering expertise, high precision, and modern technology.",
+      "Our production structure covers the full metalworking cycle: blanking, foundry, turning, milling, jig boring, grinding, heat treatment, and gear cutting, plus modern CNC equipment. This approach ensures stable quality of industrial products and control at every production stage."
     ],
     "highlights": [
-      { "value": "ISO 9001", "label": "Certified quality" },
-      { "value": "24/7", "label": "Support" }
+      { "value": "1998", "label": "Founded in Armenia" },
+      { "value": "24/7", "label": "Production and support" }
     ]
   },
   "advantages": {
     "eyebrow": "Why choose us",
-    "title": "QUALITECH",
-    "accent": "ADVANTAGE",
-    "description": "Excellence driven by innovation, quality, and commitment.",
+    "title": "QUALITECH ADVANTAGES",
+    "accent": " INDUSTRIAL MANUFACTURING IN ARMENIA",
+    "description": "Machine tool manufacturing in Armenia with full-cycle metalworking.",
     "cards": [
       {
-        "title": "Premium quality",
-        "description": "Every machine is built to the highest standards using top-grade materials and advanced technology."
+        "title": "FULL-CYCLE METALWORKING",
+        "description": "Blanking, casting, turning, milling, and CNC — the full cycle of machine tool production in Armenia."
       },
       {
-        "title": "Reliable and durable",
-        "description": "Our equipment is engineered for continuous operation in demanding industrial environments."
+        "title": "MODERN INDUSTRIAL EQUIPMENT",
+        "description": "More than 200 units of equipment for precision metal processing and industrial machine tool manufacturing."
       },
       {
-        "title": "Expert support",
-        "description": "Comprehensive technical support and service from experienced engineers."
+        "title": "MACHINE TOOL PRODUCTION SINCE 1998",
+        "description": "Proven experience in industry and metalworking in Armenia."
       },
       {
-        "title": "Innovative solutions",
-        "description": "Stay ahead with advanced automation features and smart technology integration."
+        "title": "INDUSTRIAL SOLUTIONS AND LEASING",
+        "description": "Manufacturing, equipment supply, and flexible partnership terms for businesses in Armenia."
       }
     ]
   },
   "insights": {
-    "eyebrow": "Latest insights",
-    "title": "INDUSTRY NEWS",
+    "eyebrow": "LATEST ARTICLES",
+    "title": "INDUSTRIAL MANUFACTURING NEWS",
     "accent": "",
-    "description": "Stay current with trends, tips, and innovations in industrial equipment.",
+    "description": "Up-to-date information on machine tool manufacturing, metalworking, and industrial equipment in Armenia.",
     "readMore": "Read more",
     "ctaMore": "Learn more",
     "articles": [
       {
-        "category": "Technology",
-        "title": "The future of industrial automation: AI and machine learning",
-        "description": "How artificial intelligence is reshaping manufacturing and what it means for the road ahead.",
+        "category": "MANUFACTURING",
+        "title": "How industrial machine tools are made",
+        "description": "The full production cycle: from blanks to CNC machining.",
         "date": "March 12, 2026",
-        "readTime": "5 min read"
+        "readTime": "5 min"
       },
       {
-        "category": "Maintenance",
-        "title": "CNC equipment maintenance best practices",
-        "description": "Essential tips to keep your CNC equipment running at peak performance.",
+        "category": "EQUIPMENT",
+        "title": "Modern machine tools in production",
+        "description": "Equipment and technologies for precision metalworking.",
         "date": "March 8, 2026",
-        "readTime": "7 min read"
+        "readTime": "7 min"
       },
       {
-        "category": "Automation",
-        "title": "Optimizing production lines with robotics",
-        "description": "How integrating robotic systems can boost efficiency and reduce costs.",
+        "category": "METALWORKING",
+        "title": "Precision metal processing technologies",
+        "description": "Milling, turning, grinding, and jig boring.",
         "date": "March 5, 2026",
-        "readTime": "6 min read"
+        "readTime": "6 min"
       },
       {
-        "category": "Innovation",
-        "title": "Using augmented reality for immersive on-site training",
-        "description": "How AR tools are transforming workforce training with hands-on, immersive learning.",
+        "category": "PROJECTS",
+        "title": "Delivered manufacturing solutions",
+        "description": "Examples of completed orders across industries.",
         "date": "March 10, 2026",
-        "readTime": "8 min read"
+        "readTime": "8 min"
       }
     ]
   },
   "footer": {
-    "tagline": "A leading provider of industrial equipment solutions with over 25 years of experience driving innovation in manufacturing.",
+    "tagline": "Industrial machine tools and metalworking in Armenia for over 25 years: modern technology, full-cycle production, and reliable solutions for industry.",
     "quickLinks": {
       "title": "Quick links",
       "links": ["Machines", "About", "Blog", "Contact"]
@@ -150,7 +149,7 @@
     "services": {
       "title": "Services",
       "links": [
-        "CNC machining",
+        "CNC system machining",
         "Robotic automation",
         "Laser cutting",
         "Maintenance",
@@ -158,7 +157,7 @@
       ]
     },
     "contact": {
-      "title": "Contact",
+      "title": "Contact information",
       "addressLine1": "Hrazdan, Kotayk Province",
       "addressLine2": "Armenia",
       "phone": "+79197292963",

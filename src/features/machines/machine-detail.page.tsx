@@ -165,7 +165,7 @@ export function MachineDetailPage({
             </section>
           ) : null}
         </article>
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );

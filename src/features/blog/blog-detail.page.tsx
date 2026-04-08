@@ -236,7 +236,7 @@ export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: Blo
             </section>
           ) : null}
         </article>
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );

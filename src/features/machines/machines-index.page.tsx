@@ -99,7 +99,7 @@ export function MachinesIndexPage({ locale, homeMessages, machinesMessages, cate
           )}
         </section>
 
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );

@@ -4,12 +4,13 @@ import Link from "next/link";
 import {
   advantageCardsLayout,
   articleCardsLayout,
+  heroDemoMachineSlugsByLocale,
   homeAssets,
   solutionCardsLayout,
 } from "@/features/home/home.data";
 import { HERO_CONTENT_TOP_PAD, HeroBackgroundLayers } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
+import { machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { Header } from "@/shared/layout/header";
 
@@ -54,7 +55,20 @@ function SectionHeading({
   );
 }
 
-function HeroSection({ messages }: { readonly messages: HomeMessages }) {
+const HERO_PRIMARY_CTA_CLASS =
+  "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#ff6900] px-5 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_14px_rgba(255,105,0,0.28),0_3px_5px_rgba(255,105,0,0.25)] transition hover:brightness-110 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[200px] lg:min-w-[220px]";
+
+const HERO_SECONDARY_CTA_CLASS =
+  "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-white transition hover:bg-white/10 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]";
+
+function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
+  const demoSlugs = heroDemoMachineSlugsByLocale[locale];
+  const demoHref = machineDetailHref(locale, demoSlugs.categorySlug, demoSlugs.machineSlug);
+  const machinesHref = machinesPageHref(locale);
+  /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. */
+  const ctaRowMarginTop =
+    locale === "ru" ? "mt-20 sm:mt-24 lg:mt-40" : "mt-8 sm:mt-10 lg:mt-24";
+
   return (
     <section className="relative min-h-[min(88svh,980px)] overflow-hidden lg:min-h-[920px]" id="hero">
       <HeroBackgroundLayers imagePriority />
@@ -86,21 +100,17 @@ function HeroSection({ messages }: { readonly messages: HomeMessages }) {
             </h1>
           </div>
         </div>
-        <div className="mt-8 flex w-full max-w-md flex-col items-stretch gap-2.5 self-center sm:mt-10 sm:max-w-none sm:flex-row sm:justify-center sm:gap-3 lg:mt-24">
-          <button
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#ff6900] px-5 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_14px_rgba(255,105,0,0.28),0_3px_5px_rgba(255,105,0,0.25)] sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[200px] lg:min-w-[220px]"
-            type="button"
-          >
+        <div
+          className={`flex w-full max-w-md flex-col items-stretch gap-2.5 self-center sm:max-w-none sm:flex-row sm:justify-center sm:gap-3 ${ctaRowMarginTop}`}
+        >
+          <Link className={HERO_PRIMARY_CTA_CLASS} href={machinesHref}>
             {messages.hero.ctaExplore}
             <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
-          </button>
-          <button
-            className="flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-white px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-white sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]"
-            type="button"
-          >
+          </Link>
+          <Link className={HERO_SECONDARY_CTA_CLASS} href={demoHref}>
             <Image alt="" className="shrink-0" src={homeAssets.playIcon} width={16} height={16} />
             {messages.hero.ctaDemo}
-          </button>
+          </Link>
         </div>
         <div className="mt-10 grid gap-8 lg:mt-auto lg:grid-cols-[minmax(0,228px)_1fr_minmax(0,440px)] lg:items-end lg:gap-5 lg:pt-10 xl:grid-cols-[228px_1fr_440px]">
           <p className="max-w-[248px] text-xs font-normal leading-relaxed tracking-[-0.02em] text-white sm:text-sm sm:leading-6 sm:tracking-[-0.03em] lg:max-w-none xl:max-w-[228px]">
@@ -307,12 +317,12 @@ export function HomePage({ locale, machineSectionSlugs, messages }: HomePageProp
     <main className="relative bg-[linear-gradient(201deg,#252525_14.56%,#000_90.79%)] text-white">
       <Header locale={locale} messages={messages} navContext="home" />
       <div className="overflow-x-hidden">
-        <HeroSection messages={messages} />
+        <HeroSection locale={locale} messages={messages} />
         <SolutionsSection locale={locale} machineSectionSlugs={machineSectionSlugs} messages={messages} />
         <AboutSection messages={messages} />
         <AdvantagesSection messages={messages} />
         <InsightsSection messages={messages} />
-        <Footer messages={messages} />
+        <Footer locale={locale} messages={messages} />
       </div>
     </main>
   );

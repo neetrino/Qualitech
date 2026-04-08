@@ -57,8 +57,10 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
           <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-12 xl:gap-16">
             <div className="space-y-8">
               <div>
-                <h2 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{c.infoTitle}</h2>
-                <ul className="mt-5 space-y-4 text-sm text-[#9f9fa9]">
+                {c.infoTitle.length > 0 ? (
+                  <h2 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{c.infoTitle}</h2>
+                ) : null}
+                <ul className={`space-y-4 text-sm text-[#9f9fa9] ${c.infoTitle.length > 0 ? "mt-5" : ""}`}>
                   <li className="flex gap-3">
                     <Image
                       alt=""
@@ -151,7 +153,7 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
           </div>
         </section>
 
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );

@@ -204,7 +204,7 @@ export function MachinesCategoryPage({
           )}
         </section>
 
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );

@@ -143,7 +143,7 @@ export function AboutPage({ locale, homeMessages, aboutMessages }: AboutPageProp
         <AboutValues messages={aboutMessages} />
         <AboutStats messages={aboutMessages} />
         <AboutCta locale={locale} messages={aboutMessages} />
-        <Footer messages={homeMessages} />
+        <Footer locale={locale} messages={homeMessages} />
       </div>
     </main>
   );
