@@ -18,19 +18,10 @@
     "signingOut": "Signing out…",
     "navAriaLabel": "Admin sections",
     "tabs": {
-      "overview": "Overview",
       "machineSections": "Machine sections",
       "blog": "Blog",
       "products": "Products",
       "messages": "Messages"
-    },
-    "overview": {
-      "productsLabel": "Products",
-      "productsBody": "— add, edit, or delete catalog items (per locale: meta title, meta description, Open Graph image, gallery). API:",
-      "machineSectionsLabel": "Machine sections",
-      "machineSectionsBody": "— top-level groups for the public /machines catalog (name + URL slug per locale). API:",
-      "blogLabel": "Blog",
-      "blogBody": "— add, edit, or delete articles (same SEO / OG fields per locale). API:"
     }
   },
   "messagesList": {
