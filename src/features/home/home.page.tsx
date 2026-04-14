@@ -229,9 +229,12 @@ function AboutSection({ messages }: { readonly messages: HomeMessages }) {
             <p key={`${paragraphIndex}-${paragraph.slice(0, 24)}`}>{paragraph}</p>
           ))}
         </div>
-        <div className="mt-8 grid gap-4 sm:gap-5 md:grid-cols-2">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5">
           {messages.about.highlights.map((highlight, highlightIndex) => (
-            <div key={`${highlight.value}-${highlightIndex}`} className="rounded-xl border border-[#27272a] bg-[#18181b] px-5 py-5 text-left sm:px-6 sm:py-6">
+            <div
+              key={`${highlight.value}-${highlightIndex}`}
+              className="min-w-0 rounded-xl border border-[#27272a] bg-[#18181b] px-3 py-4 text-left sm:px-6 sm:py-6"
+            >
               <div className="mb-5 -mt-5 h-0.5 w-[70%] rounded-full bg-[#ff6900] sm:-mt-6" />
               <p className="text-2xl font-black text-white sm:text-3xl">{highlight.value}</p>
               <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-[#52525c] sm:text-[11px] sm:tracking-[0.16em]">{highlight.label}</p>
@@ -322,7 +325,7 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
             );
           })}
         </div>
-        <div className="mt-10 flex justify-center sm:mt-12">
+        <div className="hidden justify-center sm:mt-12 sm:flex">
           <button className="flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]" type="button">
             {messages.insights.ctaMore}
             <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
