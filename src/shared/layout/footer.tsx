@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { homeAssets } from "@/features/home/home.data";
+import { FOOTER_SOCIAL_HREFS, homeAssets } from "@/features/home/home.data";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
 import {
   aboutPageHref,
@@ -45,6 +45,9 @@ function serviceLinkHref(locale: HomeLocale, index: number): string {
 const footerLinkClassName =
   "transition hover:text-[#a1a1aa] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]";
 
+const footerSocialLinkClassName =
+  "grid size-9 place-items-center rounded-lg border border-[rgba(255,255,255,0.42)] bg-[#18181b] transition hover:border-[#ff6900] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] sm:size-10 sm:rounded-[10px]";
+
 export function Footer({ locale, messages }: FooterProps) {
   const footerColumns = [
     { title: messages.footer.quickLinks.title, links: messages.footer.quickLinks.links },
@@ -59,7 +62,32 @@ export function Footer({ locale, messages }: FooterProps) {
             <Image alt="Qualitech logo" className="h-auto w-[260px] max-w-full sm:w-[300px]" src={homeAssets.footerLogo} width={338} height={46} />
           </Link>
           <p className="mt-6 max-w-[220px] text-xs leading-relaxed tracking-[-0.02em] text-[#52525c] sm:mt-7 sm:max-w-[239px] sm:text-sm">{messages.footer.tagline}</p>
-          <div className="mt-6 flex gap-2 sm:mt-7 sm:gap-3">{homeAssets.socialIcons.map((icon) => <span key={icon} className="grid size-9 place-items-center rounded-lg border border-[rgba(255,255,255,0.42)] bg-[#18181b] sm:size-10 sm:rounded-[10px]"><Image alt="" src={icon} width={18} height={18} /></span>)}</div>
+          <div className="mt-6 flex gap-2 sm:mt-7 sm:gap-3">
+            {homeAssets.socialIcons.map((icon, index) => {
+              const href = FOOTER_SOCIAL_HREFS[index];
+              const label = messages.footer.socialLinks[index]?.label ?? "Social";
+              const iconNode = <Image alt="" src={icon} width={18} height={18} />;
+              if (href.length === 0) {
+                return (
+                  <span key={icon} className={footerSocialLinkClassName}>
+                    {iconNode}
+                  </span>
+                );
+              }
+              return (
+                <a
+                  key={icon}
+                  aria-label={label}
+                  className={footerSocialLinkClassName}
+                  href={href}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {iconNode}
+                </a>
+              );
+            })}
+          </div>
         </div>
         {footerColumns.map((section, sectionIndex) => (
           <div key={section.title}>

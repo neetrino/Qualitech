@@ -166,6 +166,12 @@
       "phone": "+79197292963",
       "email": "qualitechmachinery@mail.ru"
     },
+    "socialLinks": [
+      { "label": "Facebook" },
+      { "label": "X" },
+      { "label": "LinkedIn" },
+      { "label": "Instagram" }
+    ],
     "copyright": "Авторские права © 2017–2026 Neetrino IT Company. Все права защищены.",
     "legal": [
       "Политика Конфиденциальности",
