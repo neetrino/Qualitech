@@ -11,7 +11,7 @@ import {
   machinesPageHref,
 } from "@/lib/i18n/locale-routes";
 
-const CONTACT_INFO_ICON_SIZE_PX = 14;
+const CONTACT_INFO_ICON_SIZE_PX = 18;
 /** Matches the three solution cards on the home page (footer service lines 1–3). */
 const FOOTER_SERVICE_LINES_LINKED_TO_SOLUTIONS = 3;
 
@@ -110,8 +110,14 @@ export function Footer({ locale, messages }: FooterProps) {
         <div>
           <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{messages.footer.contact.title}</h3>
           <div className="mt-4 space-y-3 text-[11px] tracking-[-0.01em] text-[#52525c] sm:mt-5 sm:text-xs">
-            <div className="flex gap-3">
-              <Image alt="" className="mt-0.5 size-3.5 shrink-0" src={homeAssets.locationIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
+            <div className="flex items-start gap-3">
+              <Image
+                alt=""
+                className="mt-0.5 shrink-0 object-contain"
+                height={CONTACT_INFO_ICON_SIZE_PX}
+                src={homeAssets.locationIcon}
+                width={CONTACT_INFO_ICON_SIZE_PX}
+              />
               <p>
                 {messages.footer.contact.addressLine1}
                 <br />
@@ -119,11 +125,11 @@ export function Footer({ locale, messages }: FooterProps) {
               </p>
             </div>
             <p className="flex items-center gap-3">
-              <Image alt="" className="size-3.5 shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
+              <Image alt="" className="shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               {messages.footer.contact.phone}
             </p>
             <p className="flex items-center gap-3">
-              <Image alt="" className="size-3.5 shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
+              <Image alt="" className="shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               <a className="break-all text-[#ff6900] transition hover:brightness-110" href={`mailto:${messages.footer.contact.email}`}>
                 {messages.footer.contact.email}
               </a>

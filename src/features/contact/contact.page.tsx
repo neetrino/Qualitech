@@ -16,7 +16,7 @@ import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.consta
 import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
-const CONTACT_ICON_SIZE_PX = 14;
+const CONTACT_ICON_SIZE_PX = 18;
 
 type ContactPageProps = {
   readonly locale: HomeLocale;
@@ -66,10 +66,10 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
                   <h2 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{c.infoTitle}</h2>
                 ) : null}
                 <ul className={`space-y-4 text-sm text-[#9f9fa9] ${c.infoTitle.length > 0 ? "mt-5" : ""}`}>
-                  <li className="flex gap-3">
+                  <li className="flex items-start gap-3">
                     <Image
                       alt=""
-                      className="mt-0.5 size-3.5 shrink-0"
+                      className="mt-0.5 shrink-0 object-contain"
                       height={CONTACT_ICON_SIZE_PX}
                       src={homeAssets.locationIcon}
                       width={CONTACT_ICON_SIZE_PX}
@@ -86,7 +86,7 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
                   <li className="flex gap-3">
                     <Image
                       alt=""
-                      className="mt-0.5 size-3.5 shrink-0"
+                      className="mt-0.5 shrink-0"
                       height={CONTACT_ICON_SIZE_PX}
                       src={homeAssets.phoneIcon}
                       width={CONTACT_ICON_SIZE_PX}
@@ -101,7 +101,7 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
                   <li className="flex gap-3">
                     <Image
                       alt=""
-                      className="mt-0.5 size-3.5 shrink-0"
+                      className="mt-0.5 shrink-0"
                       height={CONTACT_ICON_SIZE_PX}
                       src={homeAssets.emailIcon}
                       width={CONTACT_ICON_SIZE_PX}
