@@ -110,14 +110,8 @@ export function Footer({ locale, messages }: FooterProps) {
         <div>
           <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{messages.footer.contact.title}</h3>
           <div className="mt-4 space-y-3 text-[11px] tracking-[-0.01em] text-[#52525c] sm:mt-5 sm:text-xs">
-            <div className="flex items-start gap-3">
-              <Image
-                alt=""
-                className="mt-0.5 shrink-0 object-contain"
-                height={CONTACT_INFO_ICON_SIZE_PX}
-                src={homeAssets.locationIcon}
-                width={CONTACT_INFO_ICON_SIZE_PX}
-              />
+            <div className="flex gap-3">
+              <Image alt="" className="mt-0.5 shrink-0" src={homeAssets.locationIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               <p>
                 {messages.footer.contact.addressLine1}
                 <br />

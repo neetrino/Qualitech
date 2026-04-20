@@ -14,7 +14,7 @@ import {
   HeroBackgroundLayers,
 } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
+import { aboutPageHref, machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
 import { SiteHeader } from "@/shared/layout/site-header";
@@ -206,14 +206,16 @@ function SolutionsSection({
   );
 }
 
-function AboutSection({ messages }: { readonly messages: HomeMessages }) {
+function AboutSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
+  const aboutHref = aboutPageHref(locale);
+
   return (
-    <section className="relative overflow-hidden px-4 pb-16 pt-16 sm:px-5 sm:pb-20 sm:pt-20 md:px-6 lg:px-8 xl:px-10" id="about">
+    <section className="relative overflow-hidden px-4 pb-10 pt-16 sm:px-5 sm:pb-14 sm:pt-20 md:px-6 lg:px-8 xl:px-10" id="about">
       <div className="absolute left-0 top-[34%] hidden h-48 w-px rounded-full bg-[#ff6900] xl:block" />
       <div className="absolute -left-20 top-[4.75rem] hidden w-[min(560px,48vw)] sm:top-[-8.5rem] xl:block">
         <Image alt="" className="rotate-90 -scale-y-100 h-auto w-full" src={homeAssets.robotArm} width={680} height={724} />
       </div>
-      <div className="absolute -right-20 -bottom-16 hidden w-[min(560px,48vw)] -translate-x-10 xl:block">
+      <div className="absolute -right-20 -bottom-2 hidden w-[min(560px,48vw)] -translate-x-10 xl:block">
         <Image alt="" className="rotate-90 h-auto w-full" src={homeAssets.robotArm} width={680} height={724} />
       </div>
       <div className="mx-auto max-w-[680px] text-center">
@@ -241,6 +243,15 @@ function AboutSection({ messages }: { readonly messages: HomeMessages }) {
             </div>
           ))}
         </div>
+        <div className="mt-8 flex justify-center">
+          <Link
+            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] transition hover:brightness-110 sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]"
+            href={aboutHref}
+          >
+            {messages.about.ctaMore}
+            <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
+          </Link>
+        </div>
       </div>
     </section>
   );
@@ -248,7 +259,7 @@ function AboutSection({ messages }: { readonly messages: HomeMessages }) {
 
 function AdvantagesSection({ messages }: { readonly messages: HomeMessages }) {
   return (
-    <section className="relative px-4 pb-16 pt-14 sm:px-5 sm:pb-20 sm:pt-16 md:px-6 lg:px-8 xl:px-10">
+    <section className="relative px-4 pb-16 pt-10 sm:px-5 sm:pb-20 sm:pt-12 md:px-6 lg:px-8 xl:px-10">
       <div className="absolute left-1/2 top-20 hidden h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-[linear-gradient(28.86deg,rgba(243,244,246,0.2)_0%,rgba(0,0,0,0)_100%)] blur-[48px] xl:block" />
       <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-[180px] bg-[rgba(255,105,0,0.08)] xl:block" />
       <div className="relative mx-auto max-w-[1120px] xl:max-w-[1200px]">
@@ -343,7 +354,7 @@ export function HomePage({ locale, machineSectionSlugs, messages }: HomePageProp
       <div className="overflow-x-hidden">
         <HeroSection locale={locale} messages={messages} />
         <SolutionsSection locale={locale} machineSectionSlugs={machineSectionSlugs} messages={messages} />
-        <AboutSection messages={messages} />
+        <AboutSection locale={locale} messages={messages} />
         <AdvantagesSection messages={messages} />
         <InsightsSection messages={messages} />
         <Footer locale={locale} messages={messages} />
