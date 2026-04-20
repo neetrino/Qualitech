@@ -154,7 +154,7 @@ function SolutionsSection({
 }) {
   return (
     <section
-      className="mx-auto max-w-[1280px] px-4 pb-16 pt-12 sm:px-5 sm:pb-20 sm:pt-14 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10"
+      className="mx-auto max-w-[1200px] px-4 pb-16 pt-12 sm:px-5 sm:pb-20 sm:pt-14 md:px-6 lg:px-8 xl:max-w-[1320px] xl:px-10"
       id="solutions"
     >
       <SectionHeading
@@ -292,7 +292,7 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
   return (
     <section className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-5 sm:pb-20 sm:pt-16 md:px-6 lg:px-8 xl:px-10" id="insights">
       <div className="absolute right-[8%] top-12 hidden h-[520px] w-[900px] rounded-full bg-[linear-gradient(28.86deg,rgba(243,244,246,0.2)_0%,rgba(0,0,0,0)_100%)] blur-[48px] xl:block" />
-      <div className="mx-auto max-w-[1280px] xl:max-w-[1360px]">
+      <div className="mx-auto max-w-[1200px] xl:max-w-[1320px]">
         <SectionHeading
           eyebrow={messages.insights.eyebrow}
           title={messages.insights.title}
