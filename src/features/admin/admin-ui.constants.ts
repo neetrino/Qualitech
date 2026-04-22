@@ -114,22 +114,6 @@ export function adminBodyMutedClass(theme: AdminTheme): string {
   return theme === "light" ? "text-sm text-zinc-600" : "text-sm text-[#9f9fa9]";
 }
 
-export function adminOverviewProseClass(theme: AdminTheme): string {
-  return theme === "light"
-    ? "text-sm leading-7 text-zinc-600"
-    : "text-sm leading-7 text-[#9f9fa9]";
-}
-
-export function adminOverviewStrongClass(theme: AdminTheme): string {
-  return theme === "light" ? "text-zinc-900" : "text-white/90";
-}
-
-export function adminCodeInlineClass(theme: AdminTheme): string {
-  return theme === "light"
-    ? "rounded bg-zinc-200/90 px-1 font-mono text-xs text-zinc-800"
-    : "rounded bg-white/10 px-1 font-mono text-xs text-white/90";
-}
-
 export function adminCheckboxLabelClass(theme: AdminTheme): string {
   return theme === "light"
     ? "flex cursor-pointer items-center gap-2 text-sm text-zinc-600"

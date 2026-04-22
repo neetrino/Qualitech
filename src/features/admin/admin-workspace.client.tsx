@@ -14,14 +14,10 @@ import { AdminThemeToggle } from "@/features/admin/admin-theme-toggle.client";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import {
   adminButtonSecondaryClass,
-  adminCardPanelClass,
-  adminCodeInlineClass,
   adminEmailLineClass,
   adminEyebrowClass,
   adminHeaderBorderClass,
   adminNavTabClass,
-  adminOverviewProseClass,
-  adminOverviewStrongClass,
   adminPageTitleClass,
   adminSidebarDividerClass,
   adminSubtleLinkClass,
@@ -29,14 +25,14 @@ import {
 
 type AdminSession = { id: string; email: string };
 
-type Tab = "overview" | "machineSections" | "blog" | "products" | "messages";
+type Tab = "machineSections" | "blog" | "products" | "messages";
 
 type AdminWorkspaceClientProps = {
   readonly admin: AdminSession;
   readonly onSignedOut: () => void;
 };
 
-const TAB_ORDER: Tab[] = ["overview", "machineSections", "blog", "products", "messages"];
+const TAB_ORDER: Tab[] = ["machineSections", "blog", "products", "messages"];
 
 const ADMIN_PAGE_GUTTER_X = "px-3 sm:px-4 lg:px-6";
 
@@ -45,7 +41,7 @@ const ADMIN_SIDEBAR_WIDTH = "w-full shrink-0 sm:max-w-[200px] lg:max-w-[220px]";
 export function AdminWorkspaceClient({ admin, onSignedOut }: AdminWorkspaceClientProps) {
   const m = useAdminMessages();
   const { theme } = useAdminTheme();
-  const [tab, setTab] = useState<Tab>("overview");
+  const [tab, setTab] = useState<Tab>("machineSections");
   const [busy, setBusy] = useState(false);
 
   const onLogout = useCallback(async () => {
@@ -54,11 +50,6 @@ export function AdminWorkspaceClient({ admin, onSignedOut }: AdminWorkspaceClien
     setBusy(false);
     onSignedOut();
   }, [onSignedOut]);
-
-  const sec = adminCardPanelClass(theme);
-  const prose = adminOverviewProseClass(theme);
-  const strong = adminOverviewStrongClass(theme);
-  const code = adminCodeInlineClass(theme);
 
   return (
     <div className="w-full min-w-0 max-w-none py-6 sm:py-8">
@@ -104,22 +95,6 @@ export function AdminWorkspaceClient({ admin, onSignedOut }: AdminWorkspaceClien
         </nav>
 
         <div className="min-w-0 flex-1">
-          {tab === "overview" ? (
-            <section className={sec}>
-              <p className={prose}>
-                <strong className={strong}>{m.workspace.overview.productsLabel}</strong> {m.workspace.overview.productsBody}{" "}
-                <code className={code}>/api/admin/machines</code>.
-              </p>
-              <p className={`mt-3 ${prose}`}>
-                <strong className={strong}>{m.workspace.overview.machineSectionsLabel}</strong>{" "}
-                {m.workspace.overview.machineSectionsBody} <code className={code}>/api/admin/machine-categories</code>.
-              </p>
-              <p className={`mt-3 ${prose}`}>
-                <strong className={strong}>{m.workspace.overview.blogLabel}</strong> {m.workspace.overview.blogBody}{" "}
-                <code className={code}>/api/admin/blog</code>.
-              </p>
-            </section>
-          ) : null}
           {tab === "machineSections" ? <AdminMachineCategoriesPanelClient /> : null}
           {tab === "blog" ? <AdminBlogPanelClient /> : null}
           {tab === "products" ? <AdminMachinePanelClient /> : null}

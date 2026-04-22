@@ -89,7 +89,7 @@ function MobileGlassBar({
 }: MobileGlassBarProps) {
   return (
     <header className="fixed inset-x-0 top-0 md:hidden" style={{ zIndex: Z_MOBILE_HEADER }}>
-      <div className="px-3 pt-[max(0.5rem,env(safe-area-inset-top))]">
+      <div className="px-2 pt-[max(0.5rem,env(safe-area-inset-top))] sm:px-3">
         <GlassBarSurface>
           <Link
             className="relative z-[1] shrink-0"

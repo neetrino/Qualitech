@@ -18,19 +18,10 @@
     "signingOut": "Выход…",
     "navAriaLabel": "Разделы админки",
     "tabs": {
-      "overview": "Обзор",
       "machineSections": "Разделы станков",
       "blog": "Блог",
       "products": "Продукция",
       "messages": "Сообщения"
-    },
-    "overview": {
-      "productsLabel": "Продукция",
-      "productsBody": "— добавление, правка и удаление позиций каталога (по языкам: meta title, meta description, Open Graph, галерея). API:",
-      "machineSectionsLabel": "Разделы станков",
-      "machineSectionsBody": "— верхний уровень каталога на сайте /machines (название и slug для каждого языка). API:",
-      "blogLabel": "Блог",
-      "blogBody": "— добавление, правка и удаление статей (те же SEO / OG поля по языкам). API:"
     }
   },
   "messagesList": {

@@ -55,6 +55,17 @@ export const homeAssets = {
   ] as const,
 } as const;
 
+/**
+ * Footer social targets (order: Facebook, X, LinkedIn, Instagram — matches `homeAssets.socialIcons`).
+ * Replace with your official profile URLs when available.
+ */
+export const FOOTER_SOCIAL_HREFS: readonly [string, string, string, string] = [
+  "https://www.facebook.com/",
+  "https://x.com/",
+  "https://www.linkedin.com/",
+  "https://www.instagram.com/",
+];
+
 export const navItemsMeta: readonly NavItemMeta[] = [
   { id: "home", href: "#hero" },
   { id: "machines", href: "#solutions" },
