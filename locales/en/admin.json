@@ -1,7 +1,7 @@
 {
   "brandEyebrow": "Qualitech",
   "dashboardTitle": "Admin",
-  "checkingSession": "Checking session…",
+  "checkingSession": "Checking session",
   "auth": {
     "heading": "Sign in",
     "sessionHint": "Admin session applies to `/api/admin/*` routes.",

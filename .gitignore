@@ -10,6 +10,9 @@ Thumbs.db
 # Dependencies (if scripts use Node/npm)
 node_modules/
 
+# Large local archives (GitHub file limit); keep extracted assets only
+public/home/*.zip
+
 # Build output
 .next/
 dist/
