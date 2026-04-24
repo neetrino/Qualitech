@@ -21,7 +21,7 @@
     "message": "Message",
     "submit": "Send",
     "sending": "Sending…",
-    "success": "Thank you — we received your message and will get back to you soon.",
+    "success": "Thank you  we received your message and will get back to you soon.",
     "errorGeneric": "Something went wrong. Please try again in a moment.",
     "errorValidation": "Please check the form fields."
   },
