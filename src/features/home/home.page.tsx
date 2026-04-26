@@ -231,6 +231,15 @@ function AboutSection({ locale, messages }: { readonly locale: HomeLocale; reado
             <p key={`${paragraphIndex}-${paragraph.slice(0, 24)}`}>{paragraph}</p>
           ))}
         </div>
+        <div className="mt-8 flex justify-center">
+          <Link
+            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] transition hover:brightness-110 sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]"
+            href={aboutHref}
+          >
+            {messages.about.ctaMore}
+            <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
+          </Link>
+        </div>
         <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5">
           {messages.about.highlights.map((highlight, highlightIndex) => (
             <div
@@ -242,15 +251,6 @@ function AboutSection({ locale, messages }: { readonly locale: HomeLocale; reado
               <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-[#52525c] sm:text-[11px] sm:tracking-[0.16em]">{highlight.label}</p>
             </div>
           ))}
-        </div>
-        <div className="mt-8 flex justify-center">
-          <Link
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] transition hover:brightness-110 sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]"
-            href={aboutHref}
-          >
-            {messages.about.ctaMore}
-            <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
-          </Link>
         </div>
       </div>
     </section>
