@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   advantageCardsLayout,
   articleCardsLayout,
-  heroDemoMachineSlugsByLocale,
   homeAssets,
   solutionCardsLayout,
 } from "@/features/home/home.data";
@@ -14,7 +13,12 @@ import {
   HeroBackgroundLayers,
 } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { aboutPageHref, machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
+import {
+  aboutPageHref,
+  contactPageHref,
+  machinesCategoryHref,
+  machinesPageHref,
+} from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
 import { SiteHeader } from "@/shared/layout/site-header";
@@ -67,8 +71,7 @@ const HERO_SECONDARY_CTA_CLASS =
   "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-black/20 bg-white/45 px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-black shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md transition hover:bg-white/70 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]";
 
 function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
-  const demoSlugs = heroDemoMachineSlugsByLocale[locale];
-  const demoHref = machineDetailHref(locale, demoSlugs.categorySlug, demoSlugs.machineSlug);
+  const contactHref = contactPageHref(locale);
   const machinesHref = machinesPageHref(locale);
   /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. Tighter on small screens so buttons sit slightly higher. */
   const ctaRowMarginTop =
@@ -112,7 +115,7 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
             {messages.hero.ctaExplore}
             <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
           </Link>
-          <Link className={HERO_SECONDARY_CTA_CLASS} href={demoHref}>
+          <Link className={HERO_SECONDARY_CTA_CLASS} href={contactHref}>
             <Image alt="" className="shrink-0 brightness-0" src={homeAssets.playIcon} width={16} height={16} />
             {messages.hero.ctaDemo}
           </Link>
