@@ -68,7 +68,10 @@
     "name": "Name",
     "slug": "URL slug",
     "localeRu": "Russian (ru)",
-    "localeEn": "English (en)"
+    "localeEn": "English (en)",
+    "homeDescription": "Home page card description",
+    "homeBullets": "Home page bullet lines",
+    "homeBulletsPlaceholder": "One line per bullet (max 12)."
   },
   "blogList": {
     "title": "Blog — articles",

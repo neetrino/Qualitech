@@ -35,6 +35,10 @@ model MachineCategoryTranslation {
   locale     AppLocale
   name       String
   slug       String
+  /// Home card body (plain text).
+  homeDescription String?  @db.Text
+  /// Home card bullet lines (uppercase styling on the public page).
+  homeBullets     String[] @default([])
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
 

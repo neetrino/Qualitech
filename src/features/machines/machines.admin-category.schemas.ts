@@ -11,10 +11,31 @@ const optionalCategoryImageUrl = z
   .nullable()
   .optional();
 
+const optionalTrimmedText = (max: number) =>
+  z
+    .string()
+    .max(max)
+    .optional()
+    .transform((s): string | null => {
+      if (s === undefined) {
+        return null;
+      }
+      const t = s.trim();
+      return t.length === 0 ? null : t;
+    });
+
+const homeBulletsSchema = z
+  .array(z.string().max(200))
+  .max(12)
+  .optional()
+  .transform((lines) => (lines ?? []).map((l) => l.trim()).filter((l) => l.length > 0));
+
 export const adminMachineCategoryTranslationSchema = z.object({
   locale: localeEnum,
   name: z.string().trim().min(1).max(200),
   slug: z.string().trim().min(1).max(120),
+  homeDescription: optionalTrimmedText(4000),
+  homeBullets: homeBulletsSchema,
 });
 
 export const adminMachineCategoryCreateSchema = z

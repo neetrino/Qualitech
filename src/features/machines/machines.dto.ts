@@ -47,6 +47,8 @@ export type MachineCategoryCardDto = {
   slug: string;
   name: string;
   coverImage: MachineImageDto | null;
+  homeDescription: string | null;
+  homeBullets: string[];
 };
 
 export type MachineDetailWithLocaleSlugs = {

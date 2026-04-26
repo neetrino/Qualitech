@@ -68,7 +68,10 @@
     "name": "Название",
     "slug": "URL slug",
     "localeRu": "Русский (ru)",
-    "localeEn": "Английский (en)"
+    "localeEn": "Английский (en)",
+    "homeDescription": "Описание на главной",
+    "homeBullets": "Подзаголовки (список)",
+    "homeBulletsPlaceholder": "Одна строка — один пункт (до 12)."
   },
   "blogList": {
     "title": "Блог — статьи",

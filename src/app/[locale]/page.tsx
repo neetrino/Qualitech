@@ -28,6 +28,6 @@ export default async function Page({ params }: PageProps) {
     loadHomeMessages(locale),
     listTopLevelMachineCategoryCardsPublic(homeLocaleToAppLocale(locale)),
   ]);
-  const machineSectionSlugs = machineCategories.map((c) => c.slug).slice(0, 3);
-  return <HomePage locale={locale} machineSectionSlugs={machineSectionSlugs} messages={messages} />;
+  const homeSolutionCategories = machineCategories.slice(0, 3);
+  return <HomePage homeSolutionCategories={homeSolutionCategories} locale={locale} messages={messages} />;
 }
