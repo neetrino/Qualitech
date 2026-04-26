@@ -4,7 +4,6 @@ import Link from "next/link";
 import {
   advantageCardsLayout,
   articleCardsLayout,
-  heroDemoMachineSlugsByLocale,
   homeAssets,
   solutionCardsLayout,
 } from "@/features/home/home.data";
@@ -14,7 +13,17 @@ import {
   HeroBackgroundLayers,
 } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { aboutPageHref, machineDetailHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
+import type { MachineCategoryCardDto } from "@/features/machines/machines.dto";
+import {
+  MachineCategorySolutionCard,
+  solutionCardOverlayPositionClass,
+} from "@/features/machines/machine-category-solution-card";
+import {
+  aboutPageHref,
+  contactPageHref,
+  machinesCategoryHref,
+  machinesPageHref,
+} from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
 import { SiteHeader } from "@/shared/layout/site-header";
@@ -22,8 +31,8 @@ import { SiteHeader } from "@/shared/layout/site-header";
 type HomePageProps = {
   readonly locale: HomeLocale;
   readonly messages: HomeMessages;
-  /** First three top-level machine category slugs (same order as solution cards). */
-  readonly machineSectionSlugs: readonly string[];
+  /** First three top-level machine sections (sort order) — home #solutions cards. */
+  readonly homeSolutionCategories: readonly MachineCategoryCardDto[];
 };
 
 type SectionHeadingProps = {
@@ -67,8 +76,7 @@ const HERO_SECONDARY_CTA_CLASS =
   "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-black/20 bg-white/45 px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-black shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md transition hover:bg-white/70 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]";
 
 function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
-  const demoSlugs = heroDemoMachineSlugsByLocale[locale];
-  const demoHref = machineDetailHref(locale, demoSlugs.categorySlug, demoSlugs.machineSlug);
+  const contactHref = contactPageHref(locale);
   const machinesHref = machinesPageHref(locale);
   /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. Tighter on small screens so buttons sit slightly higher. */
   const ctaRowMarginTop =
@@ -112,7 +120,7 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
             {messages.hero.ctaExplore}
             <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
           </Link>
-          <Link className={HERO_SECONDARY_CTA_CLASS} href={demoHref}>
+          <Link className={HERO_SECONDARY_CTA_CLASS} href={contactHref}>
             <Image alt="" className="shrink-0 brightness-0" src={homeAssets.playIcon} width={16} height={16} />
             {messages.hero.ctaDemo}
           </Link>
@@ -146,11 +154,11 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
 function SolutionsSection({
   messages,
   locale,
-  machineSectionSlugs,
+  homeSolutionCategories,
 }: {
   readonly messages: HomeMessages;
   readonly locale: HomeLocale;
-  readonly machineSectionSlugs: readonly string[];
+  readonly homeSolutionCategories: readonly MachineCategoryCardDto[];
 }) {
   return (
     <section
@@ -165,40 +173,33 @@ function SolutionsSection({
       />
       <div className="mt-10 grid gap-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-16">
         {solutionCardsLayout.map((card, index) => {
-          const content = messages.solutions.cards[index];
-          const sectionSlug = machineSectionSlugs[index];
-          const detailsHref = sectionSlug ? machinesCategoryHref(locale, sectionSlug) : machinesPageHref(locale);
+          const fallback = messages.solutions.cards[index];
+          const category = homeSolutionCategories[index];
+          const detailsHref = category
+            ? machinesCategoryHref(locale, category.slug)
+            : machinesPageHref(locale);
+          const cardTitle = category ? category.name : fallback.title;
+          const cardDescription = category?.homeDescription?.trim() || fallback.description;
+          const bullets =
+            category && category.homeBullets.length > 0 ? category.homeBullets : fallback.bullets;
+          const imageSrc =
+            category?.coverImage?.url && category.coverImage.url.trim().length > 0
+              ? category.coverImage.url.trim()
+              : card.imageSrc;
           return (
-            <Link
+            <MachineCategorySolutionCard
               key={card.index}
-              className="block overflow-hidden rounded-xl border border-[#18181b] bg-[#09090b] transition hover:border-[#27272a]"
+              bullets={bullets}
+              ctaArrowSrc={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt}
+              ctaLabel={messages.solutions.ctaDetails}
+              description={cardDescription}
               href={detailsHref}
-            >
-              <article>
-                <div className="relative h-[188px] overflow-hidden sm:h-[208px] lg:h-[224px]">
-                  <Image alt={content.title} className="object-cover" fill sizes="(min-width: 1280px) 400px, 100vw" src={card.imageSrc} />
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#09090b] via-[rgba(9,9,11,0.4)] to-transparent" />
-                  <span className={`pointer-events-none absolute top-3 text-5xl font-black leading-none text-white sm:top-4 sm:text-6xl ${index === 0 ? "right-4" : index === 1 ? "right-5" : "right-6"}`}>{card.index}</span>
-                </div>
-                <div className="px-5 pb-5 pt-5 sm:px-6 sm:pb-6 sm:pt-6">
-                  <div className="mb-5 h-0.5 w-[70%] rounded-full bg-[#ff6900]" />
-                  <h3 className="max-w-[320px] text-base font-black leading-snug text-white sm:text-lg">{content.title}</h3>
-                  <p className="mt-3 max-w-none text-xs leading-relaxed tracking-[-0.02em] text-[#71717b] sm:mt-4 sm:text-sm">{content.description}</p>
-                  <ul className="mt-6 space-y-2 sm:mt-7">
-                    {content.bullets.map((bullet) => (
-                      <li key={bullet} className="flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.1em] text-[#52525c] sm:gap-2.5 sm:text-xs sm:tracking-[0.12em]">
-                        <span className="size-1 rounded-full bg-[#ff6900]" />
-                        {bullet}
-                      </li>
-                    ))}
-                  </ul>
-                  <span className="mt-6 inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[#ff6900] sm:mt-7 sm:text-xs sm:tracking-[0.14em]">
-                    {messages.solutions.ctaDetails}
-                    <Image alt="" src={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt} width={20} height={20} />
-                  </span>
-                </div>
-              </article>
-            </Link>
+              imageAlt={cardTitle}
+              imageSrc={imageSrc}
+              overlayIndex={card.index}
+              overlayNumberPositionClassName={solutionCardOverlayPositionClass(index)}
+              title={cardTitle}
+            />
           );
         })}
       </div>
@@ -231,6 +232,15 @@ function AboutSection({ locale, messages }: { readonly locale: HomeLocale; reado
             <p key={`${paragraphIndex}-${paragraph.slice(0, 24)}`}>{paragraph}</p>
           ))}
         </div>
+        <div className="mt-8 flex justify-center">
+          <Link
+            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] transition hover:brightness-110 sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]"
+            href={aboutHref}
+          >
+            {messages.about.ctaMore}
+            <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
+          </Link>
+        </div>
         <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-5">
           {messages.about.highlights.map((highlight, highlightIndex) => (
             <div
@@ -242,15 +252,6 @@ function AboutSection({ locale, messages }: { readonly locale: HomeLocale; reado
               <p className="mt-2 text-[10px] uppercase tracking-[0.14em] text-[#52525c] sm:text-[11px] sm:tracking-[0.16em]">{highlight.label}</p>
             </div>
           ))}
-        </div>
-        <div className="mt-8 flex justify-center">
-          <Link
-            className="inline-flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] transition hover:brightness-110 sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]"
-            href={aboutHref}
-          >
-            {messages.about.ctaMore}
-            <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
-          </Link>
         </div>
       </div>
     </section>
@@ -347,13 +348,13 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
   );
 }
 
-export function HomePage({ locale, machineSectionSlugs, messages }: HomePageProps) {
+export function HomePage({ locale, homeSolutionCategories, messages }: HomePageProps) {
   return (
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
       <SiteHeader locale={locale} messages={messages} navContext="home" />
       <div className="overflow-x-hidden">
         <HeroSection locale={locale} messages={messages} />
-        <SolutionsSection locale={locale} machineSectionSlugs={machineSectionSlugs} messages={messages} />
+        <SolutionsSection homeSolutionCategories={homeSolutionCategories} locale={locale} messages={messages} />
         <AboutSection locale={locale} messages={messages} />
         <AdvantagesSection messages={messages} />
         <InsightsSection messages={messages} />

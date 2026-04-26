@@ -24,10 +24,19 @@ type AdminMachineCategoryFormClientProps = {
   readonly onSaved: () => void;
 };
 
-type TrForm = { name: string; slug: string };
+type TrForm = {
+  name: string;
+  slug: string;
+  homeDescription: string;
+  homeBulletsText: string;
+};
 
 function emptyTr(): TrForm {
-  return { name: "", slug: "" };
+  return { name: "", slug: "", homeDescription: "", homeBulletsText: "" };
+}
+
+function bulletsToTextarea(lines: readonly string[]): string {
+  return lines.join("\n");
 }
 
 export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: AdminMachineCategoryFormClientProps) {
@@ -57,8 +66,18 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
     }
     const trRu = category.translations.find((t) => t.locale === "ru");
     const trEn = category.translations.find((t) => t.locale === "en");
-    setRu({ name: trRu?.name ?? "", slug: trRu?.slug ?? "" });
-    setEn({ name: trEn?.name ?? "", slug: trEn?.slug ?? "" });
+    setRu({
+      name: trRu?.name ?? "",
+      slug: trRu?.slug ?? "",
+      homeDescription: trRu?.homeDescription ?? "",
+      homeBulletsText: bulletsToTextarea(trRu?.homeBullets ?? []),
+    });
+    setEn({
+      name: trEn?.name ?? "",
+      slug: trEn?.slug ?? "",
+      homeDescription: trEn?.homeDescription ?? "",
+      homeBulletsText: bulletsToTextarea(trEn?.homeBullets ?? []),
+    });
     setSortOrder(String(category.sortOrder));
     setImageUrl(category.imageUrl ?? "");
   }, [category]);
@@ -83,9 +102,31 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       setError(null);
       const sortParsed = Number.parseInt(sortOrder, 10);
       const sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      const ruBullets = ru.homeBulletsText
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0)
+        .slice(0, 12);
+      const enBullets = en.homeBulletsText
+        .split(/\r?\n/)
+        .map((l) => l.trim())
+        .filter((l) => l.length > 0)
+        .slice(0, 12);
       const translations = [
-        { locale: AppLocale.ru, name: ru.name.trim(), slug: ru.slug.trim() },
-        { locale: AppLocale.en, name: en.name.trim(), slug: en.slug.trim() },
+        {
+          locale: AppLocale.ru,
+          name: ru.name.trim(),
+          slug: ru.slug.trim(),
+          homeDescription: ru.homeDescription.trim(),
+          homeBullets: ruBullets,
+        },
+        {
+          locale: AppLocale.en,
+          name: en.name.trim(),
+          slug: en.slug.trim(),
+          homeDescription: en.homeDescription.trim(),
+          homeBullets: enBullets,
+        },
       ];
       const imagePayload = imageUrl.trim().length > 0 ? imageUrl.trim() : null;
 
@@ -116,7 +157,20 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       setBusy(false);
       onSaved();
     },
-    [category, en.name, en.slug, imageUrl, onSaved, ru.name, ru.slug, sortOrder],
+    [
+      category,
+      en.homeBulletsText,
+      en.homeDescription,
+      en.name,
+      en.slug,
+      imageUrl,
+      onSaved,
+      ru.homeBulletsText,
+      ru.homeDescription,
+      ru.name,
+      ru.slug,
+      sortOrder,
+    ],
   );
 
   return (
@@ -214,6 +268,29 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
               value={ru.slug}
             />
           </div>
+          <div>
+            <label className={labelCls} htmlFor="mc-ru-home-desc">
+              {m.machineCategoryForm.homeDescription}
+            </label>
+            <textarea
+              className={`${inputCls} min-h-[88px] resize-y`}
+              id="mc-ru-home-desc"
+              onChange={(e) => setRu((p) => ({ ...p, homeDescription: e.target.value }))}
+              value={ru.homeDescription}
+            />
+          </div>
+          <div>
+            <label className={labelCls} htmlFor="mc-ru-home-bullets">
+              {m.machineCategoryForm.homeBullets}
+            </label>
+            <textarea
+              className={`${inputCls} min-h-[100px] resize-y font-mono text-sm`}
+              id="mc-ru-home-bullets"
+              onChange={(e) => setRu((p) => ({ ...p, homeBulletsText: e.target.value }))}
+              placeholder={m.machineCategoryForm.homeBulletsPlaceholder}
+              value={ru.homeBulletsText}
+            />
+          </div>
         </div>
         <div className="space-y-3 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
           <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{m.machineCategoryForm.localeEn}</p>
@@ -239,6 +316,29 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
               onChange={(e) => setEn((p) => ({ ...p, slug: e.target.value }))}
               type="text"
               value={en.slug}
+            />
+          </div>
+          <div>
+            <label className={labelCls} htmlFor="mc-en-home-desc">
+              {m.machineCategoryForm.homeDescription}
+            </label>
+            <textarea
+              className={`${inputCls} min-h-[88px] resize-y`}
+              id="mc-en-home-desc"
+              onChange={(e) => setEn((p) => ({ ...p, homeDescription: e.target.value }))}
+              value={en.homeDescription}
+            />
+          </div>
+          <div>
+            <label className={labelCls} htmlFor="mc-en-home-bullets">
+              {m.machineCategoryForm.homeBullets}
+            </label>
+            <textarea
+              className={`${inputCls} min-h-[100px] resize-y font-mono text-sm`}
+              id="mc-en-home-bullets"
+              onChange={(e) => setEn((p) => ({ ...p, homeBulletsText: e.target.value }))}
+              placeholder={m.machineCategoryForm.homeBulletsPlaceholder}
+              value={en.homeBulletsText}
             />
           </div>
         </div>

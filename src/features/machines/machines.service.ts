@@ -119,6 +119,10 @@ export async function listTopLevelMachineCategoryCardsPublic(
             slug: tr.slug,
             name: tr.name,
             coverImage: cover,
+            homeDescription: tr.homeDescription?.trim() ? tr.homeDescription.trim() : null,
+            homeBullets: Array.isArray(tr.homeBullets)
+              ? tr.homeBullets.map((b) => b.trim()).filter((b) => b.length > 0)
+              : [],
           };
         }),
       );

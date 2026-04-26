@@ -1,11 +1,12 @@
-import Image from "next/image";
-import Link from "next/link";
-
-import type { MachineCategoryCardDto } from "@/features/machines/machines.dto";
-import type { MachinesMessages } from "@/features/machines/machines.messages";
+import { homeAssets } from "@/features/home/home.data";
 import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { isRemoteImageUrl } from "@/lib/image/remote-image-url";
+import type { MachineCategoryCardDto } from "@/features/machines/machines.dto";
+import {
+  MachineCategorySolutionCard,
+  solutionCardOverlayPositionClass,
+} from "@/features/machines/machine-category-solution-card";
+import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { homePageHref, machinesCategoryHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
@@ -23,52 +24,33 @@ function CategoryCard({
   locale,
   messages,
   category,
+  index,
 }: {
   readonly locale: HomeLocale;
   readonly messages: MachinesMessages;
   readonly category: MachineCategoryCardDto;
+  readonly index: number;
 }) {
   const href = machinesCategoryHref(locale, category.slug);
-  const alt = category.coverImage?.alt?.trim() || messages.cardFallbackAlt;
-  const coverSrc = category.coverImage?.url?.trim() ?? "";
-  const showCover = coverSrc.length > 0;
+  const imageAlt = category.coverImage?.alt?.trim() || messages.cardFallbackAlt;
+  const imageSrc = category.coverImage?.url?.trim() ?? "";
+  const description = category.homeDescription?.trim() ?? "";
+  const overlayIndex = String(index + 1).padStart(2, "0");
+  const ctaArrowSrc = index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt;
 
   return (
-    <article className="flex h-full min-h-0 flex-col overflow-hidden rounded-2xl border border-[#18181b] bg-black p-px transition hover:border-[#27272a]">
-      <Link
-        className="relative block h-[260px] shrink-0 overflow-hidden rounded-t-[14px] bg-[#18181b] sm:h-[300px] lg:h-[340px]"
-        href={href}
-      >
-        {showCover ? (
-          <Image
-            alt={alt}
-            className="object-cover transition duration-300 hover:scale-[1.02]"
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-            src={coverSrc}
-            unoptimized={isRemoteImageUrl(coverSrc)}
-          />
-        ) : (
-          <div className="flex h-full w-full items-center justify-center bg-[linear-gradient(145deg,#18181b_0%,#09090b_100%)] text-[11px] font-bold uppercase tracking-[0.14em] text-[#52525c]">
-            Qualitech
-          </div>
-        )}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-[rgba(0,0,0,0.35)] to-transparent" />
-      </Link>
-      <div className="flex min-h-0 flex-1 flex-col px-5 py-6 sm:px-6 sm:py-8">
-        <h2 className="font-display text-xl uppercase leading-snug tracking-tight text-white sm:text-2xl lg:text-[1.65rem]">
-          <Link className="transition hover:text-[#ff6900]" href={href}>
-            {category.name}
-          </Link>
-        </h2>
-        <Link
-          className="mt-6 inline-flex shrink-0 items-center gap-1.5 self-start text-xs font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110 sm:text-[13px]"
-          href={href}
-        >
-          {messages.readDetails}
-        </Link>
-      </div>
-    </article>
+    <MachineCategorySolutionCard
+      bullets={category.homeBullets}
+      ctaArrowSrc={ctaArrowSrc}
+      ctaLabel={messages.readDetails}
+      description={description}
+      href={href}
+      imageAlt={imageAlt}
+      imageSrc={imageSrc}
+      overlayIndex={overlayIndex}
+      overlayNumberPositionClassName={solutionCardOverlayPositionClass(index)}
+      title={category.name}
+    />
   );
 }
 
@@ -93,8 +75,14 @@ export function MachinesIndexPage({ locale, homeMessages, machinesMessages, cate
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3 lg:gap-10">
-              {categories.map((c) => (
-                <CategoryCard key={c.slug} category={c} locale={locale} messages={machinesMessages} />
+              {categories.map((c, index) => (
+                <CategoryCard
+                  key={c.slug}
+                  category={c}
+                  index={index}
+                  locale={locale}
+                  messages={machinesMessages}
+                />
               ))}
             </div>
           )}
