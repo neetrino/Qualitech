@@ -35,6 +35,8 @@ export type MachineDetailDto = {
   featured: boolean;
   category: MachineCategoryBriefDto | null;
   images: MachineImageDto[];
+  /** Product sheet / brochure URL when set in admin. */
+  pdfUrl: string | null;
 };
 
 export type MachinesListResult = {

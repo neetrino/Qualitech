@@ -81,6 +81,9 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
           ]
         : [];
 
+  const pdfRaw = machine.pdfUrl?.trim() ?? "";
+  const pdfUrl = pdfRaw.length > 0 ? normalizeStoredImageUrl(pdfRaw) : null;
+
   return {
     id: machine.id,
     slug: row.slug,
@@ -92,5 +95,6 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
     featured: machine.featured,
     category: mapCategoryBrief(machine.category),
     images,
+    pdfUrl,
   };
 }

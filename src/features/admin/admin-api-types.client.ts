@@ -87,6 +87,7 @@ export type MachineRow = {
   featured: boolean;
   published: boolean;
   sortOrder: number;
+  pdfUrl: string | null;
   createdAt: string;
   updatedAt: string;
   translations: MachineTranslationRow[];

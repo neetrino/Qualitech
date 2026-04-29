@@ -49,6 +49,13 @@ function buildObjectKey(scope: R2UploadScope, contentType: R2AllowedContentType)
   return `${prefix}/${randomUUID()}.${ext}`;
 }
 
+/** Prefer in-tab PDF viewing over attachment download when the bucket/object allows it. */
+const PDF_INLINE_DISPOSITION = "inline" as const;
+
+function putObjectContentDisposition(contentType: R2AllowedContentType): string | undefined {
+  return contentType === "application/pdf" ? PDF_INLINE_DISPOSITION : undefined;
+}
+
 /**
  * Issues a presigned PUT URL bound to `Content-Type` and `Content-Length` so size and type match admin policy.
  */
@@ -66,6 +73,7 @@ export async function createPresignedR2Upload(
     Bucket: config.bucketName,
     Key: key,
     ContentType: body.contentType,
+    ContentDisposition: putObjectContentDisposition(body.contentType),
   });
   const uploadUrl = await getSignedUrl(client, command, { expiresIn: R2_PRESIGN_EXPIRES_SECONDS });
   const publicUrl = buildR2PublicObjectUrl(config.publicUrl, key);
@@ -98,6 +106,7 @@ export async function putR2ObjectFromServer(
       Key: key,
       Body: data,
       ContentType: body.contentType,
+      ContentDisposition: putObjectContentDisposition(body.contentType),
     }),
   );
   return { publicUrl: buildR2PublicObjectUrl(config.publicUrl, key), key };

@@ -53,6 +53,8 @@ model Machine {
   featured   Boolean          @default(false)
   published  Boolean          @default(false)
   sortOrder  Int              @default(0)
+  /// Optional product sheet / brochure (public URL, e.g. R2).
+  pdfUrl     String?          @db.Text
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
 

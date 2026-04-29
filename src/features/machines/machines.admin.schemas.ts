@@ -26,6 +26,8 @@ export const adminMachineImageSchema = z.object({
   isPrimary: z.boolean().default(false),
 });
 
+const adminMachinePdfUrlSchema = z.union([z.string().trim().url().max(2000), z.null()]).optional();
+
 export const adminMachineCreateSchema = z
   .object({
     categoryId: z.string().trim().cuid().nullable().optional(),
@@ -33,6 +35,7 @@ export const adminMachineCreateSchema = z
     sortOrder: z.number().int().min(0).default(0),
     translations: z.array(adminMachineTranslationSchema).min(1),
     images: z.array(adminMachineImageSchema).default([]),
+    pdfUrl: adminMachinePdfUrlSchema,
   })
   .superRefine((val, ctx) => {
     const locales = val.translations.map((t) => t.locale);
@@ -51,6 +54,7 @@ export const adminMachinePatchSchema = z
     sortOrder: z.number().int().min(0).optional(),
     translations: z.array(adminMachineTranslationSchema).min(1).optional(),
     images: z.array(adminMachineImageSchema).optional(),
+    pdfUrl: adminMachinePdfUrlSchema,
   })
   .superRefine((val, ctx) => {
     if (!val.translations) {

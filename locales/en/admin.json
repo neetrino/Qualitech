@@ -130,7 +130,13 @@
     "categoryHint": "Add sections under “Machine sections” first, then pick one here.",
     "sortOrder": "Sort order",
     "featured": "Featured",
-    "galleryHint": "Upload one or more images. Mark one as primary — it is used for the catalog card, product hero, and social previews (Open Graph)."
+    "galleryHint": "Upload one or more images. Mark one as primary — it is used for the catalog card, product hero, and social previews (Open Graph).",
+    "pdfSheet": "Product sheet (PDF)",
+    "pdfHint": "Optional datasheet or brochure. It appears on the product page under the gallery thumbnails.",
+    "pdfUpload": "Upload PDF",
+    "pdfUploading": "Uploading…",
+    "pdfRemove": "Remove PDF",
+    "pdfOpen": "Open current PDF"
   },
   "gallery": {
     "heading": "Gallery images",

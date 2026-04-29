@@ -13,13 +13,18 @@ export const R2_KEY_PREFIX_BY_SCOPE: Record<R2UploadScope, string> = {
   blog: "blog",
 };
 
-export const R2_ALLOWED_CONTENT_TYPES = [
+/** Image uploads in admin gallery / OG (not PDF). */
+export const R2_IMAGE_CONTENT_TYPES = [
   "image/jpeg",
   "image/png",
   "image/webp",
   "image/gif",
   "image/svg+xml",
 ] as const;
+
+export type R2ImageContentType = (typeof R2_IMAGE_CONTENT_TYPES)[number];
+
+export const R2_ALLOWED_CONTENT_TYPES = [...R2_IMAGE_CONTENT_TYPES, "application/pdf"] as const;
 
 export type R2AllowedContentType = (typeof R2_ALLOWED_CONTENT_TYPES)[number];
 
@@ -29,4 +34,5 @@ export const R2_CONTENT_TYPE_TO_EXTENSION: Record<R2AllowedContentType, string> 
   "image/webp": "webp",
   "image/gif": "gif",
   "image/svg+xml": "svg",
+  "application/pdf": "pdf",
 };

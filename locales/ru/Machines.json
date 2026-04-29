@@ -15,6 +15,8 @@
   "breadcrumbMachines": "Станки",
   "ctaContact": "Запросить предложение",
   "galleryFallbackAlt": "Фото оборудования",
+  "pdfViewLabel": "Подробное описание оборудования (PDF)",
+  "pdfCloseViewer": "Свернуть просмотр",
   "paginationPrev": "Назад",
   "paginationNext": "Вперёд",
   "pageIndicator": "Страница {page} из {totalPages}",
