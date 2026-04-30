@@ -24,6 +24,7 @@ import {
   adminCheckboxClass,
   adminCheckboxLabelClass,
   adminFormSectionTitleClass,
+  adminFormStickyBottomActionsClass,
   adminInputClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
@@ -146,19 +147,12 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
   const pri = adminButtonPrimaryClass();
   const sec = adminButtonSecondaryClass(theme);
   const title = adminFormSectionTitleClass(theme);
+  const stickyBottomActionsClass = adminFormStickyBottomActionsClass(theme);
 
   return (
     <form className="space-y-6" onSubmit={(ev) => void onSubmit(ev)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
         <h3 className={title}>{post ? m.blogForm.editTitle : m.blogForm.newTitle}</h3>
-        <div className="flex flex-wrap gap-2">
-          <button className={sec} onClick={onCancel} type="button">
-            {m.blogForm.cancel}
-          </button>
-          <button className={pri} disabled={busy} type="submit">
-            {busy ? m.blogForm.saving : m.blogForm.save}
-          </button>
-        </div>
       </div>
 
       {error ? (
@@ -212,6 +206,15 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
         uploadScope="blog"
         onUploadBusyChange={setUploadBusy}
       />
+
+      <div className={stickyBottomActionsClass}>
+        <button className={sec} onClick={onCancel} type="button">
+          {m.blogForm.cancel}
+        </button>
+        <button className={pri} disabled={busy || uploadBusy} type="submit">
+          {busy ? m.blogForm.saving : m.blogForm.save}
+        </button>
+      </div>
     </form>
   );
 }

@@ -46,6 +46,13 @@ export function adminCardPanelClass(theme: AdminTheme): string {
     : "rounded-2xl border border-white/10 bg-black/40 p-6 backdrop-blur-sm";
 }
 
+/** Sticky footer for admin card forms (`p-6`); use with `-mx-6 px-6` horizontal bleed. */
+export function adminFormStickyBottomActionsClass(theme: AdminTheme): string {
+  return theme === "light"
+    ? "sticky bottom-0 z-20 -mx-6 flex flex-wrap items-center justify-end gap-2 border-t border-zinc-200/90 bg-white px-6 py-3 shadow-sm"
+    : "sticky bottom-0 z-20 -mx-6 flex flex-wrap items-center justify-end gap-2 border-t border-white/10 bg-zinc-950 px-6 py-3 shadow-sm";
+}
+
 export function adminListItemRowClass(theme: AdminTheme): string {
   const base =
     "flex flex-col gap-3 rounded-xl px-4 py-3 sm:flex-row sm:items-center sm:justify-between";

@@ -14,6 +14,7 @@ import {
   adminButtonPrimaryClass,
   adminButtonSecondaryClass,
   adminFormSectionTitleClass,
+  adminFormStickyBottomActionsClass,
   adminInputClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
@@ -47,6 +48,7 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
   const labelCls = adminLabelClass(theme);
   const inputCls = adminInputClass(theme);
   const formTitle = adminFormSectionTitleClass(theme);
+  const stickyBottomActionsClass = adminFormStickyBottomActionsClass(theme);
 
   const [sortOrder, setSortOrder] = useState(String(category?.sortOrder ?? 0));
   const [imageUrl, setImageUrl] = useState(category?.imageUrl ?? "");
@@ -180,16 +182,8 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
 
   return (
     <form className="space-y-6" onSubmit={(ev) => void onSubmit(ev)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
         <h3 className={formTitle}>{category ? m.machineCategoryForm.editTitle : m.machineCategoryForm.newTitle}</h3>
-        <div className="flex flex-wrap gap-2">
-          <button className={sec} onClick={onCancel} type="button">
-            {m.machineCategoryForm.cancel}
-          </button>
-          <button className={pri} disabled={busy} type="submit">
-            {busy ? m.machineCategoryForm.saving : m.machineCategoryForm.save}
-          </button>
-        </div>
       </div>
 
       {error ? (
@@ -349,6 +343,15 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
             />
           </div>
         </div>
+      </div>
+
+      <div className={stickyBottomActionsClass}>
+        <button className={sec} onClick={onCancel} type="button">
+          {m.machineCategoryForm.cancel}
+        </button>
+        <button className={pri} disabled={busy || uploadBusy} type="submit">
+          {busy ? m.machineCategoryForm.saving : m.machineCategoryForm.save}
+        </button>
       </div>
     </form>
   );

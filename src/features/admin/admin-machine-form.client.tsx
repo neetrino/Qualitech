@@ -24,6 +24,7 @@ import {
   adminCheckboxClass,
   adminCheckboxLabelClass,
   adminFormSectionTitleClass,
+  adminFormStickyBottomActionsClass,
   adminHintTextClass,
   adminInputClass,
   adminLabelClass,
@@ -71,6 +72,7 @@ export function AdminMachineFormClient({
   const labelCls = adminLabelClass(theme);
   const inputCls = adminInputClass(theme);
   const formTitle = adminFormSectionTitleClass(theme);
+  const stickyBottomActionsClass = adminFormStickyBottomActionsClass(theme);
 
   const [categoryId, setCategoryId] = useState<string>(() => machine?.categoryId ?? "");
   const [featured, setFeatured] = useState(machine?.featured ?? false);
@@ -169,16 +171,8 @@ export function AdminMachineFormClient({
 
   return (
     <form className="space-y-6" onSubmit={(ev) => void onSubmit(ev)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
         <h3 className={formTitle}>{machine ? m.machineForm.editTitle : m.machineForm.newTitle}</h3>
-        <div className="flex flex-wrap gap-2">
-          <button className={sec} onClick={onCancel} type="button">
-            {m.machineForm.cancel}
-          </button>
-          <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy} type="submit">
-            {busy ? m.machineForm.saving : m.machineForm.save}
-          </button>
-        </div>
       </div>
 
       {error ? (
@@ -260,6 +254,15 @@ export function AdminMachineFormClient({
         theme={theme}
         uploadBusy={pdfUploadBusy}
       />
+
+      <div className={stickyBottomActionsClass}>
+        <button className={sec} onClick={onCancel} type="button">
+          {m.machineForm.cancel}
+        </button>
+        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy} type="submit">
+          {busy ? m.machineForm.saving : m.machineForm.save}
+        </button>
+      </div>
     </form>
   );
 }
