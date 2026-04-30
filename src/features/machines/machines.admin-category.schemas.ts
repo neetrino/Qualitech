@@ -41,6 +41,8 @@ export const adminMachineCategoryTranslationSchema = z.object({
 export const adminMachineCategoryCreateSchema = z
   .object({
     sortOrder: z.number().int().min(0).default(0),
+    featured: z.boolean().optional().default(true),
+    published: z.boolean().optional().default(true),
     imageUrl: optionalCategoryImageUrl,
     translations: z.array(adminMachineCategoryTranslationSchema).min(1),
   })
@@ -62,6 +64,8 @@ export type AdminMachineCategoryCreateInput = z.infer<typeof adminMachineCategor
 export const adminMachineCategoryPatchSchema = z
   .object({
     sortOrder: z.number().int().min(0).optional(),
+    featured: z.boolean().optional(),
+    published: z.boolean().optional(),
     imageUrl: optionalCategoryImageUrl,
     translations: z.array(adminMachineCategoryTranslationSchema).min(1).optional(),
   })

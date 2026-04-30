@@ -9,6 +9,8 @@ async function seedCategories(): Promise<string[]> {
   const c1 = await prisma.machineCategory.create({
     data: {
       sortOrder: 0,
+      featured: true,
+      published: true,
       translations: {
         create: [
           { locale: AppLocale.ru, name: "ЧПУ станки", slug: "cnc-stanki" },
@@ -20,6 +22,8 @@ async function seedCategories(): Promise<string[]> {
   const c2 = await prisma.machineCategory.create({
     data: {
       sortOrder: 1,
+      featured: true,
+      published: true,
       translations: {
         create: [
           { locale: AppLocale.ru, name: "Робототехника", slug: "robototekhnika" },
@@ -31,6 +35,8 @@ async function seedCategories(): Promise<string[]> {
   const c3 = await prisma.machineCategory.create({
     data: {
       sortOrder: 2,
+      featured: true,
+      published: true,
       translations: {
         create: [
           { locale: AppLocale.ru, name: "Автоматизация", slug: "avtomatizatsiya" },

@@ -100,8 +100,13 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       e.preventDefault();
       setBusy(true);
       setError(null);
-      const sortParsed = Number.parseInt(sortOrder, 10);
-      const sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      let sortOrderVal: number;
+      if (category) {
+        sortOrderVal = category.sortOrder;
+      } else {
+        const sortParsed = Number.parseInt(sortOrder, 10);
+        sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      }
       const ruBullets = ru.homeBulletsText
         .split(/\r?\n/)
         .map((l) => l.trim())
@@ -191,19 +196,21 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
         <p className={theme === "light" ? "text-sm text-red-600" : "text-sm text-red-400"}>{error}</p>
       ) : null}
 
-      <div className="max-w-xs">
-        <label className={labelCls} htmlFor="mc-sort">
-          {m.machineCategoryForm.sortOrder}
-        </label>
-        <input
-          className={inputCls}
-          id="mc-sort"
-          min={0}
-          onChange={(e) => setSortOrder(e.target.value)}
-          type="number"
-          value={sortOrder}
-        />
-      </div>
+      {!category ? (
+        <div className="max-w-xs">
+          <label className={labelCls} htmlFor="mc-sort">
+            {m.machineCategoryForm.sortOrder}
+          </label>
+          <input
+            className={inputCls}
+            id="mc-sort"
+            min={0}
+            onChange={(e) => setSortOrder(e.target.value)}
+            type="number"
+            value={sortOrder}
+          />
+        </div>
+      ) : null}
 
       <div className="max-w-xl space-y-2">
         <div className={labelCls}>{m.machineCategoryForm.coverImage}</div>

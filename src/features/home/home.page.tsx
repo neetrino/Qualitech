@@ -31,7 +31,7 @@ import { SiteHeader } from "@/shared/layout/site-header";
 type HomePageProps = {
   readonly locale: HomeLocale;
   readonly messages: HomeMessages;
-  /** First three top-level machine sections (sort order) — home #solutions cards. */
+  /** Up to three top-level sections with home star on (sort order) — home #solutions cards. */
   readonly homeSolutionCategories: readonly MachineCategoryCardDto[];
 };
 
@@ -151,6 +151,77 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
   );
 }
 
+function HomeSolutionCmsCard({
+  messages,
+  locale,
+  category,
+  index,
+}: {
+  readonly messages: HomeMessages;
+  readonly locale: HomeLocale;
+  readonly category: MachineCategoryCardDto;
+  readonly index: number;
+}) {
+  const card = solutionCardsLayout[index];
+  const fallback = messages.solutions.cards[index];
+  if (!card || !fallback) {
+    return null;
+  }
+  const detailsHref = machinesCategoryHref(locale, category.slug);
+  const cardTitle = category.name;
+  const cardDescription = category.homeDescription?.trim() || fallback.description;
+  const bullets = category.homeBullets.length > 0 ? category.homeBullets : fallback.bullets;
+  const imageSrc =
+    category.coverImage?.url && category.coverImage.url.trim().length > 0
+      ? category.coverImage.url.trim()
+      : card.imageSrc;
+  return (
+    <MachineCategorySolutionCard
+      bullets={bullets}
+      ctaArrowSrc={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt}
+      ctaLabel={messages.solutions.ctaDetails}
+      description={cardDescription}
+      href={detailsHref}
+      imageAlt={cardTitle}
+      imageSrc={imageSrc}
+      overlayIndex={card.index}
+      overlayNumberPositionClassName={solutionCardOverlayPositionClass(index)}
+      title={cardTitle}
+    />
+  );
+}
+
+function HomeSolutionFallbackStrip({
+  messages,
+  locale,
+}: {
+  readonly messages: HomeMessages;
+  readonly locale: HomeLocale;
+}) {
+  return solutionCardsLayout.map((card, index) => {
+    const fallback = messages.solutions.cards[index];
+    if (!fallback) {
+      return null;
+    }
+    const detailsHref = machinesPageHref(locale);
+    return (
+      <MachineCategorySolutionCard
+        key={card.index}
+        bullets={fallback.bullets}
+        ctaArrowSrc={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt}
+        ctaLabel={messages.solutions.ctaDetails}
+        description={fallback.description}
+        href={detailsHref}
+        imageAlt={fallback.title}
+        imageSrc={card.imageSrc}
+        overlayIndex={card.index}
+        overlayNumberPositionClassName={solutionCardOverlayPositionClass(index)}
+        title={fallback.title}
+      />
+    );
+  });
+}
+
 function SolutionsSection({
   messages,
   locale,
@@ -172,36 +243,17 @@ function SolutionsSection({
         description={messages.solutions.description}
       />
       <div className="mt-10 grid gap-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-16">
-        {solutionCardsLayout.map((card, index) => {
-          const fallback = messages.solutions.cards[index];
-          const category = homeSolutionCategories[index];
-          const detailsHref = category
-            ? machinesCategoryHref(locale, category.slug)
-            : machinesPageHref(locale);
-          const cardTitle = category ? category.name : fallback.title;
-          const cardDescription = category?.homeDescription?.trim() || fallback.description;
-          const bullets =
-            category && category.homeBullets.length > 0 ? category.homeBullets : fallback.bullets;
-          const imageSrc =
-            category?.coverImage?.url && category.coverImage.url.trim().length > 0
-              ? category.coverImage.url.trim()
-              : card.imageSrc;
-          return (
-            <MachineCategorySolutionCard
-              key={card.index}
-              bullets={bullets}
-              ctaArrowSrc={index === 0 ? homeAssets.linkArrow : homeAssets.linkArrowAlt}
-              ctaLabel={messages.solutions.ctaDetails}
-              description={cardDescription}
-              href={detailsHref}
-              imageAlt={cardTitle}
-              imageSrc={imageSrc}
-              overlayIndex={card.index}
-              overlayNumberPositionClassName={solutionCardOverlayPositionClass(index)}
-              title={cardTitle}
-            />
-          );
-        })}
+        {homeSolutionCategories.length > 0
+          ? homeSolutionCategories.slice(0, 3).map((category, index) => (
+              <HomeSolutionCmsCard
+                category={category}
+                index={index}
+                key={category.slug}
+                locale={locale}
+                messages={messages}
+              />
+            ))
+          : <HomeSolutionFallbackStrip locale={locale} messages={messages} />}
       </div>
     </section>
   );

@@ -154,14 +154,13 @@ export function AdminMachineListClient({
 
       {!loading && machines.length > 0 ? (
         <div className={wrap}>
-          <table className="w-full min-w-[720px] border-collapse text-left">
+          <table className="w-full min-w-[640px] border-collapse text-left">
             <thead>
               <tr>
                 <th className={th}>{m.machineList.colProduct}</th>
                 <th className={th}>{m.machineList.colStatus}</th>
                 <th className={th}>{m.machineList.colCategory}</th>
                 <th className={`${th} text-center`}>{m.machineList.colFeatured}</th>
-                <th className={`${th} text-right tabular-nums`}>{m.machineList.colSort}</th>
                 <th className={th}>{m.machineList.colCreated}</th>
                 <th className={`${th} text-right`}>{m.machineList.colActions}</th>
               </tr>
@@ -225,7 +224,6 @@ export function AdminMachineListClient({
                       {rowItem.featured ? "★" : "☆"}
                     </button>
                   </td>
-                  <td className={`${td} text-right tabular-nums`}>{rowItem.sortOrder}</td>
                   <td className={`${td} tabular-nums`}>{formatListDate(rowItem.createdAt)}</td>
                   <td className={`${td} text-right`}>
                     <div className="flex flex-wrap justify-end gap-1.5">

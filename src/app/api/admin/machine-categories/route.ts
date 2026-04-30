@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { requireAdmin } from "@/features/admin/admin.guard";
 import { adminMachineCategoryCreateSchema } from "@/features/machines/machines.admin-category.schemas";
 import { createMachineCategoryForAdmin, listMachineCategoriesTopLevelForAdmin } from "@/features/machines/machines.admin-category.service";
+import { revalidateMachineCategoryPublicCaches } from "@/features/machines/machines.public-cache.revalidate";
 import { jsonError } from "@/lib/http/api-error";
 import { parseJsonBody } from "@/lib/http/parse-json-body";
 import { logMetaWithRequest } from "@/lib/http/request-log-meta";
@@ -31,6 +32,7 @@ export async function POST(request: Request): Promise<NextResponse> {
 
   try {
     const row = await createMachineCategoryForAdmin(parsed.data);
+    revalidateMachineCategoryPublicCaches();
     return NextResponse.json({ data: row }, { status: 201 });
   } catch (err) {
     if (isPrismaUniqueConstraintError(err)) {

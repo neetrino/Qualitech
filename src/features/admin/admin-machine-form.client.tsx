@@ -74,7 +74,6 @@ export function AdminMachineFormClient({
 
   const [categoryId, setCategoryId] = useState<string>(() => machine?.categoryId ?? "");
   const [featured, setFeatured] = useState(machine?.featured ?? false);
-  const [sortOrder, setSortOrder] = useState(String(machine?.sortOrder ?? 0));
 
   const initialMap = useMemo((): Record<MachineFormLocale, MachineTrForm> => {
     const base: Record<MachineFormLocale, MachineTrForm> = {
@@ -122,8 +121,7 @@ export function AdminMachineFormClient({
           isPrimary: i.isPrimary,
         }));
 
-      const sortParsed = Number.parseInt(sortOrder, 10);
-      const sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      const sortOrderVal = machine?.sortOrder ?? 0;
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
       const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
 
@@ -166,7 +164,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, featured, images, machine, onSaved, pdfUrl, sortOrder, tr],
+    [categoryId, featured, images, machine, onSaved, pdfUrl, tr],
   );
 
   return (
@@ -187,7 +185,7 @@ export function AdminMachineFormClient({
         <p className={theme === "light" ? "text-sm text-red-600" : "text-sm text-red-400"}>{error}</p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls} htmlFor="machine-category">
             {m.machineForm.category}
@@ -208,19 +206,6 @@ export function AdminMachineFormClient({
           {categoryOptions.length === 0 ? (
             <p className={adminHintTextClass(theme)}>{m.machineForm.categoryHint}</p>
           ) : null}
-        </div>
-        <div>
-          <label className={labelCls} htmlFor="machine-sort">
-            {m.machineForm.sortOrder}
-          </label>
-          <input
-            className={inputCls}
-            id="machine-sort"
-            min={0}
-            onChange={(e) => setSortOrder(e.target.value)}
-            type="number"
-            value={sortOrder}
-          />
         </div>
         <label className={`${adminCheckboxLabelClass(theme)} self-end`}>
           <input

@@ -4,7 +4,7 @@ import { homeLocaleToAppLocale } from "@/features/blog/blog.locale";
 import { HomePage } from "@/features/home/home.page";
 import type { HomeLocale } from "@/features/home/home.messages";
 import { loadHomeMessages } from "@/features/home/home.messages";
-import { listTopLevelMachineCategoryCardsPublic } from "@/features/machines/machines.service";
+import { listHomeFeaturedMachineCategoryCardsPublic } from "@/features/machines/machines.service";
 import { isHomeLocaleSegment } from "@/lib/i18n/locale-routes";
 
 /** ISR seconds (Next.js requires a numeric literal in route modules). */
@@ -26,7 +26,7 @@ export default async function Page({ params }: PageProps) {
   const locale: HomeLocale = raw;
   const [messages, machineCategories] = await Promise.all([
     loadHomeMessages(locale),
-    listTopLevelMachineCategoryCardsPublic(homeLocaleToAppLocale(locale)),
+    listHomeFeaturedMachineCategoryCardsPublic(homeLocaleToAppLocale(locale)),
   ]);
   const homeSolutionCategories = machineCategories.slice(0, 3);
   return <HomePage homeSolutionCategories={homeSolutionCategories} locale={locale} messages={messages} />;

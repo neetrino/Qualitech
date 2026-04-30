@@ -82,6 +82,21 @@ export function AdminMachineCategoriesPanelClient() {
     [loadList],
   );
 
+  const onToggleFeaturedOnHome = useCallback(
+    async (id: string, nextFeatured: boolean) => {
+      const res = await adminApiJson<MachineCategoryAdminRow>(`${ADMIN_API_MACHINE_CATEGORIES_PATH}/${id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ featured: nextFeatured }),
+      });
+      if (res.ok) {
+        setCategories((prev) => prev.map((row) => (row.id === id ? res.data : row)));
+      } else {
+        window.alert(res.error.message);
+      }
+    },
+    [],
+  );
+
   if (mode.kind === "edit") {
     if (mode.id !== null && editLoading) {
       return (
@@ -105,6 +120,7 @@ export function AdminMachineCategoriesPanelClient() {
         onDelete={onDelete}
         onEdit={openEdit}
         onNew={openNew}
+        onToggleFeaturedOnHome={onToggleFeaturedOnHome}
       />
     </div>
   );
