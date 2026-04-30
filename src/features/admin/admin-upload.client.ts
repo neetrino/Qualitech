@@ -1,10 +1,12 @@
 import { ADMIN_API_UPLOAD_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson } from "@/features/admin/admin-http.client";
-import { R2_ALLOWED_CONTENT_TYPES } from "@/features/admin/r2/r2.constants";
+import { R2_IMAGE_CONTENT_TYPES } from "@/features/admin/r2/r2.constants";
 
 export type R2UploadScopeUi = "blog" | "machines";
 
-const ALLOWED_TYPES = new Set<string>(R2_ALLOWED_CONTENT_TYPES);
+const IMAGE_UPLOAD_TYPES = new Set<string>(R2_IMAGE_CONTENT_TYPES);
+
+const PDF_CONTENT_TYPE = "application/pdf" as const;
 
 type UploadData = {
   publicUrl: string;
@@ -13,15 +15,8 @@ type UploadData = {
   byteLength: number;
 };
 
-/**
- * Uploads a single image to R2 via the admin API (same-origin; no browser→R2 CORS).
- */
-export async function uploadImageToR2(file: File, scope: R2UploadScopeUi): Promise<string> {
-  const contentType = file.type;
-  if (!ALLOWED_TYPES.has(contentType)) {
-    throw new Error(`Use JPEG, PNG, WebP, GIF, or SVG (got: ${contentType || "empty"})`);
-  }
-
+/** Shared multipart POST to `/api/admin/upload`. */
+async function postMultipartUpload(file: File, scope: R2UploadScopeUi): Promise<string> {
   const form = new FormData();
   form.set("scope", scope);
   form.set("file", file);
@@ -39,4 +34,24 @@ export async function uploadImageToR2(file: File, scope: R2UploadScopeUi): Promi
   }
 
   return res.data.publicUrl;
+}
+
+/**
+ * Uploads a single image to R2 via the admin API (same-origin; no browser→R2 CORS).
+ */
+export async function uploadImageToR2(file: File, scope: R2UploadScopeUi): Promise<string> {
+  const contentType = file.type;
+  if (!IMAGE_UPLOAD_TYPES.has(contentType)) {
+    throw new Error(`Use JPEG, PNG, WebP, GIF, or SVG (got: ${contentType || "empty"})`);
+  }
+  return postMultipartUpload(file, scope);
+}
+
+/** PDF brochure / datasheet upload (same R2 flow as images). */
+export async function uploadPdfToR2(file: File, scope: R2UploadScopeUi): Promise<string> {
+  const contentType = file.type;
+  if (contentType !== PDF_CONTENT_TYPE) {
+    throw new Error(`Use a PDF file (got: ${contentType || "empty"})`);
+  }
+  return postMultipartUpload(file, scope);
 }

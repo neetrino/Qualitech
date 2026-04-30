@@ -2,6 +2,7 @@ import Link from "next/link";
 
 import { BlogProse } from "@/features/blog/blog-prose";
 import { MachineHeroGallery } from "@/features/machines/machine-hero-gallery.client";
+import { MachinePdfInlinePanel } from "@/features/machines/machine-pdf-inline-panel.client";
 import type { MachineDetailWithLocaleSlugs, MachineListItemDto } from "@/features/machines/machines.dto";
 import { MachineRelatedCarousel } from "@/features/machines/machine-related-carousel";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
@@ -36,6 +37,7 @@ export function MachineDetailPage({
   const initialImageIndex = primaryIdx >= 0 ? primaryIdx : 0;
   const categoryName = detail.category?.name ?? "";
   const categoryCrumbLabel = categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines;
+  const hasPdfSheet = detail.pdfUrl != null && detail.pdfUrl.trim().length > 0;
 
   return (
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
@@ -62,12 +64,14 @@ export function MachineDetailPage({
           {hasLead ? (
             <section className="mx-auto w-full max-w-[1680px] px-4 pb-12 sm:px-5 sm:pb-16 md:px-6 lg:px-8 xl:px-10">
               <div className="grid grid-cols-1 gap-8 lg:grid-cols-2 lg:items-start lg:gap-10 xl:gap-14">
-                <MachineHeroGallery
-                  fallbackAlt={machinesMessages.galleryFallbackAlt}
-                  images={detail.images}
-                  initialIndex={initialImageIndex}
-                />
-                <div className="flex min-w-0 flex-col gap-6 lg:max-w-none lg:pt-1">
+                <div className="order-1 min-w-0 lg:col-start-1 lg:row-start-1">
+                  <MachineHeroGallery
+                    fallbackAlt={machinesMessages.galleryFallbackAlt}
+                    images={detail.images}
+                    initialIndex={initialImageIndex}
+                  />
+                </div>
+                <div className="order-2 flex min-w-0 flex-col gap-6 lg:sticky lg:top-28 lg:z-[1] lg:col-start-2 lg:row-start-1 lg:max-w-none lg:pt-1">
                   <Link
                     className="inline-flex w-fit text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
                     href={machinesCategoryHref(locale, sectionSlug)}
@@ -81,6 +85,15 @@ export function MachineDetailPage({
                     <BlogProse html={detail.description} />
                   </div>
                 </div>
+                {hasPdfSheet ? (
+                  <div className="order-3 col-span-full min-w-0 lg:col-span-2 lg:row-start-2">
+                    <MachinePdfInlinePanel
+                      pdfCloseLabel={machinesMessages.pdfCloseViewer}
+                      pdfLinkLabel={machinesMessages.pdfViewLabel}
+                      pdfUrl={detail.pdfUrl}
+                    />
+                  </div>
+                ) : null}
               </div>
             </section>
           ) : (

@@ -48,9 +48,8 @@ export function MachineListCard({ locale, sectionSlug, messages, machine }: Mach
             {machine.title}
           </Link>
         </h2>
-        <p className="mt-2 min-h-0 flex-1 text-xs leading-relaxed text-[#9f9fa9] sm:mt-3 sm:text-sm">{machine.descriptionExcerpt}</p>
         <Link
-          className="mt-4 inline-flex shrink-0 items-center gap-1.5 self-start text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110 sm:mt-5 sm:text-xs"
+          className="mt-auto inline-flex shrink-0 items-center gap-1.5 self-start pt-4 text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110 sm:pt-5 sm:text-xs"
           href={href}
         >
           {messages.readDetails}

@@ -19,6 +19,10 @@ model MachineCategory {
   parent    MachineCategory?  @relation("CategoryTree", fields: [parentId], references: [id], onDelete: SetNull)
   children  MachineCategory[] @relation("CategoryTree")
   sortOrder Int               @default(0)
+  /// Eligible for home #solutions strip (first N by sort order among top-level categories).
+  featured  Boolean           @default(false)
+  /// Shown on public `/machines` catalog when true.
+  published Boolean           @default(true)
   /// Public catalog card image (R2 URL); optional — falls back to first machine cover in subtree.
   imageUrl  String?           @db.Text
   createdAt DateTime          @default(now())
@@ -53,6 +57,8 @@ model Machine {
   featured   Boolean          @default(false)
   published  Boolean          @default(false)
   sortOrder  Int              @default(0)
+  /// Optional product sheet / brochure (public URL, e.g. R2).
+  pdfUrl     String?          @db.Text
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
 

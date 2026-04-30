@@ -52,6 +52,8 @@ export type MachineCategoryAdminRow = {
   id: string;
   parentId: string | null;
   sortOrder: number;
+  featured: boolean;
+  published: boolean;
   imageUrl: string | null;
   createdAt: string;
   updatedAt: string;
@@ -87,6 +89,7 @@ export type MachineRow = {
   featured: boolean;
   published: boolean;
   sortOrder: number;
+  pdfUrl: string | null;
   createdAt: string;
   updatedAt: string;
   translations: MachineTranslationRow[];

@@ -15,6 +15,8 @@
   "breadcrumbMachines": "Machines",
   "ctaContact": "Request a quote",
   "galleryFallbackAlt": "Machine photo",
+  "pdfViewLabel": "View detailed equipment description (PDF)",
+  "pdfCloseViewer": "Hide datasheet",
   "paginationPrev": "Previous",
   "paginationNext": "Next",
   "pageIndicator": "Page {page} of {totalPages}",

@@ -10,6 +10,7 @@ import {
   getMachineCategoryForAdmin,
   updateMachineCategoryForAdmin,
 } from "@/features/machines/machines.admin-category.service";
+import { revalidateMachineCategoryPublicCaches } from "@/features/machines/machines.public-cache.revalidate";
 import { jsonError } from "@/lib/http/api-error";
 import { parseJsonBody } from "@/lib/http/parse-json-body";
 import { logMetaWithRequest } from "@/lib/http/request-log-meta";
@@ -65,6 +66,7 @@ export async function PATCH(request: Request, context: RouteContext): Promise<Ne
     if (!row) {
       return jsonError(404, "NOT_FOUND", "Category not found");
     }
+    revalidateMachineCategoryPublicCaches();
     return NextResponse.json({ data: row });
   } catch (err) {
     if (isPrismaUniqueConstraintError(err)) {
@@ -105,5 +107,6 @@ export async function DELETE(request: Request, context: RouteContext): Promise<N
     }
     return jsonError(409, "CONFLICT", "Category still has products; reassign or delete them first");
   }
+  revalidateMachineCategoryPublicCaches();
   return NextResponse.json({ data: { ok: true as const } });
 }

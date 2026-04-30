@@ -34,6 +34,8 @@ export async function adminCreateMachineCategory(
     data: {
       parentId: null,
       sortOrder: data.sortOrder,
+      featured: data.featured ?? true,
+      published: data.published ?? true,
       imageUrl: data.imageUrl ?? null,
       translations: { create: data.translations },
     },
@@ -45,6 +47,12 @@ function buildCategoryUpdateData(patch: AdminMachineCategoryPatchInput): Prisma.
   const data: Prisma.MachineCategoryUpdateInput = {};
   if (patch.sortOrder !== undefined) {
     data.sortOrder = patch.sortOrder;
+  }
+  if (patch.featured !== undefined) {
+    data.featured = patch.featured;
+  }
+  if (patch.published !== undefined) {
+    data.published = patch.published;
   }
   if (patch.imageUrl !== undefined) {
     data.imageUrl = patch.imageUrl;

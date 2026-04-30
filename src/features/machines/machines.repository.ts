@@ -58,9 +58,22 @@ export async function collectDescendantCategoryIds(rootId: string): Promise<stri
   return ids;
 }
 
-export async function findTopLevelMachineCategories(locale: AppLocale) {
+export type FindTopLevelMachineCategoriesOptions = {
+  /** When true, only categories flagged for the home #solutions strip (`featured`). */
+  readonly homeSolutionsOnly?: boolean;
+};
+
+export async function findTopLevelMachineCategories(
+  locale: AppLocale,
+  options?: FindTopLevelMachineCategoriesOptions,
+) {
+  const { homeSolutionsOnly } = options ?? {};
   return prisma.machineCategory.findMany({
-    where: { parentId: null },
+    where: {
+      parentId: null,
+      published: true,
+      ...(homeSolutionsOnly === true ? { featured: true } : {}),
+    },
     orderBy: { sortOrder: "asc" },
     include: {
       translations: { where: { locale } },

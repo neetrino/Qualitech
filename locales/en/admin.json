@@ -49,6 +49,8 @@
     "loading": "Loading…",
     "empty": "No sections yet. Create the main categories shown on /machines.",
     "sortLabel": "Sort",
+    "ariaAddHomeFeatured": "Show on home page",
+    "ariaRemoveHomeFeatured": "Hide from home page",
     "edit": "Edit",
     "delete": "Delete",
     "confirmDelete": "Delete this section permanently? It must have no products assigned."
@@ -94,7 +96,6 @@
     "colStatus": "Status",
     "colCategory": "Category",
     "colFeatured": "Featured",
-    "colSort": "Sort",
     "colCreated": "Created",
     "colActions": "Actions",
     "featuredYes": "Featured",
@@ -128,9 +129,14 @@
     "category": "Category",
     "noCategory": "No category",
     "categoryHint": "Add sections under “Machine sections” first, then pick one here.",
-    "sortOrder": "Sort order",
     "featured": "Featured",
-    "galleryHint": "Upload one or more images. Mark one as primary — it is used for the catalog card, product hero, and social previews (Open Graph)."
+    "galleryHint": "Upload one or more images. Mark one as primary — it is used for the catalog card, product hero, and social previews (Open Graph).",
+    "pdfSheet": "Product sheet (PDF)",
+    "pdfHint": "Optional datasheet or brochure. It appears on the product page under the gallery thumbnails.",
+    "pdfUpload": "Upload PDF",
+    "pdfUploading": "Uploading…",
+    "pdfRemove": "Remove PDF",
+    "pdfOpen": "Open current PDF"
   },
   "gallery": {
     "heading": "Gallery images",

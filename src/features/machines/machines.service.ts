@@ -11,7 +11,11 @@ import type {
   MachinesListResult,
 } from "@/features/machines/machines.dto";
 import { mapMachineDetailRow, mapMachineListRow } from "@/features/machines/machines.mappers";
-import { MACHINES_PUBLIC_DATA_REVALIDATE_SEC, RELATED_MACHINES_CAROUSEL_LIMIT } from "@/features/machines/machines.constants";
+import {
+  MACHINE_CATEGORY_PUBLIC_CACHE_TAG,
+  MACHINES_PUBLIC_DATA_REVALIDATE_SEC,
+  RELATED_MACHINES_CAROUSEL_LIMIT,
+} from "@/features/machines/machines.constants";
 import {
   collectDescendantCategoryIds,
   countMachinesForList,
@@ -87,49 +91,72 @@ export async function getMachineBySlugPublic(
   return cached();
 }
 
+type TopLevelCategoryRow = Awaited<ReturnType<typeof findTopLevelMachineCategories>>[number];
+
+async function mapTopLevelCategoryRowsToCards(
+  rows: TopLevelCategoryRow[],
+  locale: AppLocale,
+): Promise<MachineCategoryCardDto[]> {
+  const cardsOrNull = await Promise.all(
+    rows.map(async (row): Promise<MachineCategoryCardDto | null> => {
+      const tr = row.translations[0];
+      if (!tr) {
+        return null;
+      }
+      const ids = await getDescendantCategoryIdsCached(row.id);
+      const customCover =
+        row.imageUrl != null && row.imageUrl.trim().length > 0
+          ? {
+              url: normalizeStoredImageUrl(row.imageUrl),
+              alt: null as string | null,
+              sortOrder: 0,
+              isPrimary: true,
+            }
+          : null;
+      const fallbackCover = await findFirstPublishedMachineCoverInCategoryIds(ids, locale);
+      const cover =
+        customCover ??
+        (fallbackCover ? { ...fallbackCover, url: normalizeStoredImageUrl(fallbackCover.url) } : null);
+      return {
+        slug: tr.slug,
+        name: tr.name,
+        coverImage: cover,
+        homeDescription: tr.homeDescription?.trim() ? tr.homeDescription.trim() : null,
+        homeBullets: Array.isArray(tr.homeBullets)
+          ? tr.homeBullets.map((b) => b.trim()).filter((b) => b.length > 0)
+          : [],
+      };
+    }),
+  );
+  return cardsOrNull.filter((card): card is MachineCategoryCardDto => card !== null);
+}
+
+/** All top-level sections for `/machines` catalog grid. */
 export async function listTopLevelMachineCategoryCardsPublic(
   locale: AppLocale,
 ): Promise<MachineCategoryCardDto[]> {
   const cached = unstable_cache(
     async () => {
       const rows = await findTopLevelMachineCategories(locale);
-      const cardsOrNull = await Promise.all(
-        rows.map(async (row): Promise<MachineCategoryCardDto | null> => {
-          const tr = row.translations[0];
-          if (!tr) {
-            return null;
-          }
-          const ids = await getDescendantCategoryIdsCached(row.id);
-          const customCover =
-            row.imageUrl != null && row.imageUrl.trim().length > 0
-              ? {
-                  url: normalizeStoredImageUrl(row.imageUrl),
-                  alt: null as string | null,
-                  sortOrder: 0,
-                  isPrimary: true,
-                }
-              : null;
-          const fallbackCover = await findFirstPublishedMachineCoverInCategoryIds(ids, locale);
-          const cover =
-            customCover ??
-            (fallbackCover
-              ? { ...fallbackCover, url: normalizeStoredImageUrl(fallbackCover.url) }
-              : null);
-          return {
-            slug: tr.slug,
-            name: tr.name,
-            coverImage: cover,
-            homeDescription: tr.homeDescription?.trim() ? tr.homeDescription.trim() : null,
-            homeBullets: Array.isArray(tr.homeBullets)
-              ? tr.homeBullets.map((b) => b.trim()).filter((b) => b.length > 0)
-              : [],
-          };
-        }),
-      );
-      return cardsOrNull.filter((card): card is MachineCategoryCardDto => card !== null);
+      return mapTopLevelCategoryRowsToCards(rows, locale);
     },
     ["machines-top-level-category-cards", locale],
-    { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC },
+    { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC, tags: [MACHINE_CATEGORY_PUBLIC_CACHE_TAG] },
+  );
+  return cached();
+}
+
+/** Top-level sections marked for home #solutions (same card mapping; ordered by `sortOrder`). */
+export async function listHomeFeaturedMachineCategoryCardsPublic(
+  locale: AppLocale,
+): Promise<MachineCategoryCardDto[]> {
+  const cached = unstable_cache(
+    async () => {
+      const rows = await findTopLevelMachineCategories(locale, { homeSolutionsOnly: true });
+      return mapTopLevelCategoryRowsToCards(rows, locale);
+    },
+    ["home-featured-machine-category-cards", locale],
+    { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC, tags: [MACHINE_CATEGORY_PUBLIC_CACHE_TAG] },
   );
   return cached();
 }

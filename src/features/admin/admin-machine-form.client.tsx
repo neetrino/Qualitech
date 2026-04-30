@@ -6,6 +6,7 @@ import type { MachineImageRow, MachineRow } from "@/features/admin/admin-api-typ
 import { ADMIN_API_MACHINES_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson, formatAdminValidationError } from "@/features/admin/admin-http.client";
 import { AdminGalleryImageRows } from "@/features/admin/admin-gallery-image-rows.client";
+import { AdminMachinePdfField } from "@/features/admin/admin-machine-pdf-field.client";
 import {
   AdminMachineLocaleFields,
   MACHINE_FORM_LOCALES,
@@ -23,6 +24,7 @@ import {
   adminCheckboxClass,
   adminCheckboxLabelClass,
   adminFormSectionTitleClass,
+  adminFormStickyBottomActionsClass,
   adminHintTextClass,
   adminInputClass,
   adminLabelClass,
@@ -70,10 +72,10 @@ export function AdminMachineFormClient({
   const labelCls = adminLabelClass(theme);
   const inputCls = adminInputClass(theme);
   const formTitle = adminFormSectionTitleClass(theme);
+  const stickyBottomActionsClass = adminFormStickyBottomActionsClass(theme);
 
   const [categoryId, setCategoryId] = useState<string>(() => machine?.categoryId ?? "");
   const [featured, setFeatured] = useState(machine?.featured ?? false);
-  const [sortOrder, setSortOrder] = useState(String(machine?.sortOrder ?? 0));
 
   const initialMap = useMemo((): Record<MachineFormLocale, MachineTrForm> => {
     const base: Record<MachineFormLocale, MachineTrForm> = {
@@ -95,8 +97,10 @@ export function AdminMachineFormClient({
   const [images, setImages] = useState<MachineImageRow[]>(() =>
     machine ? mapApiImagesToForm(machine.images.map((i) => ({ ...i }))) : [],
   );
+  const [pdfUrl, setPdfUrl] = useState(() => machine?.pdfUrl?.trim() ?? "");
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
+  const [pdfUploadBusy, setPdfUploadBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const setLocale = useCallback((loc: MachineFormLocale, next: MachineTrForm) => {
@@ -119,9 +123,9 @@ export function AdminMachineFormClient({
           isPrimary: i.isPrimary,
         }));
 
-      const sortParsed = Number.parseInt(sortOrder, 10);
-      const sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      const sortOrderVal = machine?.sortOrder ?? 0;
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
+      const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
 
       if (machine) {
         const res = await adminApiJson<MachineRow>(`${ADMIN_API_MACHINES_PATH}/${machine.id}`, {
@@ -133,6 +137,7 @@ export function AdminMachineFormClient({
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
+            pdfUrl: pdfPayload,
           }),
         });
         if (!res.ok) {
@@ -149,6 +154,7 @@ export function AdminMachineFormClient({
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
+            pdfUrl: pdfPayload,
           }),
         });
         if (!res.ok) {
@@ -160,28 +166,20 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, featured, images, machine, onSaved, sortOrder, tr],
+    [categoryId, featured, images, machine, onSaved, pdfUrl, tr],
   );
 
   return (
     <form className="space-y-6" onSubmit={(ev) => void onSubmit(ev)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
         <h3 className={formTitle}>{machine ? m.machineForm.editTitle : m.machineForm.newTitle}</h3>
-        <div className="flex flex-wrap gap-2">
-          <button className={sec} onClick={onCancel} type="button">
-            {m.machineForm.cancel}
-          </button>
-          <button className={pri} disabled={busy} type="submit">
-            {busy ? m.machineForm.saving : m.machineForm.save}
-          </button>
-        </div>
       </div>
 
       {error ? (
         <p className={theme === "light" ? "text-sm text-red-600" : "text-sm text-red-400"}>{error}</p>
       ) : null}
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className={labelCls} htmlFor="machine-category">
             {m.machineForm.category}
@@ -202,19 +200,6 @@ export function AdminMachineFormClient({
           {categoryOptions.length === 0 ? (
             <p className={adminHintTextClass(theme)}>{m.machineForm.categoryHint}</p>
           ) : null}
-        </div>
-        <div>
-          <label className={labelCls} htmlFor="machine-sort">
-            {m.machineForm.sortOrder}
-          </label>
-          <input
-            className={inputCls}
-            id="machine-sort"
-            min={0}
-            onChange={(e) => setSortOrder(e.target.value)}
-            type="number"
-            value={sortOrder}
-          />
         </div>
         <label className={`${adminCheckboxLabelClass(theme)} self-end`}>
           <input
@@ -260,6 +245,24 @@ export function AdminMachineFormClient({
         uploadScope="machines"
         onUploadBusyChange={setUploadBusy}
       />
+
+      <AdminMachinePdfField
+        onPdfUrlChange={setPdfUrl}
+        onUploadBusyChange={setPdfUploadBusy}
+        pdfUrl={pdfUrl}
+        reportError={(msg) => setError(msg)}
+        theme={theme}
+        uploadBusy={pdfUploadBusy}
+      />
+
+      <div className={stickyBottomActionsClass}>
+        <button className={sec} onClick={onCancel} type="button">
+          {m.machineForm.cancel}
+        </button>
+        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy} type="submit">
+          {busy ? m.machineForm.saving : m.machineForm.save}
+        </button>
+      </div>
     </form>
   );
 }

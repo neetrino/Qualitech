@@ -14,6 +14,7 @@ import {
   adminButtonPrimaryClass,
   adminButtonSecondaryClass,
   adminFormSectionTitleClass,
+  adminFormStickyBottomActionsClass,
   adminInputClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
@@ -47,6 +48,7 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
   const labelCls = adminLabelClass(theme);
   const inputCls = adminInputClass(theme);
   const formTitle = adminFormSectionTitleClass(theme);
+  const stickyBottomActionsClass = adminFormStickyBottomActionsClass(theme);
 
   const [sortOrder, setSortOrder] = useState(String(category?.sortOrder ?? 0));
   const [imageUrl, setImageUrl] = useState(category?.imageUrl ?? "");
@@ -100,8 +102,13 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       e.preventDefault();
       setBusy(true);
       setError(null);
-      const sortParsed = Number.parseInt(sortOrder, 10);
-      const sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      let sortOrderVal: number;
+      if (category) {
+        sortOrderVal = category.sortOrder;
+      } else {
+        const sortParsed = Number.parseInt(sortOrder, 10);
+        sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
+      }
       const ruBullets = ru.homeBulletsText
         .split(/\r?\n/)
         .map((l) => l.trim())
@@ -175,35 +182,29 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
 
   return (
     <form className="space-y-6" onSubmit={(ev) => void onSubmit(ev)}>
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div>
         <h3 className={formTitle}>{category ? m.machineCategoryForm.editTitle : m.machineCategoryForm.newTitle}</h3>
-        <div className="flex flex-wrap gap-2">
-          <button className={sec} onClick={onCancel} type="button">
-            {m.machineCategoryForm.cancel}
-          </button>
-          <button className={pri} disabled={busy} type="submit">
-            {busy ? m.machineCategoryForm.saving : m.machineCategoryForm.save}
-          </button>
-        </div>
       </div>
 
       {error ? (
         <p className={theme === "light" ? "text-sm text-red-600" : "text-sm text-red-400"}>{error}</p>
       ) : null}
 
-      <div className="max-w-xs">
-        <label className={labelCls} htmlFor="mc-sort">
-          {m.machineCategoryForm.sortOrder}
-        </label>
-        <input
-          className={inputCls}
-          id="mc-sort"
-          min={0}
-          onChange={(e) => setSortOrder(e.target.value)}
-          type="number"
-          value={sortOrder}
-        />
-      </div>
+      {!category ? (
+        <div className="max-w-xs">
+          <label className={labelCls} htmlFor="mc-sort">
+            {m.machineCategoryForm.sortOrder}
+          </label>
+          <input
+            className={inputCls}
+            id="mc-sort"
+            min={0}
+            onChange={(e) => setSortOrder(e.target.value)}
+            type="number"
+            value={sortOrder}
+          />
+        </div>
+      ) : null}
 
       <div className="max-w-xl space-y-2">
         <div className={labelCls}>{m.machineCategoryForm.coverImage}</div>
@@ -342,6 +343,15 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
             />
           </div>
         </div>
+      </div>
+
+      <div className={stickyBottomActionsClass}>
+        <button className={sec} onClick={onCancel} type="button">
+          {m.machineCategoryForm.cancel}
+        </button>
+        <button className={pri} disabled={busy || uploadBusy} type="submit">
+          {busy ? m.machineCategoryForm.saving : m.machineCategoryForm.save}
+        </button>
       </div>
     </form>
   );
