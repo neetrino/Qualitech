@@ -12,9 +12,22 @@ type MachineListCardProps = {
   readonly sectionSlug: string;
   readonly messages: MachinesMessages;
   readonly machine: MachineListItemDto;
+  /** Smaller title on dense grids (e.g. category product listing). */
+  readonly titleScale?: "default" | "compact";
 };
 
-export function MachineListCard({ locale, sectionSlug, messages, machine }: MachineListCardProps) {
+const TITLE_CLASS: Record<NonNullable<MachineListCardProps["titleScale"]>, string> = {
+  default: "font-display text-sm uppercase leading-snug tracking-tight text-white sm:text-lg",
+  compact: "font-display text-xs uppercase leading-snug tracking-tight text-white sm:text-sm md:text-base",
+};
+
+export function MachineListCard({
+  locale,
+  sectionSlug,
+  messages,
+  machine,
+  titleScale = "default",
+}: MachineListCardProps) {
   const href = machineDetailHref(locale, sectionSlug, machine.slug);
   const alt = machine.coverImage?.alt?.trim() || messages.cardFallbackAlt;
   const coverSrc = machine.coverImage?.url?.trim() ?? "";
@@ -23,7 +36,7 @@ export function MachineListCard({ locale, sectionSlug, messages, machine }: Mach
   return (
     <article className="flex h-full min-h-0 flex-col overflow-hidden rounded-xl border border-[#18181b] bg-black p-px transition hover:border-[#27272a]">
       <Link
-        className="relative block h-[140px] shrink-0 overflow-hidden rounded-t-[12px] bg-[#18181b] sm:h-[190px] md:h-[220px]"
+        className="relative block h-[128px] shrink-0 overflow-hidden rounded-t-[12px] bg-[#18181b] sm:h-[172px] md:h-[200px]"
         href={href}
       >
         {showCover ? (
@@ -31,7 +44,7 @@ export function MachineListCard({ locale, sectionSlug, messages, machine }: Mach
             alt={alt}
             className="object-cover transition duration-300 hover:scale-[1.02]"
             fill
-            sizes="(max-width: 640px) 50vw, (max-width: 768px) 50vw, (max-width: 1024px) 33vw, (max-width: 1280px) 25vw, 20vw"
+            sizes="(max-width: 640px) 45vw, (max-width: 768px) 45vw, (max-width: 1024px) 30vw, (max-width: 1280px) 23vw, 18vw"
             src={coverSrc}
             unoptimized={isRemoteImageUrl(coverSrc)}
           />
@@ -42,14 +55,14 @@ export function MachineListCard({ locale, sectionSlug, messages, machine }: Mach
         )}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-[rgba(0,0,0,0.35)] to-transparent" />
       </Link>
-      <div className="flex min-h-0 flex-1 flex-col px-3 py-4 sm:px-5 sm:py-6">
-        <h2 className="font-display text-base uppercase leading-snug tracking-tight text-white sm:text-xl">
+      <div className="flex min-h-0 flex-1 flex-col px-3 py-3 sm:px-4 sm:py-5">
+        <h2 className={TITLE_CLASS[titleScale]}>
           <Link className="transition hover:text-[#ff6900]" href={href}>
             {machine.title}
           </Link>
         </h2>
         <Link
-          className="mt-auto inline-flex shrink-0 items-center gap-1.5 self-start pt-4 text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110 sm:pt-5 sm:text-xs"
+          className="mt-auto inline-flex shrink-0 items-center gap-1.5 self-start pt-3 text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110 sm:pt-4 sm:text-xs"
           href={href}
         >
           {messages.readDetails}
