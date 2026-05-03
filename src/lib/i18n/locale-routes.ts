@@ -52,8 +52,16 @@ export function machinesPageHref(locale: HomeLocale): string {
   return `/${locale}/machines`;
 }
 
+/**
+ * Encodes a single path segment for `/machines/...` URLs. `encodeURIComponent` leaves `.` as-is;
+ * unencoded dots in the last segment are often treated as static file extensions (404).
+ */
+function encodeMachinesPathSegment(segment: string): string {
+  return encodeURIComponent(segment).replaceAll(".", "%2E");
+}
+
 export function machinesCategoryHref(locale: HomeLocale, categorySlug: string): string {
-  return `/${locale}/machines/${encodeURIComponent(categorySlug)}`;
+  return `/${locale}/machines/${encodeMachinesPathSegment(categorySlug)}`;
 }
 
 export function machineDetailHref(
@@ -61,7 +69,7 @@ export function machineDetailHref(
   categorySlug: string,
   machineSlug: string,
 ): string {
-  return `/${locale}/machines/${encodeURIComponent(categorySlug)}/${encodeURIComponent(machineSlug)}`;
+  return `/${locale}/machines/${encodeMachinesPathSegment(categorySlug)}/${encodeMachinesPathSegment(machineSlug)}`;
 }
 
 /** Language switch when both section and machine slugs exist per locale. */

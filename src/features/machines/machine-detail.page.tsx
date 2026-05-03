@@ -8,6 +8,7 @@ import { MachineRelatedCarousel } from "@/features/machines/machine-related-caro
 import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
+import { htmlToPlainText } from "@/lib/html/html-to-plain-excerpt";
 import { homePageHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
@@ -38,6 +39,7 @@ export function MachineDetailPage({
   const categoryName = detail.category?.name ?? "";
   const categoryCrumbLabel = categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines;
   const hasPdfSheet = detail.pdfUrl != null && detail.pdfUrl.trim().length > 0;
+  const hasDescription = htmlToPlainText(detail.description).length > 0;
 
   return (
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
@@ -81,9 +83,11 @@ export function MachineDetailPage({
                   <h1 className="font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                     {detail.title}
                   </h1>
-                  <div className="border-t border-[#18181b] pt-8">
-                    <BlogProse html={detail.description} />
-                  </div>
+                  {hasDescription ? (
+                    <div className="border-t border-[#18181b] pt-8">
+                      <BlogProse html={detail.description} />
+                    </div>
+                  ) : null}
                 </div>
                 {hasPdfSheet ? (
                   <div className="order-3 col-span-full min-w-0 lg:col-span-2 lg:row-start-2">
@@ -107,9 +111,11 @@ export function MachineDetailPage({
               <h1 className="mt-6 font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                 {detail.title}
               </h1>
-              <div className="mt-10 border-t border-[#18181b] pt-10">
-                <BlogProse html={detail.description} />
-              </div>
+              {hasDescription ? (
+                <div className="mt-10 border-t border-[#18181b] pt-10">
+                  <BlogProse html={detail.description} />
+                </div>
+              ) : null}
             </section>
           )}
 

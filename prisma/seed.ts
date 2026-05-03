@@ -51,6 +51,7 @@ async function seedCategories(): Promise<string[]> {
 async function seedMachine(categoryId: string): Promise<void> {
   await prisma.machine.create({
     data: {
+      slug: "demo-machine",
       categoryId,
       featured: true,
       published: true,
@@ -60,7 +61,6 @@ async function seedMachine(categoryId: string): Promise<void> {
           {
             locale: AppLocale.ru,
             title: "Демо-станок",
-            slug: "demo-stanok",
             description:
               "<p>Краткое описание для каталога.</p><p>Полное описание оборудования для детальной страницы.</p>",
             metaTitle: "Демо-станок | Qualitech",
@@ -70,7 +70,6 @@ async function seedMachine(categoryId: string): Promise<void> {
           {
             locale: AppLocale.en,
             title: "Demo machine",
-            slug: "demo-machine",
             description:
               "<p>Short catalog description.</p><p>Full machine description for the product page.</p>",
             metaTitle: "Demo machine | Qualitech",

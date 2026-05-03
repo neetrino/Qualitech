@@ -23,12 +23,12 @@ import {
   findFirstPublishedMachineCoverInCategoryIds,
   findMachineCategoryTranslationBySlug,
   findMachineDetailBySlug,
+  findPublishedMachineCategorySlug,
   findMachinesForList,
   findMachinesForListInCategoryIds,
   findRelatedMachinesInCategoryIds,
   findTopLevelMachineCategories,
   listCategoryTranslationSlugs,
-  listMachineTranslationSlugs,
 } from "@/features/machines/machines.repository";
 import type { MachinesListQuery } from "@/features/machines/machines.schemas";
 import { normalizeStoredImageUrl } from "@/lib/image/remote-image-url";
@@ -73,6 +73,13 @@ export async function listMachinesPublic(query: MachinesListQuery): Promise<Mach
   return cached();
 }
 
+export async function getPublishedMachineCategorySlugForMachine(
+  machineId: string,
+  locale: AppLocale,
+): Promise<string | null> {
+  return findPublishedMachineCategorySlug(machineId, locale);
+}
+
 export async function getMachineBySlugPublic(
   slug: string,
   locale: AppLocale,
@@ -89,6 +96,18 @@ export async function getMachineBySlugPublic(
     { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC },
   );
   return cached();
+}
+
+/** Uncached (e.g. after admin edits, or to avoid stale `null` in the detail-page fallback path). */
+export async function getMachineBySlugPublicUncached(
+  slug: string,
+  locale: AppLocale,
+): Promise<MachineDetailDto | null> {
+  const row = await findMachineDetailBySlug(slug, locale);
+  if (!row) {
+    return null;
+  }
+  return mapMachineDetailRow(row);
 }
 
 type TopLevelCategoryRow = Awaited<ReturnType<typeof findTopLevelMachineCategories>>[number];
@@ -238,41 +257,54 @@ export async function listRelatedMachinesInSectionPublic(
   return cached();
 }
 
+async function loadMachineDetailForSection(
+  machineSlug: string,
+  sectionSlug: string,
+  locale: AppLocale,
+): Promise<MachineDetailWithLocaleSlugs | null> {
+  const section = await findMachineCategoryTranslationBySlug(sectionSlug, locale);
+  if (!section) {
+    return null;
+  }
+  const descendantIds = await getDescendantCategoryIdsCached(section.categoryId);
+  const row = await findMachineDetailBySlug(machineSlug, locale);
+  if (!row) {
+    return null;
+  }
+  const cid = row.machine.categoryId;
+  if (!cid || !descendantIds.includes(cid)) {
+    return null;
+  }
+  const detail = mapMachineDetailRow(row);
+  const cTr = await listCategoryTranslationSlugs(section.categoryId);
+  const sharedSlug = row.machine.slug;
+  const slugByLocale: Partial<Record<HomeLocale, string>> = {
+    en: sharedSlug,
+    ru: sharedSlug,
+  };
+  const sectionSlugByLocale: Partial<Record<HomeLocale, string>> = {};
+  for (const t of cTr) {
+    sectionSlugByLocale[localeKey(t.locale)] = t.slug;
+  }
+  return { detail, slugByLocale, sectionSlugByLocale };
+}
+
+/** Uncached load (e.g. after correcting a bad section slug in URL). */
+export async function getMachineDetailForSectionPublicUncached(
+  machineSlug: string,
+  sectionSlug: string,
+  locale: AppLocale,
+): Promise<MachineDetailWithLocaleSlugs | null> {
+  return loadMachineDetailForSection(machineSlug, sectionSlug, locale);
+}
+
 export async function getMachineDetailForSectionPublic(
   machineSlug: string,
   sectionSlug: string,
   locale: AppLocale,
 ): Promise<MachineDetailWithLocaleSlugs | null> {
   const cached = unstable_cache(
-    async () => {
-      const section = await findMachineCategoryTranslationBySlug(sectionSlug, locale);
-      if (!section) {
-        return null;
-      }
-      const descendantIds = await getDescendantCategoryIdsCached(section.categoryId);
-      const row = await findMachineDetailBySlug(machineSlug, locale);
-      if (!row) {
-        return null;
-      }
-      const cid = row.machine.categoryId;
-      if (!cid || !descendantIds.includes(cid)) {
-        return null;
-      }
-      const detail = mapMachineDetailRow(row);
-      const [mTr, cTr] = await Promise.all([
-        listMachineTranslationSlugs(row.machine.id),
-        listCategoryTranslationSlugs(section.categoryId),
-      ]);
-      const slugByLocale: Partial<Record<HomeLocale, string>> = {};
-      for (const t of mTr) {
-        slugByLocale[localeKey(t.locale)] = t.slug;
-      }
-      const sectionSlugByLocale: Partial<Record<HomeLocale, string>> = {};
-      for (const t of cTr) {
-        sectionSlugByLocale[localeKey(t.locale)] = t.slug;
-      }
-      return { detail, slugByLocale, sectionSlugByLocale };
-    },
+    () => loadMachineDetailForSection(machineSlug, sectionSlug, locale),
     ["machine-detail-for-section", locale, sectionSlug, machineSlug],
     { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC },
   );

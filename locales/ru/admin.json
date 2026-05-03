@@ -163,8 +163,6 @@
     "slug": "Слаг",
     "description": "Описание",
     "descriptionPlaceholder": "Описание продукта (поддерживается HTML)",
-    "metaTitle": "Meta title (SEO)",
-    "metaDescription": "Meta description (SEO)",
     "ogImage": "Open Graph — изображение",
     "upload": "Загрузить"
   },

@@ -195,13 +195,6 @@ export async function findFirstPublishedMachineCoverInCategoryIds(
   return null;
 }
 
-export async function listMachineTranslationSlugs(machineId: string) {
-  return prisma.machineTranslation.findMany({
-    where: { machineId },
-    select: { locale: true, slug: true },
-  });
-}
-
 export async function listCategoryTranslationSlugs(categoryId: string) {
   return prisma.machineCategoryTranslation.findMany({
     where: { categoryId },
@@ -209,26 +202,43 @@ export async function listCategoryTranslationSlugs(categoryId: string) {
   });
 }
 
-export async function findMachineDetailBySlug(slug: string, locale: AppLocale) {
-  return prisma.machineTranslation.findFirst({
-    where: {
-      locale,
-      slug,
-      machine: { published: true },
-    },
-    include: {
-      machine: {
-        include: {
-          images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }] },
-          category: {
-            include: {
-              translations: { where: { locale } },
-            },
-          },
+/** Public machine detail fallback when `MachineDetailDto.category` is null but `categoryId` exists. */
+export async function findPublishedMachineCategorySlug(
+  machineId: string,
+  locale: AppLocale,
+): Promise<string | null> {
+  const row = await prisma.machine.findFirst({
+    where: { id: machineId, published: true },
+    select: {
+      category: {
+        select: {
+          translations: { where: { locale }, select: { slug: true }, take: 1 },
         },
       },
     },
   });
+  const slug = row?.category?.translations[0]?.slug?.trim();
+  return slug && slug.length > 0 ? slug : null;
+}
+
+export async function findMachineDetailBySlug(slug: string, locale: AppLocale) {
+  const machine = await prisma.machine.findFirst({
+    where: { slug, published: true },
+    include: {
+      translations: { where: { locale } },
+      images: { orderBy: [{ isPrimary: "desc" }, { sortOrder: "asc" }] },
+      category: {
+        include: {
+          translations: { where: { locale } },
+        },
+      },
+    },
+  });
+  const translation = machine?.translations[0];
+  if (!machine || !translation) {
+    return null;
+  }
+  return { machine, translation };
 }
 
 export type MachineListRow = Awaited<ReturnType<typeof findMachinesForList>>[number];

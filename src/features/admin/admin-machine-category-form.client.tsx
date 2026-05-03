@@ -10,6 +10,7 @@ import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.cli
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import { uploadImageToR2 } from "@/features/admin/admin-upload.client";
+import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
 import {
   adminButtonPrimaryClass,
   adminButtonSecondaryClass,
@@ -70,13 +71,13 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
     const trEn = category.translations.find((t) => t.locale === "en");
     setRu({
       name: trRu?.name ?? "",
-      slug: trRu?.slug ?? "",
+      slug: normalizeMachineSlugForAdminStorage(trRu?.slug ?? ""),
       homeDescription: trRu?.homeDescription ?? "",
       homeBulletsText: bulletsToTextarea(trRu?.homeBullets ?? []),
     });
     setEn({
       name: trEn?.name ?? "",
-      slug: trEn?.slug ?? "",
+      slug: normalizeMachineSlugForAdminStorage(trEn?.slug ?? ""),
       homeDescription: trEn?.homeDescription ?? "",
       homeBulletsText: bulletsToTextarea(trEn?.homeBullets ?? []),
     });
@@ -264,7 +265,9 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
             <input
               className={inputCls}
               id="mc-ru-slug"
-              onChange={(e) => setRu((p) => ({ ...p, slug: e.target.value }))}
+              onChange={(e) =>
+                setRu((p) => ({ ...p, slug: normalizeMachineSlugForAdminStorage(e.target.value) }))
+              }
               type="text"
               value={ru.slug}
             />
@@ -314,7 +317,9 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
             <input
               className={inputCls}
               id="mc-en-slug"
-              onChange={(e) => setEn((p) => ({ ...p, slug: e.target.value }))}
+              onChange={(e) =>
+                setEn((p) => ({ ...p, slug: normalizeMachineSlugForAdminStorage(e.target.value) }))
+              }
               type="text"
               value={en.slug}
             />

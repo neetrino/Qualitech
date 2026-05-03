@@ -163,8 +163,6 @@
     "slug": "Slug",
     "description": "Description",
     "descriptionPlaceholder": "Product description (HTML supported)",
-    "metaTitle": "Meta title (SEO)",
-    "metaDescription": "Meta description (SEO)",
     "ogImage": "Open Graph image",
     "upload": "Upload"
   },
