@@ -1,7 +1,16 @@
 import { AppLocale } from "@prisma/client";
 import { z } from "zod";
 
+import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+
 const localeEnum = z.nativeEnum(AppLocale);
+
+const adminMachineCategorySlugSchema = z
+  .string()
+  .trim()
+  .max(120)
+  .transform((s) => normalizeMachineSlugForAdminStorage(s))
+  .pipe(z.string().min(1).max(120));
 
 const optionalCategoryImageUrl = z
   .string()
@@ -33,7 +42,7 @@ const homeBulletsSchema = z
 export const adminMachineCategoryTranslationSchema = z.object({
   locale: localeEnum,
   name: z.string().trim().min(1).max(200),
-  slug: z.string().trim().min(1).max(120),
+  slug: adminMachineCategorySlugSchema,
   homeDescription: optionalTrimmedText(4000),
   homeBullets: homeBulletsSchema,
 });

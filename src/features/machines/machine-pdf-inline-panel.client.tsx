@@ -21,10 +21,10 @@ export function MachinePdfInlinePanel({
 }: MachinePdfInlinePanelProps) {
   const trimmed = pdfUrl?.trim() ?? "";
   const src = trimmed.length > 0 ? normalizeStoredImageUrl(trimmed) : "";
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   useEffect(() => {
-    setOpen(false);
+    setOpen(true);
   }, [src]);
 
   if (src.length === 0) {

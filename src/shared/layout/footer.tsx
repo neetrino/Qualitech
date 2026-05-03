@@ -131,9 +131,8 @@ export function Footer({ locale, messages }: FooterProps) {
           </div>
         </div>
       </div>
-      <div className="mt-10 flex flex-col gap-4 border-t border-[#18181b] pt-6 sm:mt-12 sm:pt-7 xl:flex-row xl:items-center xl:justify-between">
+      <div className="mt-10 border-t border-[#18181b] pt-6 sm:mt-12 sm:pt-7">
         <p className="font-legal text-[10px] uppercase text-[#52525c] sm:text-xs">{messages.footer.copyright}</p>
-        <div className="flex flex-wrap gap-2 text-[10px] tracking-[-0.01em] text-[#99a1af] sm:justify-end sm:gap-3 sm:text-xs">{messages.footer.legal.map((item) => <span key={item}>{item}</span>)}</div>
       </div>
     </footer>
   );

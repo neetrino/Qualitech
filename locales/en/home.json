@@ -145,7 +145,7 @@
     ]
   },
   "footer": {
-    "tagline": "Industrial machine tools and metalworking in Armenia for over 25 years: modern technology, full-cycle production, and reliable solutions for industry.",
+    "tagline": "Industrial machine tools and metalworking in Armenia for over 28 years: modern technology, full-cycle production, and reliable solutions for industry.",
     "quickLinks": {
       "title": "Quick links",
       "links": ["Machines", "About", "Blog", "Contact"]
@@ -173,12 +173,6 @@
       { "label": "LinkedIn" },
       { "label": "Instagram" }
     ],
-    "copyright": "Copyright © 2017–2026 Neetrino IT Company. All rights reserved.",
-    "legal": [
-      "Privacy Policy",
-      "Shipping Policy",
-      "Terms of Use",
-      "Usage Policy"
-    ]
+    "copyright": "Copyright © 2017–2026 Neetrino IT Company. All rights reserved."
   }
 }

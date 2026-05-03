@@ -52,6 +52,8 @@ model MachineCategoryTranslation {
 
 model Machine {
   id         String           @id @default(cuid())
+  /// Single URL segment for all locales: `/[locale]/machines/[category]/[slug]`.
+  slug       String           @unique
   categoryId String?
   category   MachineCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   featured   Boolean          @default(false)
@@ -59,6 +61,8 @@ model Machine {
   sortOrder  Int              @default(0)
   /// Optional product sheet / brochure (public URL, e.g. R2).
   pdfUrl     String?          @db.Text
+  /// Optional Excel specs sheet (public URL, e.g. R2 `.xlsx` / `.xls`).
+  excelUrl   String?          @db.Text
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
 
@@ -76,7 +80,6 @@ model MachineTranslation {
   machine          Machine   @relation(fields: [machineId], references: [id], onDelete: Cascade)
   locale           AppLocale
   title            String
-  slug             String
   /// Rich HTML (admin WYSIWYG); sanitized on save.
   description      String    @db.Text
   metaTitle        String?
@@ -85,7 +88,7 @@ model MachineTranslation {
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 
-  @@unique([locale, slug])
+  @@unique([machineId, locale])
   @@index([machineId])
 }
 

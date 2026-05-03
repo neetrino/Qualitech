@@ -34,9 +34,7 @@ function titlePreview(row: MachineRow): string {
 }
 
 function slugPreview(row: MachineRow): string {
-  const en = row.translations.find((t) => t.locale === "en");
-  const ru = row.translations.find((t) => t.locale === "ru");
-  const s = en?.slug ?? ru?.slug ?? "";
+  const s = row.slug?.trim() ?? "";
   return s.length > 0 ? s.slice(0, 80) : "—";
 }
 

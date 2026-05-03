@@ -22,7 +22,7 @@ export type HeaderProps = {
   readonly blogSlugByLocale?: Partial<Record<HomeLocale, string>>;
   /** Machines section listing: same category id, localized slugs. */
   readonly machineSectionSlugByLocale?: Partial<Record<HomeLocale, string>>;
-  /** Machine product page: same machine id, localized slugs. */
+  /** Machine product page: shared URL slug (same value for `en` / `ru` keys). */
   readonly machineSlugByLocale?: Partial<Record<HomeLocale, string>>;
 };
 

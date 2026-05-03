@@ -24,7 +24,18 @@ export const R2_IMAGE_CONTENT_TYPES = [
 
 export type R2ImageContentType = (typeof R2_IMAGE_CONTENT_TYPES)[number];
 
-export const R2_ALLOWED_CONTENT_TYPES = [...R2_IMAGE_CONTENT_TYPES, "application/pdf"] as const;
+export const R2_SPREADSHEET_CONTENT_TYPES = [
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-excel",
+] as const;
+
+export type R2SpreadsheetContentType = (typeof R2_SPREADSHEET_CONTENT_TYPES)[number];
+
+export const R2_ALLOWED_CONTENT_TYPES = [
+  ...R2_IMAGE_CONTENT_TYPES,
+  "application/pdf",
+  ...R2_SPREADSHEET_CONTENT_TYPES,
+] as const;
 
 export type R2AllowedContentType = (typeof R2_ALLOWED_CONTENT_TYPES)[number];
 
@@ -35,4 +46,6 @@ export const R2_CONTENT_TYPE_TO_EXTENSION: Record<R2AllowedContentType, string> 
   "image/gif": "gif",
   "image/svg+xml": "svg",
   "application/pdf": "pdf",
+  "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": "xlsx",
+  "application/vnd.ms-excel": "xls",
 };

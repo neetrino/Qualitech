@@ -2,17 +2,23 @@ import Link from "next/link";
 
 import { BlogProse } from "@/features/blog/blog-prose";
 import { MachineHeroGallery } from "@/features/machines/machine-hero-gallery.client";
+import { MachineExcelInlinePanel } from "@/features/machines/machine-excel-inline-panel.client";
 import { MachinePdfInlinePanel } from "@/features/machines/machine-pdf-inline-panel.client";
 import type { MachineDetailWithLocaleSlugs, MachineListItemDto } from "@/features/machines/machines.dto";
 import { MachineRelatedCarousel } from "@/features/machines/machine-related-carousel";
 import type { MachinesMessages } from "@/features/machines/machines.messages";
 import { HERO_CONTENT_TOP_PAD, HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
+import { htmlToPlainText } from "@/lib/html/html-to-plain-excerpt";
 import { homePageHref, machinesCategoryHref, machinesPageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
 import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
+
+/** Centered body copy under the PDF (datasheet-style). */
+const MACHINE_PAGE_META_DESCRIPTION_CLASS =
+  "mx-auto w-full max-w-2xl text-center text-pretty text-[13px] leading-relaxed text-[#a1a1aa] whitespace-pre-wrap sm:max-w-3xl sm:text-sm";
 
 type MachineDetailPageProps = {
   readonly locale: HomeLocale;
@@ -38,6 +44,10 @@ export function MachineDetailPage({
   const categoryName = detail.category?.name ?? "";
   const categoryCrumbLabel = categoryName.length > 0 ? categoryName : machinesMessages.breadcrumbMachines;
   const hasPdfSheet = detail.pdfUrl != null && detail.pdfUrl.trim().length > 0;
+  const hasDescription = htmlToPlainText(detail.description).length > 0;
+  const metaDescriptionPlain = detail.metaDescription?.trim() ?? "";
+  const hasMetaDescriptionOnPage = metaDescriptionPlain.length > 0;
+  const hasExcelSheet = detail.excelUrl != null && detail.excelUrl.trim().length > 0;
 
   return (
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
@@ -81,17 +91,32 @@ export function MachineDetailPage({
                   <h1 className="font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                     {detail.title}
                   </h1>
-                  <div className="border-t border-[#18181b] pt-8">
-                    <BlogProse html={detail.description} />
-                  </div>
+                  {hasDescription ? (
+                    <div className="border-t border-[#18181b] pt-8">
+                      <BlogProse html={detail.description} />
+                    </div>
+                  ) : null}
                 </div>
-                {hasPdfSheet ? (
-                  <div className="order-3 col-span-full min-w-0 lg:col-span-2 lg:row-start-2">
-                    <MachinePdfInlinePanel
-                      pdfCloseLabel={machinesMessages.pdfCloseViewer}
-                      pdfLinkLabel={machinesMessages.pdfViewLabel}
-                      pdfUrl={detail.pdfUrl}
-                    />
+                {hasPdfSheet || hasMetaDescriptionOnPage || hasExcelSheet ? (
+                  <div className="order-3 col-span-full flex min-w-0 flex-col gap-4 lg:col-span-2 lg:row-start-2">
+                    {hasPdfSheet ? (
+                      <MachinePdfInlinePanel
+                        pdfCloseLabel={machinesMessages.pdfCloseViewer}
+                        pdfLinkLabel={machinesMessages.pdfViewLabel}
+                        pdfUrl={detail.pdfUrl}
+                      />
+                    ) : null}
+                    {hasMetaDescriptionOnPage ? (
+                      <p className={MACHINE_PAGE_META_DESCRIPTION_CLASS}>{metaDescriptionPlain}</p>
+                    ) : null}
+                    {hasExcelSheet ? (
+                      <MachineExcelInlinePanel
+                        closeLabel={machinesMessages.excelCloseViewer}
+                        downloadLabel={machinesMessages.excelDownloadLabel}
+                        excelUrl={detail.excelUrl}
+                        panelTitle={machinesMessages.excelViewLabel}
+                      />
+                    ) : null}
                   </div>
                 ) : null}
               </div>
@@ -107,9 +132,24 @@ export function MachineDetailPage({
               <h1 className="mt-6 font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
                 {detail.title}
               </h1>
-              <div className="mt-10 border-t border-[#18181b] pt-10">
-                <BlogProse html={detail.description} />
-              </div>
+              {hasDescription ? (
+                <div className="mt-10 border-t border-[#18181b] pt-10">
+                  <BlogProse html={detail.description} />
+                </div>
+              ) : null}
+              {hasMetaDescriptionOnPage ? (
+                <p className={`mt-8 ${MACHINE_PAGE_META_DESCRIPTION_CLASS}`}>{metaDescriptionPlain}</p>
+              ) : null}
+              {hasExcelSheet ? (
+                <div className="mt-8">
+                  <MachineExcelInlinePanel
+                    closeLabel={machinesMessages.excelCloseViewer}
+                    downloadLabel={machinesMessages.excelDownloadLabel}
+                    excelUrl={detail.excelUrl}
+                    panelTitle={machinesMessages.excelViewLabel}
+                  />
+                </div>
+              ) : null}
             </section>
           )}
 

@@ -28,11 +28,13 @@ export async function adminGetMachineById(id: string): Promise<MachineAdminRow |
 export async function adminCreateMachine(data: AdminMachineCreateInput): Promise<MachineAdminRow> {
   return prisma.machine.create({
     data: {
+      slug: data.slug,
       categoryId: data.categoryId ?? null,
       featured: data.featured,
       published: true,
       sortOrder: data.sortOrder,
       pdfUrl: data.pdfUrl ?? null,
+      excelUrl: data.excelUrl ?? null,
       translations: { create: data.translations },
       images: { create: data.images },
     },
@@ -42,6 +44,9 @@ export async function adminCreateMachine(data: AdminMachineCreateInput): Promise
 
 function buildMachineUpdateData(patch: AdminMachinePatchInput): Prisma.MachineUpdateInput {
   const data: Prisma.MachineUpdateInput = {};
+  if (patch.slug !== undefined) {
+    data.slug = patch.slug;
+  }
   if (patch.categoryId !== undefined) {
     data.category =
       patch.categoryId === null ? { disconnect: true } : { connect: { id: patch.categoryId } };
@@ -57,6 +62,9 @@ function buildMachineUpdateData(patch: AdminMachinePatchInput): Prisma.MachineUp
   }
   if (patch.pdfUrl !== undefined) {
     data.pdfUrl = patch.pdfUrl;
+  }
+  if (patch.excelUrl !== undefined) {
+    data.excelUrl = patch.excelUrl;
   }
   if (patch.translations) {
     data.translations = { deleteMany: {}, create: patch.translations };

@@ -14,8 +14,8 @@ type MachineRelatedCarouselProps = {
   readonly items: MachineListItemDto[];
 };
 
-/** Fraction of viewport width to scroll per arrow tap (carousel track). */
-const CAROUSEL_SCROLL_STEP_RATIO = 0.85;
+/** One arrow tap scrolls one viewport “page” of the track (matches visible columns). */
+const CAROUSEL_SCROLL_PAGE_RATIO = 1;
 
 export function MachineRelatedCarousel({ locale, sectionSlug, messages, items }: MachineRelatedCarouselProps) {
   const scrollerRef = useRef<HTMLDivElement>(null);
@@ -25,7 +25,7 @@ export function MachineRelatedCarousel({ locale, sectionSlug, messages, items }:
     if (!el) {
       return;
     }
-    el.scrollBy({ left: direction * el.clientWidth * CAROUSEL_SCROLL_STEP_RATIO, behavior: "smooth" });
+    el.scrollBy({ left: direction * el.clientWidth * CAROUSEL_SCROLL_PAGE_RATIO, behavior: "smooth" });
   }, []);
 
   if (items.length === 0) {
@@ -66,12 +66,12 @@ export function MachineRelatedCarousel({ locale, sectionSlug, messages, items }:
       </div>
       <div
         ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-4 overflow-x-auto scroll-smooth pb-2 pl-11 pr-11 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-5 sm:pl-12 sm:pr-12 [&::-webkit-scrollbar]:hidden"
+        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth pb-2 pl-10 pr-10 pt-1 [-ms-overflow-style:none] [scrollbar-width:none] sm:gap-4 sm:pl-11 sm:pr-11 [&::-webkit-scrollbar]:hidden"
       >
         {items.map((machine) => (
           <div
             key={machine.id}
-            className="w-[min(280px,82vw)] shrink-0 snap-start sm:w-[min(300px,70vw)] lg:w-[min(320px,28vw)]"
+            className="w-[min(260px,78vw)] shrink-0 snap-start sm:w-[min(280px,66vw)] md:w-[calc((100%-1rem)/2)] lg:w-[calc((100%-2rem)/3)]"
           >
             <MachineListCard locale={locale} machine={machine} messages={messages} sectionSlug={sectionSlug} />
           </div>

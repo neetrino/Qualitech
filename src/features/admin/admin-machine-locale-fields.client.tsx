@@ -8,6 +8,7 @@ import {
   adminFieldsetShellClass,
   adminInputClass,
   adminLabelClass,
+  adminTextareaClass,
 } from "@/features/admin/admin-ui.constants";
 
 export const MACHINE_FORM_LOCALES = ["ru", "en"] as const;
@@ -15,16 +16,20 @@ export type MachineFormLocale = (typeof MACHINE_FORM_LOCALES)[number];
 
 export type MachineTrForm = {
   title: string;
-  slug: string;
   description: string;
+  /** Preserved on save; no dedicated admin field yet. */
   metaTitle: string;
   metaDescription: string;
 };
 
+function toNullableMeta(s: string): string | null {
+  const v = s.trim();
+  return v.length > 0 ? v : null;
+}
+
 export function emptyMachineTr(): MachineTrForm {
   return {
     title: "",
-    slug: "",
     description: "",
     metaTitle: "",
     metaDescription: "",
@@ -34,16 +39,10 @@ export function emptyMachineTr(): MachineTrForm {
 export function machineTrFromApi(t: MachineTranslationRow): MachineTrForm {
   return {
     title: t.title,
-    slug: t.slug,
     description: t.description,
     metaTitle: t.metaTitle ?? "",
     metaDescription: t.metaDescription ?? "",
   };
-}
-
-function toNullableMeta(s: string): string | null {
-  const v = s.trim();
-  return v.length > 0 ? v : null;
 }
 
 export function buildMachineTranslations(
@@ -55,7 +54,6 @@ export function buildMachineTranslations(
   return MACHINE_FORM_LOCALES.map((loc) => ({
     locale: loc,
     title: map[loc].title.trim(),
-    slug: map[loc].slug.trim(),
     description: map[loc].description.trim(),
     metaTitle: toNullableMeta(map[loc].metaTitle),
     metaDescription: toNullableMeta(map[loc].metaDescription),
@@ -80,6 +78,7 @@ export function AdminMachineLocaleFields({
   const label = locale.toUpperCase();
   const inC = adminInputClass(theme);
   const lab = adminLabelClass(theme);
+  const ta = adminTextareaClass(theme);
   const leg =
     theme === "light"
       ? "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ea580c]"
@@ -96,14 +95,6 @@ export function AdminMachineLocaleFields({
           value={value.title}
         />
       </div>
-      <div>
-        <label className={lab}>{m.machineFields.slug}</label>
-        <input
-          className={inC}
-          onChange={(e) => onChange({ ...value, slug: e.target.value })}
-          value={value.slug}
-        />
-      </div>
       <AdminMachineRichText
         label={m.machineFields.description}
         onChange={(html) => onChange({ ...value, description: html })}
@@ -111,23 +102,15 @@ export function AdminMachineLocaleFields({
         theme={theme}
         value={value.description}
       />
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div>
-          <label className={lab}>{m.machineFields.metaTitle}</label>
-          <input
-            className={inC}
-            onChange={(e) => onChange({ ...value, metaTitle: e.target.value })}
-            value={value.metaTitle}
-          />
-        </div>
-        <div>
-          <label className={lab}>{m.machineFields.metaDescription}</label>
-          <input
-            className={inC}
-            onChange={(e) => onChange({ ...value, metaDescription: e.target.value })}
-            value={value.metaDescription}
-          />
-        </div>
+      <div>
+        <label className={lab}>{m.machineFields.metaDescription}</label>
+        <p className="mb-2 text-xs text-neutral-500 dark:text-neutral-400">{m.machineFields.metaDescriptionHint}</p>
+        <textarea
+          className={ta}
+          onChange={(e) => onChange({ ...value, metaDescription: e.target.value })}
+          rows={4}
+          value={value.metaDescription}
+        />
       </div>
     </fieldset>
   );

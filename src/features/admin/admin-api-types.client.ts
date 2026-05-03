@@ -69,7 +69,6 @@ export type MachineCategoryAdminRow = {
 export type MachineTranslationRow = {
   locale: string;
   title: string;
-  slug: string;
   description: string;
   metaTitle: string | null;
   metaDescription: string | null;
@@ -85,11 +84,13 @@ export type MachineImageRow = {
 
 export type MachineRow = {
   id: string;
+  slug: string;
   categoryId: string | null;
   featured: boolean;
   published: boolean;
   sortOrder: number;
   pdfUrl: string | null;
+  excelUrl: string | null;
   createdAt: string;
   updatedAt: string;
   translations: MachineTranslationRow[];

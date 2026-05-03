@@ -1,19 +1,21 @@
 import { AppLocale } from "@prisma/client";
 import { z } from "zod";
 
-import { htmlToPlainText } from "@/lib/html/html-to-plain-excerpt";
+import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
 
 const localeEnum = z.nativeEnum(AppLocale);
+
+const adminMachineProductSlugSchema = z
+  .string()
+  .trim()
+  .max(200)
+  .transform((s) => normalizeMachineSlugForAdminStorage(s))
+  .pipe(z.string().min(1).max(200));
 
 export const adminMachineTranslationSchema = z.object({
   locale: localeEnum,
   title: z.string().trim().min(1).max(300),
-  slug: z.string().trim().min(1).max(200),
-  description: z
-    .string()
-    .trim()
-    .max(500_000)
-    .refine((s) => htmlToPlainText(s).length > 0, "Description is required"),
+  description: z.string().trim().max(500_000),
   metaTitle: z.string().trim().max(300).nullable().optional(),
   metaDescription: z.string().trim().max(20_000).nullable().optional(),
   ogImageUrl: z.string().trim().url().max(2000).nullable().optional(),
@@ -28,14 +30,18 @@ export const adminMachineImageSchema = z.object({
 
 const adminMachinePdfUrlSchema = z.union([z.string().trim().url().max(2000), z.null()]).optional();
 
+const adminMachineExcelUrlSchema = z.union([z.string().trim().url().max(2000), z.null()]).optional();
+
 export const adminMachineCreateSchema = z
   .object({
+    slug: adminMachineProductSlugSchema,
     categoryId: z.string().trim().cuid().nullable().optional(),
     featured: z.boolean().default(false),
     sortOrder: z.number().int().min(0).default(0),
     translations: z.array(adminMachineTranslationSchema).min(1),
     images: z.array(adminMachineImageSchema).default([]),
     pdfUrl: adminMachinePdfUrlSchema,
+    excelUrl: adminMachineExcelUrlSchema,
   })
   .superRefine((val, ctx) => {
     const locales = val.translations.map((t) => t.locale);
@@ -48,6 +54,7 @@ export type AdminMachineCreateInput = z.infer<typeof adminMachineCreateSchema>;
 
 export const adminMachinePatchSchema = z
   .object({
+    slug: adminMachineProductSlugSchema.optional(),
     categoryId: z.string().trim().cuid().nullable().optional(),
     featured: z.boolean().optional(),
     published: z.boolean().optional(),
@@ -55,6 +62,7 @@ export const adminMachinePatchSchema = z
     translations: z.array(adminMachineTranslationSchema).min(1).optional(),
     images: z.array(adminMachineImageSchema).optional(),
     pdfUrl: adminMachinePdfUrlSchema,
+    excelUrl: adminMachineExcelUrlSchema,
   })
   .superRefine((val, ctx) => {
     if (!val.translations) {

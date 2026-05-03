@@ -35,7 +35,7 @@ export function mapMachineListRow(row: MachineListRow): MachineListItemDto {
 
   return {
     id: row.id,
-    slug: tr.slug,
+    slug: row.slug,
     title: tr.title,
     descriptionExcerpt: htmlToPlainExcerpt(tr.description),
     featured: row.featured,
@@ -54,7 +54,7 @@ function sortMachineImagesForDisplay<T extends { sortOrder: number; isPrimary: b
 }
 
 export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDetailDto {
-  const { machine } = row;
+  const { machine, translation } = row;
   const mappedImages = sortMachineImagesForDisplay(
     machine.images
       .map((i) => ({
@@ -66,7 +66,7 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
       .filter((i) => i.url.trim().length > 0),
   );
 
-  const ogTrimmed = row.ogImageUrl?.trim() ?? "";
+  const ogTrimmed = translation.ogImageUrl?.trim() ?? "";
   const images =
     mappedImages.length > 0
       ? mappedImages
@@ -74,7 +74,7 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
         ? [
             {
               url: normalizeStoredImageUrl(ogTrimmed),
-              alt: row.title,
+              alt: translation.title,
               sortOrder: 0,
               isPrimary: true,
             },
@@ -83,18 +83,21 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
 
   const pdfRaw = machine.pdfUrl?.trim() ?? "";
   const pdfUrl = pdfRaw.length > 0 ? normalizeStoredImageUrl(pdfRaw) : null;
+  const excelRaw = machine.excelUrl?.trim() ?? "";
+  const excelUrl = excelRaw.length > 0 ? normalizeStoredImageUrl(excelRaw) : null;
 
   return {
     id: machine.id,
-    slug: row.slug,
-    title: row.title,
-    description: row.description,
-    metaTitle: row.metaTitle,
-    metaDescription: row.metaDescription,
-    ogImageUrl: row.ogImageUrl,
+    slug: machine.slug,
+    title: translation.title,
+    description: translation.description,
+    metaTitle: translation.metaTitle,
+    metaDescription: translation.metaDescription,
+    ogImageUrl: translation.ogImageUrl,
     featured: machine.featured,
     category: mapCategoryBrief(machine.category),
     images,
     pdfUrl,
+    excelUrl,
   };
 }

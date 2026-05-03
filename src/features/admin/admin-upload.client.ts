@@ -8,6 +8,10 @@ const IMAGE_UPLOAD_TYPES = new Set<string>(R2_IMAGE_CONTENT_TYPES);
 
 const PDF_CONTENT_TYPE = "application/pdf" as const;
 
+const SPREADSHEET_XLSX = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" as const;
+const SPREADSHEET_XLS = "application/vnd.ms-excel" as const;
+const SPREADSHEET_TYPES = new Set<string>([SPREADSHEET_XLSX, SPREADSHEET_XLS]);
+
 type UploadData = {
   publicUrl: string;
   key: string;
@@ -54,4 +58,25 @@ export async function uploadPdfToR2(file: File, scope: R2UploadScopeUi): Promise
     throw new Error(`Use a PDF file (got: ${contentType || "empty"})`);
   }
   return postMultipartUpload(file, scope);
+}
+
+async function normalizeSpreadsheetFileForUpload(file: File): Promise<File> {
+  if (SPREADSHEET_TYPES.has(file.type)) {
+    return file;
+  }
+  const name = file.name.toLowerCase();
+  const buf = await file.arrayBuffer();
+  if (name.endsWith(".xlsx")) {
+    return new File([buf], file.name, { type: SPREADSHEET_XLSX });
+  }
+  if (name.endsWith(".xls")) {
+    return new File([buf], file.name, { type: SPREADSHEET_XLS });
+  }
+  throw new Error("Use an Excel file (.xlsx or .xls).");
+}
+
+/** Excel specs upload (same R2 flow as PDF). */
+export async function uploadExcelToR2(file: File, scope: R2UploadScopeUi): Promise<string> {
+  const normalized = await normalizeSpreadsheetFileForUpload(file);
+  return postMultipartUpload(normalized, scope);
 }

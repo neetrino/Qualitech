@@ -188,9 +188,16 @@ export function MachinesCategoryPage({
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 xl:gap-5">
+              <div className="grid grid-cols-2 gap-4 sm:gap-6 md:grid-cols-3 lg:grid-cols-4 xl:gap-5">
                 {machines.map((m) => (
-                  <MachineListCard key={m.id} locale={locale} machine={m} messages={machinesMessages} sectionSlug={sectionSlug} />
+                  <MachineListCard
+                    key={m.id}
+                    locale={locale}
+                    machine={m}
+                    messages={machinesMessages}
+                    sectionSlug={sectionSlug}
+                    titleScale="compact"
+                  />
                 ))}
               </div>
               <Pagination

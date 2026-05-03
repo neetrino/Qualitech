@@ -1,11 +1,12 @@
 "use client";
 
-import { useCallback, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 
 import type { MachineImageRow, MachineRow } from "@/features/admin/admin-api-types.client";
 import { ADMIN_API_MACHINES_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson, formatAdminValidationError } from "@/features/admin/admin-http.client";
 import { AdminGalleryImageRows } from "@/features/admin/admin-gallery-image-rows.client";
+import { AdminMachineExcelField } from "@/features/admin/admin-machine-excel-field.client";
 import { AdminMachinePdfField } from "@/features/admin/admin-machine-pdf-field.client";
 import {
   AdminMachineLocaleFields,
@@ -29,6 +30,8 @@ import {
   adminInputClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
+import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
 
 type CategoryOption = { id: string; label: string };
 
@@ -94,18 +97,52 @@ export function AdminMachineFormClient({
   }, [machine]);
 
   const [tr, setTr] = useState<Record<MachineFormLocale, MachineTrForm>>(initialMap);
+  const [productSlug, setProductSlug] = useState(() =>
+    machine?.slug ? normalizeMachineSlugForAdminStorage(machine.slug) : "",
+  );
+  const [slugFollowsRuTitle, setSlugFollowsRuTitle] = useState(() => !machine);
   const [images, setImages] = useState<MachineImageRow[]>(() =>
     machine ? mapApiImagesToForm(machine.images.map((i) => ({ ...i }))) : [],
   );
   const [pdfUrl, setPdfUrl] = useState(() => machine?.pdfUrl?.trim() ?? "");
+  const [excelUrl, setExcelUrl] = useState(() => machine?.excelUrl?.trim() ?? "");
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
   const [pdfUploadBusy, setPdfUploadBusy] = useState(false);
+  const [excelUploadBusy, setExcelUploadBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const setLocale = useCallback((loc: MachineFormLocale, next: MachineTrForm) => {
-    setTr((prev) => ({ ...prev, [loc]: next }));
-  }, []);
+  useEffect(() => {
+    if (machine) {
+      setProductSlug(normalizeMachineSlugForAdminStorage(machine.slug));
+      setSlugFollowsRuTitle(false);
+    } else {
+      setProductSlug("");
+      setSlugFollowsRuTitle(true);
+    }
+  }, [machine?.id, machine?.slug]);
+
+  const setLocale = useCallback(
+    (loc: MachineFormLocale, next: MachineTrForm) => {
+      if (loc === "ru") {
+        const prevRu = tr.ru;
+        const prevDerived = slugifyForUrl(prevRu.title);
+        const normalizedCurrent = normalizeMachineSlugForAdminStorage(productSlug);
+        const slugStillSynced =
+          slugFollowsRuTitle &&
+          (normalizedCurrent.length === 0 ||
+            normalizedCurrent ===
+              normalizeMachineSlugForAdminStorage(slugifyForUrl(prevDerived)));
+        if (slugStillSynced) {
+          setProductSlug(normalizeMachineSlugForAdminStorage(slugifyForUrl(next.title)));
+        }
+        setTr((prev) => ({ ...prev, ru: next }));
+        return;
+      }
+      setTr((prev) => ({ ...prev, [loc]: next }));
+    },
+    [productSlug, slugFollowsRuTitle, tr.ru],
+  );
 
   const onSubmit = useCallback(
     async (e: FormEvent) => {
@@ -126,11 +163,13 @@ export function AdminMachineFormClient({
       const sortOrderVal = machine?.sortOrder ?? 0;
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
       const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
+      const excelPayload = excelUrl.trim().length > 0 ? excelUrl.trim() : null;
 
       if (machine) {
         const res = await adminApiJson<MachineRow>(`${ADMIN_API_MACHINES_PATH}/${machine.id}`, {
           method: "PATCH",
           body: JSON.stringify({
+            slug: normalizeMachineSlugForAdminStorage(productSlug),
             categoryId: categoryPayload,
             featured,
             published: machine.published,
@@ -138,6 +177,7 @@ export function AdminMachineFormClient({
             translations,
             images: imagePayload,
             pdfUrl: pdfPayload,
+            excelUrl: excelPayload,
           }),
         });
         if (!res.ok) {
@@ -149,12 +189,14 @@ export function AdminMachineFormClient({
         const res = await adminApiJson<MachineRow>(ADMIN_API_MACHINES_PATH, {
           method: "POST",
           body: JSON.stringify({
+            slug: normalizeMachineSlugForAdminStorage(productSlug),
             categoryId: categoryPayload,
             featured,
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
             pdfUrl: pdfPayload,
+            excelUrl: excelPayload,
           }),
         });
         if (!res.ok) {
@@ -166,7 +208,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, featured, images, machine, onSaved, pdfUrl, tr],
+    [categoryId, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, tr],
   );
 
   return (
@@ -212,6 +254,21 @@ export function AdminMachineFormClient({
         </label>
       </div>
 
+      <div>
+        <label className={labelCls} htmlFor="machine-slug">
+          {m.machineFields.slug}
+        </label>
+        <input
+          className={inputCls}
+          id="machine-slug"
+          onChange={(e) => {
+            setSlugFollowsRuTitle(false);
+            setProductSlug(normalizeMachineSlugForAdminStorage(e.target.value));
+          }}
+          value={productSlug}
+        />
+      </div>
+
       <div className="grid gap-4 lg:grid-cols-2">
         {MACHINE_FORM_LOCALES.map((loc) => (
           <AdminMachineLocaleFields
@@ -255,11 +312,20 @@ export function AdminMachineFormClient({
         uploadBusy={pdfUploadBusy}
       />
 
+      <AdminMachineExcelField
+        excelUrl={excelUrl}
+        onExcelUrlChange={setExcelUrl}
+        onUploadBusyChange={setExcelUploadBusy}
+        reportError={(msg) => setError(msg)}
+        theme={theme}
+        uploadBusy={excelUploadBusy}
+      />
+
       <div className={stickyBottomActionsClass}>
         <button className={sec} onClick={onCancel} type="button">
           {m.machineForm.cancel}
         </button>
-        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy} type="submit">
+        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy || excelUploadBusy} type="submit">
           {busy ? m.machineForm.saving : m.machineForm.save}
         </button>
       </div>
