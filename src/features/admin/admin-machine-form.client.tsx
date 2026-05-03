@@ -6,6 +6,7 @@ import type { MachineImageRow, MachineRow } from "@/features/admin/admin-api-typ
 import { ADMIN_API_MACHINES_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson, formatAdminValidationError } from "@/features/admin/admin-http.client";
 import { AdminGalleryImageRows } from "@/features/admin/admin-gallery-image-rows.client";
+import { AdminMachineExcelField } from "@/features/admin/admin-machine-excel-field.client";
 import { AdminMachinePdfField } from "@/features/admin/admin-machine-pdf-field.client";
 import {
   AdminMachineLocaleFields,
@@ -104,9 +105,11 @@ export function AdminMachineFormClient({
     machine ? mapApiImagesToForm(machine.images.map((i) => ({ ...i }))) : [],
   );
   const [pdfUrl, setPdfUrl] = useState(() => machine?.pdfUrl?.trim() ?? "");
+  const [excelUrl, setExcelUrl] = useState(() => machine?.excelUrl?.trim() ?? "");
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
   const [pdfUploadBusy, setPdfUploadBusy] = useState(false);
+  const [excelUploadBusy, setExcelUploadBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -160,6 +163,7 @@ export function AdminMachineFormClient({
       const sortOrderVal = machine?.sortOrder ?? 0;
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
       const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
+      const excelPayload = excelUrl.trim().length > 0 ? excelUrl.trim() : null;
 
       if (machine) {
         const res = await adminApiJson<MachineRow>(`${ADMIN_API_MACHINES_PATH}/${machine.id}`, {
@@ -173,6 +177,7 @@ export function AdminMachineFormClient({
             translations,
             images: imagePayload,
             pdfUrl: pdfPayload,
+            excelUrl: excelPayload,
           }),
         });
         if (!res.ok) {
@@ -191,6 +196,7 @@ export function AdminMachineFormClient({
             translations,
             images: imagePayload,
             pdfUrl: pdfPayload,
+            excelUrl: excelPayload,
           }),
         });
         if (!res.ok) {
@@ -202,7 +208,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, featured, images, machine, onSaved, pdfUrl, productSlug, tr],
+    [categoryId, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, tr],
   );
 
   return (
@@ -306,11 +312,20 @@ export function AdminMachineFormClient({
         uploadBusy={pdfUploadBusy}
       />
 
+      <AdminMachineExcelField
+        excelUrl={excelUrl}
+        onExcelUrlChange={setExcelUrl}
+        onUploadBusyChange={setExcelUploadBusy}
+        reportError={(msg) => setError(msg)}
+        theme={theme}
+        uploadBusy={excelUploadBusy}
+      />
+
       <div className={stickyBottomActionsClass}>
         <button className={sec} onClick={onCancel} type="button">
           {m.machineForm.cancel}
         </button>
-        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy} type="submit">
+        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy || excelUploadBusy} type="submit">
           {busy ? m.machineForm.saving : m.machineForm.save}
         </button>
       </div>

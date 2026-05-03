@@ -136,7 +136,13 @@
     "pdfUpload": "Загрузить PDF",
     "pdfUploading": "Загрузка…",
     "pdfRemove": "Удалить PDF",
-    "pdfOpen": "Открыть текущий PDF"
+    "pdfOpen": "Открыть текущий PDF",
+    "excelSheet": "Характеристики (Excel)",
+    "excelHint": "Необязательный файл .xlsx или .xls. Показывается на странице продукта под meta description, по умолчанию развёрнут (просмотр Office Online).",
+    "excelUpload": "Загрузить Excel",
+    "excelUploading": "Загрузка…",
+    "excelRemove": "Удалить Excel",
+    "excelOpen": "Скачать текущий файл"
   },
   "gallery": {
     "heading": "Изображения галереи",
@@ -163,6 +169,8 @@
     "slug": "Слаг",
     "description": "Описание",
     "descriptionPlaceholder": "Описание продукта (поддерживается HTML)",
+    "metaDescription": "Meta description (SEO)",
+    "metaDescriptionHint": "Используется в сниппетах поиска и показывается на странице продукта под просмотром PDF, если задано.",
     "ogImage": "Open Graph — изображение",
     "upload": "Загрузить"
   },

@@ -90,6 +90,7 @@ export type MachineRow = {
   published: boolean;
   sortOrder: number;
   pdfUrl: string | null;
+  excelUrl: string | null;
   createdAt: string;
   updatedAt: string;
   translations: MachineTranslationRow[];

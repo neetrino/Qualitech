@@ -34,6 +34,7 @@ export async function adminCreateMachine(data: AdminMachineCreateInput): Promise
       published: true,
       sortOrder: data.sortOrder,
       pdfUrl: data.pdfUrl ?? null,
+      excelUrl: data.excelUrl ?? null,
       translations: { create: data.translations },
       images: { create: data.images },
     },
@@ -61,6 +62,9 @@ function buildMachineUpdateData(patch: AdminMachinePatchInput): Prisma.MachineUp
   }
   if (patch.pdfUrl !== undefined) {
     data.pdfUrl = patch.pdfUrl;
+  }
+  if (patch.excelUrl !== undefined) {
+    data.excelUrl = patch.excelUrl;
   }
   if (patch.translations) {
     data.translations = { deleteMany: {}, create: patch.translations };

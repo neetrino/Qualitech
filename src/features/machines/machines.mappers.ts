@@ -83,6 +83,8 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
 
   const pdfRaw = machine.pdfUrl?.trim() ?? "";
   const pdfUrl = pdfRaw.length > 0 ? normalizeStoredImageUrl(pdfRaw) : null;
+  const excelRaw = machine.excelUrl?.trim() ?? "";
+  const excelUrl = excelRaw.length > 0 ? normalizeStoredImageUrl(excelRaw) : null;
 
   return {
     id: machine.id,
@@ -96,5 +98,6 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
     category: mapCategoryBrief(machine.category),
     images,
     pdfUrl,
+    excelUrl,
   };
 }

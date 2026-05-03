@@ -136,7 +136,13 @@
     "pdfUpload": "Upload PDF",
     "pdfUploading": "Uploading…",
     "pdfRemove": "Remove PDF",
-    "pdfOpen": "Open current PDF"
+    "pdfOpen": "Open current PDF",
+    "excelSheet": "Specifications (Excel)",
+    "excelHint": "Optional .xlsx or .xls file. Shown on the product page below the meta description, expanded by default (Office Online viewer).",
+    "excelUpload": "Upload Excel",
+    "excelUploading": "Uploading…",
+    "excelRemove": "Remove Excel",
+    "excelOpen": "Download current file"
   },
   "gallery": {
     "heading": "Gallery images",
@@ -163,6 +169,8 @@
     "slug": "Slug",
     "description": "Description",
     "descriptionPlaceholder": "Product description (HTML supported)",
+    "metaDescription": "Meta description (SEO)",
+    "metaDescriptionHint": "Used in search snippets and shown on the product page below the PDF viewer when set.",
     "ogImage": "Open Graph image",
     "upload": "Upload"
   },
