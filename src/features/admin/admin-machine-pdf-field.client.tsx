@@ -2,14 +2,16 @@
 
 import { useRef, type ChangeEvent } from "react";
 
+import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
-import { uploadPdfToR2 } from "@/features/admin/admin-upload.client";
+import { uploadImageToR2 } from "@/features/admin/admin-upload.client";
 import {
   adminButtonSecondaryClass,
   adminHintTextClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
+import { machineSheetUrlIsPdf } from "@/features/machines/machine-sheet-asset-url";
 
 type AdminMachinePdfFieldProps = {
   readonly theme: AdminTheme;
@@ -43,7 +45,7 @@ export function AdminMachinePdfField({
       onUploadBusyChange(true);
       reportError(null);
       try {
-        const url = await uploadPdfToR2(file, "machines");
+        const url = await uploadImageToR2(file, "machines");
         onPdfUrlChange(url);
       } catch (err) {
         reportError(err instanceof Error ? err.message : m.common.uploadFailed);
@@ -59,7 +61,7 @@ export function AdminMachinePdfField({
       <p className={adminHintTextClass(theme)}>{m.machineForm.pdfHint}</p>
       <div className="flex flex-wrap items-center gap-2">
         <input
-          accept="application/pdf,.pdf"
+          accept="image/jpeg,image/png,image/webp,image/gif,image/svg+xml,.jpg,.jpeg,.png,.webp,.gif,.svg"
           className="sr-only"
           onChange={onFileChange}
           ref={inputRef}
@@ -84,11 +86,16 @@ export function AdminMachinePdfField({
         ) : null}
       </div>
       {pdfUrl.trim().length > 0 ? (
-        <p className={theme === "light" ? "text-xs text-zinc-600" : "text-xs text-zinc-400"}>
-          <a className="underline" href={pdfUrl.trim()} rel="noopener noreferrer" target="_blank">
-            {m.machineForm.pdfOpen}
-          </a>
-        </p>
+        <div className="space-y-2">
+          {machineSheetUrlIsPdf(pdfUrl) ? null : (
+            <AdminOgImagePreview theme={theme} url={pdfUrl} variant="galleryCard" />
+          )}
+          <p className={theme === "light" ? "text-xs text-zinc-600" : "text-xs text-zinc-400"}>
+            <a className="underline" href={pdfUrl.trim()} rel="noopener noreferrer" target="_blank">
+              {m.machineForm.pdfOpen}
+            </a>
+          </p>
+        </div>
       ) : null}
     </div>
   );

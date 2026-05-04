@@ -16,7 +16,7 @@ import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.consta
 import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
-/** Centered body copy under the PDF (datasheet-style). */
+/** Centered body copy under the product sheet panel. */
 const MACHINE_PAGE_META_DESCRIPTION_CLASS =
   "mx-auto w-full max-w-2xl text-center text-pretty text-[13px] leading-relaxed text-[#a1a1aa] whitespace-pre-wrap sm:max-w-3xl sm:text-sm";
 
