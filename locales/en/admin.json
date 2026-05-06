@@ -127,6 +127,8 @@
     "save": "Save",
     "saving": "Saving…",
     "category": "Category",
+    "sortOrder": "Sort order",
+    "sortOrderHint": "Lower numbers appear first in the list (1 is first).",
     "noCategory": "No category",
     "categoryHint": "Add sections under “Machine sections” first, then pick one here.",
     "featured": "Featured",

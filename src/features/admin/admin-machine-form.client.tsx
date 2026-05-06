@@ -79,6 +79,7 @@ export function AdminMachineFormClient({
 
   const [categoryId, setCategoryId] = useState<string>(() => machine?.categoryId ?? "");
   const [featured, setFeatured] = useState(machine?.featured ?? false);
+  const [sortOrder, setSortOrder] = useState<number>(() => (machine?.sortOrder ?? 0) + 1);
 
   const initialMap = useMemo((): Record<MachineFormLocale, MachineTrForm> => {
     const base: Record<MachineFormLocale, MachineTrForm> = {
@@ -116,11 +117,13 @@ export function AdminMachineFormClient({
     if (machine) {
       setProductSlug(normalizeMachineSlugForAdminStorage(machine.slug));
       setSlugFollowsRuTitle(false);
+      setSortOrder(machine.sortOrder + 1);
     } else {
       setProductSlug("");
       setSlugFollowsRuTitle(true);
+      setSortOrder(1);
     }
-  }, [machine?.id, machine?.slug]);
+  }, [machine?.id, machine?.slug, machine?.sortOrder]);
 
   const setLocale = useCallback(
     (loc: MachineFormLocale, next: MachineTrForm) => {
@@ -160,7 +163,7 @@ export function AdminMachineFormClient({
           isPrimary: i.isPrimary,
         }));
 
-      const sortOrderVal = machine?.sortOrder ?? 0;
+      const sortOrderVal = Math.max(0, sortOrder - 1);
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
       const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
       const excelPayload = excelUrl.trim().length > 0 ? excelUrl.trim() : null;
@@ -208,7 +211,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, tr],
+    [categoryId, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, sortOrder, tr],
   );
 
   return (
@@ -242,6 +245,24 @@ export function AdminMachineFormClient({
           {categoryOptions.length === 0 ? (
             <p className={adminHintTextClass(theme)}>{m.machineForm.categoryHint}</p>
           ) : null}
+        </div>
+        <div>
+          <label className={labelCls} htmlFor="machine-sort-order">
+            {m.machineForm.sortOrder}
+          </label>
+          <input
+            className={inputCls}
+            id="machine-sort-order"
+            min={1}
+            onChange={(e) => {
+              const parsed = Number.parseInt(e.target.value, 10);
+              setSortOrder(Number.isFinite(parsed) && parsed > 0 ? parsed : 1);
+            }}
+            step={1}
+            type="number"
+            value={sortOrder}
+          />
+          <p className={adminHintTextClass(theme)}>{m.machineForm.sortOrderHint}</p>
         </div>
         <label className={`${adminCheckboxLabelClass(theme)} self-end`}>
           <input
