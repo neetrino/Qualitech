@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import type { MachineCategoryAdminRow } from "@/features/admin/admin-api-types.client";
 import { categoryLabelForAdminSelect } from "@/features/admin/admin-machine-helpers.client";
-import { useAdminMessages } from "@/features/admin/admin-messages.context";
+import { useAdminLocale, useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import { adminBodyMutedClass, adminButtonPrimaryClass } from "@/features/admin/admin-ui.constants";
 
@@ -26,6 +26,7 @@ export function AdminMachineCategoryListClient({
   onToggleFeaturedOnHome,
 }: AdminMachineCategoryListClientProps) {
   const m = useAdminMessages();
+  const locale = useAdminLocale();
   const { theme } = useAdminTheme();
   const muted = adminBodyMutedClass(theme);
   const pri = adminButtonPrimaryClass();
@@ -73,7 +74,9 @@ export function AdminMachineCategoryListClient({
                     </div>
                   ) : null}
                   <div className="min-w-0">
-                    <p className="font-medium text-neutral-900 dark:text-neutral-100">{categoryLabelForAdminSelect(c)}</p>
+                    <p className="font-medium text-neutral-900 dark:text-neutral-100">
+                      {categoryLabelForAdminSelect(c, locale)}
+                    </p>
                     <p className="mt-1 text-xs text-neutral-500">
                       {m.machineCategoryList.sortLabel}: {c.sortOrder}
                       {ru ? ` · RU: ${ru.slug}` : ""}

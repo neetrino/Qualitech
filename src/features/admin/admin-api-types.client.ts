@@ -91,6 +91,7 @@ export type MachineRow = {
   sortOrder: number;
   pdfUrl: string | null;
   excelUrl: string | null;
+  excelImageUrls: string[];
   createdAt: string;
   updatedAt: string;
   translations: MachineTranslationRow[];

@@ -35,6 +35,7 @@ export async function adminCreateMachine(data: AdminMachineCreateInput): Promise
       sortOrder: data.sortOrder,
       pdfUrl: data.pdfUrl ?? null,
       excelUrl: data.excelUrl ?? null,
+      excelImageUrls: data.excelImageUrls ?? [],
       translations: { create: data.translations },
       images: { create: data.images },
     },
@@ -65,6 +66,9 @@ function buildMachineUpdateData(patch: AdminMachinePatchInput): Prisma.MachineUp
   }
   if (patch.excelUrl !== undefined) {
     data.excelUrl = patch.excelUrl;
+  }
+  if (patch.excelImageUrls !== undefined) {
+    data.excelImageUrls = patch.excelImageUrls;
   }
   if (patch.translations) {
     data.translations = { deleteMany: {}, create: patch.translations };

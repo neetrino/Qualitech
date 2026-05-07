@@ -8,7 +8,7 @@ import { adminApiJson } from "@/features/admin/admin-http.client";
 import { machineCategoryOptionsFromApi } from "@/features/admin/admin-machine-helpers.client";
 import { AdminMachineFormClient } from "@/features/admin/admin-machine-form.client";
 import { AdminMachineListClient } from "@/features/admin/admin-machine-list.client";
-import { useAdminMessages } from "@/features/admin/admin-messages.context";
+import { useAdminLocale, useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import { adminBodyMutedClass, adminCardPanelClass } from "@/features/admin/admin-ui.constants";
 
@@ -16,6 +16,7 @@ type Mode = { kind: "list" } | { kind: "edit"; id: string | null };
 
 export function AdminMachinePanelClient() {
   const m = useAdminMessages();
+  const locale = useAdminLocale();
   const { theme } = useAdminTheme();
   const card = adminCardPanelClass(theme);
   const muted = adminBodyMutedClass(theme);
@@ -27,7 +28,7 @@ export function AdminMachinePanelClient() {
   const [draft, setDraft] = useState<MachineRow | null>(null);
   const [editLoading, setEditLoading] = useState(false);
 
-  const categoryOptions = useMemo(() => machineCategoryOptionsFromApi(categories), [categories]);
+  const categoryOptions = useMemo(() => machineCategoryOptionsFromApi(categories, locale), [categories, locale]);
 
   const loadCategories = useCallback(async () => {
     const res = await adminApiJson<MachineCategoryAdminRow[]>(ADMIN_API_MACHINE_CATEGORIES_PATH, { method: "GET" });
@@ -146,6 +147,7 @@ export function AdminMachinePanelClient() {
   return (
     <div className={card}>
       <AdminMachineListClient
+        categoryOptions={categoryOptions}
         loading={loading}
         machines={machines}
         onDelete={onDelete}

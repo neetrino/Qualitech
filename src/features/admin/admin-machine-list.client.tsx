@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
 import type { MachineRow } from "@/features/admin/admin-api-types.client";
 import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
-import { useAdminMessages } from "@/features/admin/admin-messages.context";
+import { useAdminLocale, useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
+import type { HomeLocale } from "@/features/home/home.messages";
 import {
   adminBodyMutedClass,
   adminButtonDeleteExtraClass,
@@ -19,6 +20,7 @@ import {
 
 type AdminMachineListClientProps = {
   readonly machines: MachineRow[];
+  readonly categoryOptions: Array<{ id: string; label: string }>;
   readonly loading: boolean;
   readonly onNew: () => void;
   readonly onEdit: (id: string) => void;
@@ -38,12 +40,15 @@ function slugPreview(row: MachineRow): string {
   return s.length > 0 ? s.slice(0, 80) : "—";
 }
 
-function categoryLabel(row: MachineRow): string {
+function categoryLabel(row: MachineRow, locale: HomeLocale): string {
   if (!row.category) {
     return "—";
   }
+  const fallbackLocale: HomeLocale = locale === "ru" ? "en" : "ru";
   const t =
-    row.category.translations.find((x) => x.locale === "en") ?? row.category.translations[0];
+    row.category.translations.find((x) => x.locale === locale) ??
+    row.category.translations.find((x) => x.locale === fallbackLocale) ??
+    row.category.translations[0];
   return t?.name ?? row.category.id;
 }
 
@@ -91,6 +96,7 @@ function tdClass(theme: AdminTheme): string {
 
 export function AdminMachineListClient({
   machines,
+  categoryOptions,
   loading,
   onNew,
   onEdit,
@@ -99,6 +105,7 @@ export function AdminMachineListClient({
   onTogglePublished,
 }: AdminMachineListClientProps) {
   const m = useAdminMessages();
+  const locale = useAdminLocale();
   const { theme } = useAdminTheme();
   const [listPatchBusy, setListPatchBusy] = useState(false);
   const pri = adminButtonPrimaryClass();
@@ -111,6 +118,18 @@ export function AdminMachineListClient({
   const wrap = tableWrapClass(theme);
   const th = thClass(theme);
   const td = tdClass(theme);
+  const filterInput = theme === "light"
+    ? "w-full min-w-[14rem] rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none ring-[#ff6900] focus:border-[#ff6900]/60 focus:ring-2"
+    : "w-full min-w-[14rem] rounded-lg border border-white/15 bg-black/60 px-3 py-2 text-sm text-white outline-none ring-[#ff6900] focus:border-[#ff6900]/60 focus:ring-2";
+  const [selectedCategoryId, setSelectedCategoryId] = useState("");
+
+  const filteredMachines = useMemo(
+    () =>
+      selectedCategoryId.length > 0
+        ? machines.filter((row) => row.categoryId === selectedCategoryId)
+        : machines,
+    [machines, selectedCategoryId],
+  );
 
   const runListPatch = async (fn: () => Promise<void>) => {
     if (listPatchBusy) {
@@ -137,9 +156,30 @@ export function AdminMachineListClient({
           <h2 className={h2}>{m.machineList.title}</h2>
           {!loading ? (
             <p className={muted}>
-              {m.machineList.totalProducts}: {machines.length}
+              {m.machineList.totalProducts}:{" "}
+              {selectedCategoryId.length > 0 ? `${filteredMachines.length}/${machines.length}` : machines.length}
             </p>
           ) : null}
+        </div>
+        <div className="flex min-w-[14rem] items-end gap-2">
+          <div className="w-full">
+            <label className={muted} htmlFor="machine-list-category-filter">
+              {m.machineList.filterByCategory}
+            </label>
+            <select
+              className={filterInput}
+              id="machine-list-category-filter"
+              onChange={(event) => setSelectedCategoryId(event.target.value)}
+              value={selectedCategoryId}
+            >
+              <option value="">{m.machineList.allCategories}</option>
+              {categoryOptions.map((option) => (
+                <option key={option.id} value={option.id}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
         <button className={pri} onClick={onNew} type="button">
           {m.machineList.newProduct}
@@ -148,9 +188,9 @@ export function AdminMachineListClient({
 
       {loading ? <p className={muted}>{m.machineList.loading}</p> : null}
 
-      {!loading && machines.length === 0 ? <p className={muted}>{m.machineList.empty}</p> : null}
+      {!loading && filteredMachines.length === 0 ? <p className={muted}>{m.machineList.empty}</p> : null}
 
-      {!loading && machines.length > 0 ? (
+      {!loading && filteredMachines.length > 0 ? (
         <div className={wrap}>
           <table className="w-full min-w-[640px] border-collapse text-left">
             <thead>
@@ -164,7 +204,7 @@ export function AdminMachineListClient({
               </tr>
             </thead>
             <tbody>
-              {machines.map((rowItem) => (
+              {filteredMachines.map((rowItem) => (
                 <tr key={rowItem.id}>
                   <td className={td}>
                     <div className="flex max-w-[min(100%,22rem)] items-start gap-3">
@@ -199,8 +239,8 @@ export function AdminMachineListClient({
                       {rowItem.published ? m.machineList.published : m.machineList.draft}
                     </button>
                   </td>
-                  <td className={`${td} max-w-[10rem] truncate`} title={categoryLabel(rowItem)}>
-                    {categoryLabel(rowItem)}
+                  <td className={`${td} max-w-[10rem] truncate`} title={categoryLabel(rowItem, locale)}>
+                    {categoryLabel(rowItem, locale)}
                   </td>
                   <td className={`${td} text-center`}>
                     <button
