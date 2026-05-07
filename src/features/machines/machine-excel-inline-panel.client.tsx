@@ -9,6 +9,8 @@ const OFFICE_EMBED_PREFIX = "https://view.officeapps.live.com/op/embed.aspx?src=
 /** Full row width; height matches PDF viewer panel. */
 const EXCEL_VIEWER_FRAME_CLASS =
   "block h-[min(85dvh,960px)] w-full max-w-full border-0 bg-[#18181b]";
+const EXCEL_PANEL_VIEWPORT_BLEED_CLASS =
+  "relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2";
 
 type MachineExcelInlinePanelProps = {
   readonly excelUrl: string | null | undefined;
@@ -69,30 +71,32 @@ export function MachineExcelInlinePanel({
         ) : null}
       </div>
       {open ? (
-        <div className="flex w-full min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55)]">
-          <div className="flex items-center justify-end gap-3 border-b border-[#18181b] px-3 py-2 sm:px-4">
-            <button
-              className="shrink-0 rounded-lg border border-[#27272a] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#e4e4e7] transition hover:border-[#ff6900] hover:text-[#ff6900] sm:text-[11px]"
-              onClick={() => {
-                setOpen(false);
-              }}
-              type="button"
-            >
-              {closeLabel}
-            </button>
-          </div>
-          {hasExcelFile ? (
-            <iframe className={EXCEL_VIEWER_FRAME_CLASS} loading="lazy" src={absoluteSrc} title={panelTitle} />
-          ) : (
-            <div className="flex flex-col gap-3 p-3 sm:p-4">
-              {normalizedImages.map((url, idx) => (
-                <a className="block w-full" href={url} key={`${url}-${idx}`} rel="noopener noreferrer" target="_blank">
-                  {/* eslint-disable-next-line @next/next/no-img-element -- Product specs media from R2/CDN */}
-                  <img alt="" className="mx-auto w-[92%] rounded-xl" loading="lazy" src={url} />
-                </a>
-              ))}
+        <div className={EXCEL_PANEL_VIEWPORT_BLEED_CLASS}>
+          <div className="mx-4 flex w-auto min-w-0 max-w-full flex-col overflow-hidden rounded-none border-y border-[#18181b] bg-[#09090b] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55)] sm:mx-8 lg:mx-12 xl:mx-16">
+            <div className="flex items-center justify-end gap-3 border-b border-[#18181b] px-3 py-2 sm:px-4">
+              <button
+                className="shrink-0 rounded-lg border border-[#27272a] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#e4e4e7] transition hover:border-[#ff6900] hover:text-[#ff6900] sm:text-[11px]"
+                onClick={() => {
+                  setOpen(false);
+                }}
+                type="button"
+              >
+                {closeLabel}
+              </button>
             </div>
-          )}
+            {hasExcelFile ? (
+              <iframe className={EXCEL_VIEWER_FRAME_CLASS} loading="lazy" src={absoluteSrc} title={panelTitle} />
+            ) : (
+              <div className="flex flex-col gap-2">
+                {normalizedImages.map((url, idx) => (
+                  <a className="block w-full" href={url} key={`${url}-${idx}`} rel="noopener noreferrer" target="_blank">
+                    {/* eslint-disable-next-line @next/next/no-img-element -- Product specs media from R2/CDN */}
+                    <img alt="" className="block w-full" loading="lazy" src={url} />
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       ) : null}
     </div>
