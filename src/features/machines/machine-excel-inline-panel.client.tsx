@@ -72,7 +72,7 @@ export function MachineExcelInlinePanel({
       </div>
       {open ? (
         <div className={EXCEL_PANEL_VIEWPORT_BLEED_CLASS}>
-          <div className="mx-4 flex w-auto min-w-0 max-w-full flex-col overflow-hidden rounded-none border-y border-[#18181b] bg-[#09090b] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55)] sm:mx-8 lg:mx-12">
+          <div className="mx-4 flex w-auto min-w-0 max-w-full flex-col overflow-hidden rounded-none border-y border-[#18181b] bg-[#09090b] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55)] sm:mx-8 lg:mx-12 xl:mx-16">
             <div className="flex items-center justify-end gap-3 border-b border-[#18181b] px-3 py-2 sm:px-4">
               <button
                 className="shrink-0 rounded-lg border border-[#27272a] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#e4e4e7] transition hover:border-[#ff6900] hover:text-[#ff6900] sm:text-[11px]"
