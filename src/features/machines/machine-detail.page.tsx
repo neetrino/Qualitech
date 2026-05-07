@@ -48,6 +48,9 @@ export function MachineDetailPage({
   const metaDescriptionPlain = detail.metaDescription?.trim() ?? "";
   const hasMetaDescriptionOnPage = metaDescriptionPlain.length > 0;
   const hasExcelSheet = detail.excelUrl != null && detail.excelUrl.trim().length > 0;
+  const excelImageUrls = detail.excelImageUrls ?? [];
+  const hasExcelImages = excelImageUrls.length > 0;
+  const hasExcelContent = hasExcelSheet || hasExcelImages;
 
   return (
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
@@ -97,7 +100,7 @@ export function MachineDetailPage({
                     </div>
                   ) : null}
                 </div>
-                {hasPdfSheet || hasMetaDescriptionOnPage || hasExcelSheet ? (
+                {hasPdfSheet || hasMetaDescriptionOnPage || hasExcelContent ? (
                   <div className="order-3 col-span-full flex min-w-0 flex-col gap-4 lg:col-span-2 lg:row-start-2">
                     {hasPdfSheet ? (
                       <MachinePdfInlinePanel
@@ -109,10 +112,11 @@ export function MachineDetailPage({
                     {hasMetaDescriptionOnPage ? (
                       <p className={MACHINE_PAGE_META_DESCRIPTION_CLASS}>{metaDescriptionPlain}</p>
                     ) : null}
-                    {hasExcelSheet ? (
+                    {hasExcelContent ? (
                       <MachineExcelInlinePanel
                         closeLabel={machinesMessages.excelCloseViewer}
                         downloadLabel={machinesMessages.excelDownloadLabel}
+                        excelImageUrls={excelImageUrls}
                         excelUrl={detail.excelUrl}
                         panelTitle={machinesMessages.excelViewLabel}
                       />
@@ -140,11 +144,12 @@ export function MachineDetailPage({
               {hasMetaDescriptionOnPage ? (
                 <p className={`mt-8 ${MACHINE_PAGE_META_DESCRIPTION_CLASS}`}>{metaDescriptionPlain}</p>
               ) : null}
-              {hasExcelSheet ? (
+              {hasExcelContent ? (
                 <div className="mt-8">
                   <MachineExcelInlinePanel
                     closeLabel={machinesMessages.excelCloseViewer}
                     downloadLabel={machinesMessages.excelDownloadLabel}
+                    excelImageUrls={excelImageUrls}
                     excelUrl={detail.excelUrl}
                     panelTitle={machinesMessages.excelViewLabel}
                   />

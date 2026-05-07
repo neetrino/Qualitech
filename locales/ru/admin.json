@@ -109,7 +109,9 @@
     "featured": "Избранное",
     "edit": "Правка",
     "delete": "Удалить",
-    "confirmDelete": "Удалить этот продукт безвозвратно?"
+    "confirmDelete": "Удалить этот продукт безвозвратно?",
+    "filterByCategory": "Фильтр по категории",
+    "allCategories": "Все категории"
   },
   "blogForm": {
     "editTitle": "Правка статьи",
@@ -142,9 +144,11 @@
     "excelSheet": "Характеристики (Excel)",
     "excelHint": "Необязательный файл .xlsx или .xls. Показывается на странице продукта под meta description, по умолчанию развёрнут (просмотр Office Online).",
     "excelUpload": "Загрузить Excel",
+    "excelUploadImages": "Загрузить изображения",
     "excelUploading": "Загрузка…",
     "excelRemove": "Удалить Excel",
-    "excelOpen": "Скачать текущий файл"
+    "excelOpen": "Скачать текущий файл",
+    "excelImageAlternativeHint": "Или загрузите одно или несколько изображений вместо Excel. Эти изображения используются только в блоке характеристик."
   },
   "gallery": {
     "heading": "Изображения галереи",

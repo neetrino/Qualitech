@@ -63,6 +63,8 @@ model Machine {
   pdfUrl     String?          @db.Text
   /// Optional Excel specs sheet (public URL, e.g. R2 `.xlsx` / `.xls`).
   excelUrl   String?          @db.Text
+  /// Optional image list shown in the specifications block (independent from product gallery).
+  excelImageUrls String[]     @default([])
   createdAt  DateTime         @default(now())
   updatedAt  DateTime         @updatedAt
 

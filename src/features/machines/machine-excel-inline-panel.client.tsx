@@ -12,6 +12,7 @@ const EXCEL_VIEWER_FRAME_CLASS =
 
 type MachineExcelInlinePanelProps = {
   readonly excelUrl: string | null | undefined;
+  readonly excelImageUrls: string[];
   readonly panelTitle: string;
   readonly closeLabel: string;
   readonly downloadLabel: string;
@@ -19,6 +20,7 @@ type MachineExcelInlinePanelProps = {
 
 export function MachineExcelInlinePanel({
   excelUrl,
+  excelImageUrls,
   panelTitle,
   closeLabel,
   downloadLabel,
@@ -26,13 +28,19 @@ export function MachineExcelInlinePanel({
   const trimmed = excelUrl?.trim() ?? "";
   const absoluteSrc =
     trimmed.length > 0 ? `${OFFICE_EMBED_PREFIX}${encodeURIComponent(normalizeStoredImageUrl(trimmed))}` : "";
+  const normalizedImages = excelImageUrls
+    .map((url) => normalizeStoredImageUrl(url).trim())
+    .filter((url) => url.length > 0);
+  const excelImagesKey = normalizedImages.join("|");
+  const hasExcelFile = absoluteSrc.length > 0;
+  const hasExcelImages = normalizedImages.length > 0;
   const [open, setOpen] = useState(true);
 
   useEffect(() => {
     setOpen(true);
-  }, [absoluteSrc]);
+  }, [absoluteSrc, excelImagesKey]);
 
-  if (absoluteSrc.length === 0) {
+  if (!hasExcelFile && !hasExcelImages) {
     return null;
   }
 
@@ -49,21 +57,20 @@ export function MachineExcelInlinePanel({
         >
           {panelTitle}
         </button>
-        <a
-          className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#a1a1aa] underline decoration-[#3f3f46] underline-offset-4 transition hover:text-[#ff6900]"
-          href={normalizeStoredImageUrl(trimmed)}
-          rel="noopener noreferrer"
-          target="_blank"
-        >
-          {downloadLabel}
-        </a>
+        {hasExcelFile ? (
+          <a
+            className="text-[11px] font-bold uppercase tracking-[0.1em] text-[#a1a1aa] underline decoration-[#3f3f46] underline-offset-4 transition hover:text-[#ff6900]"
+            href={normalizeStoredImageUrl(trimmed)}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {downloadLabel}
+          </a>
+        ) : null}
       </div>
       {open ? (
         <div className="flex w-full min-w-0 max-w-full flex-col overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55)]">
-          <div className="flex items-center justify-between gap-3 border-b border-[#18181b] px-3 py-2 sm:px-4">
-            <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-[0.1em] text-[#a1a1aa] sm:text-[11px]">
-              {panelTitle}
-            </span>
+          <div className="flex items-center justify-end gap-3 border-b border-[#18181b] px-3 py-2 sm:px-4">
             <button
               className="shrink-0 rounded-lg border border-[#27272a] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#e4e4e7] transition hover:border-[#ff6900] hover:text-[#ff6900] sm:text-[11px]"
               onClick={() => {
@@ -74,7 +81,18 @@ export function MachineExcelInlinePanel({
               {closeLabel}
             </button>
           </div>
-          <iframe className={EXCEL_VIEWER_FRAME_CLASS} loading="lazy" src={absoluteSrc} title={panelTitle} />
+          {hasExcelFile ? (
+            <iframe className={EXCEL_VIEWER_FRAME_CLASS} loading="lazy" src={absoluteSrc} title={panelTitle} />
+          ) : (
+            <div className="flex flex-col gap-3 p-3 sm:p-4">
+              {normalizedImages.map((url, idx) => (
+                <a className="block w-full" href={url} key={`${url}-${idx}`} rel="noopener noreferrer" target="_blank">
+                  {/* eslint-disable-next-line @next/next/no-img-element -- Product specs media from R2/CDN */}
+                  <img alt="" className="mx-auto w-[92%] rounded-xl" loading="lazy" src={url} />
+                </a>
+              ))}
+            </div>
+          )}
         </div>
       ) : null}
     </div>

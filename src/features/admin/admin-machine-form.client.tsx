@@ -107,6 +107,11 @@ export function AdminMachineFormClient({
   );
   const [pdfUrl, setPdfUrl] = useState(() => machine?.pdfUrl?.trim() ?? "");
   const [excelUrl, setExcelUrl] = useState(() => machine?.excelUrl?.trim() ?? "");
+  const [excelImageUrls, setExcelImageUrls] = useState<string[]>(() =>
+    machine
+      ? (machine.excelImageUrls ?? []).map((url) => url.trim()).filter((url) => url.length > 0)
+      : [],
+  );
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
   const [pdfUploadBusy, setPdfUploadBusy] = useState(false);
@@ -167,6 +172,7 @@ export function AdminMachineFormClient({
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
       const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
       const excelPayload = excelUrl.trim().length > 0 ? excelUrl.trim() : null;
+      const excelImageUrlsPayload = excelImageUrls.map((url) => url.trim()).filter((url) => url.length > 0);
 
       if (machine) {
         const res = await adminApiJson<MachineRow>(`${ADMIN_API_MACHINES_PATH}/${machine.id}`, {
@@ -181,6 +187,7 @@ export function AdminMachineFormClient({
             images: imagePayload,
             pdfUrl: pdfPayload,
             excelUrl: excelPayload,
+            excelImageUrls: excelImageUrlsPayload,
           }),
         });
         if (!res.ok) {
@@ -200,6 +207,7 @@ export function AdminMachineFormClient({
             images: imagePayload,
             pdfUrl: pdfPayload,
             excelUrl: excelPayload,
+            excelImageUrls: excelImageUrlsPayload,
           }),
         });
         if (!res.ok) {
@@ -211,7 +219,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, sortOrder, tr],
+    [categoryId, excelImageUrls, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, sortOrder, tr],
   );
 
   return (
@@ -335,6 +343,8 @@ export function AdminMachineFormClient({
 
       <AdminMachineExcelField
         excelUrl={excelUrl}
+        excelImageUrls={excelImageUrls}
+        onExcelImageUrlsChange={setExcelImageUrls}
         onExcelUrlChange={setExcelUrl}
         onUploadBusyChange={setExcelUploadBusy}
         reportError={(msg) => setError(msg)}

@@ -39,6 +39,8 @@ export type MachineDetailDto = {
   pdfUrl: string | null;
   /** Optional Excel (.xlsx / .xls) specs URL when set in admin. */
   excelUrl: string | null;
+  /** Optional images for the specifications block (separate from gallery). */
+  excelImageUrls: string[];
 };
 
 export type MachinesListResult = {

@@ -4,6 +4,7 @@ import { z } from "zod";
 import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
 
 const localeEnum = z.nativeEnum(AppLocale);
+const MAX_MACHINE_EXCEL_IMAGES = 50;
 
 const adminMachineProductSlugSchema = z
   .string()
@@ -31,6 +32,10 @@ export const adminMachineImageSchema = z.object({
 const adminMachinePdfUrlSchema = z.union([z.string().trim().url().max(2000), z.null()]).optional();
 
 const adminMachineExcelUrlSchema = z.union([z.string().trim().url().max(2000), z.null()]).optional();
+const adminMachineExcelImageUrlsSchema = z
+  .array(z.string().trim().url().max(2000))
+  .max(MAX_MACHINE_EXCEL_IMAGES)
+  .optional();
 
 export const adminMachineCreateSchema = z
   .object({
@@ -42,6 +47,7 @@ export const adminMachineCreateSchema = z
     images: z.array(adminMachineImageSchema).default([]),
     pdfUrl: adminMachinePdfUrlSchema,
     excelUrl: adminMachineExcelUrlSchema,
+    excelImageUrls: adminMachineExcelImageUrlsSchema,
   })
   .superRefine((val, ctx) => {
     const locales = val.translations.map((t) => t.locale);
@@ -63,6 +69,7 @@ export const adminMachinePatchSchema = z
     images: z.array(adminMachineImageSchema).optional(),
     pdfUrl: adminMachinePdfUrlSchema,
     excelUrl: adminMachineExcelUrlSchema,
+    excelImageUrls: adminMachineExcelImageUrlsSchema,
   })
   .superRefine((val, ctx) => {
     if (!val.translations) {

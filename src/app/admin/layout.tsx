@@ -24,7 +24,9 @@ export default async function AdminLayout({ children }: { children: ReactNode })
     <>
       <SiteHeader locale={locale} messages={homeMessages} navContext="site" />
       <div className={`${HERO_CONTENT_TOP_PAD} ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
-        <AdminMessagesProvider messages={adminMessages}>{children}</AdminMessagesProvider>
+        <AdminMessagesProvider locale={locale} messages={adminMessages}>
+          {children}
+        </AdminMessagesProvider>
       </div>
     </>
   );

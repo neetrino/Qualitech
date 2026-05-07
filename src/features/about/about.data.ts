@@ -2,7 +2,7 @@ import { homeAssets, solutionCardsLayout } from "@/features/home/home.data";
 
 /** Visual assets for the About page (reuses public home imagery). */
 export const aboutAssets = {
-  storyImage: homeAssets.robotArm,
+  storyImage: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k5.jpg",
   gallery: [
     solutionCardsLayout[0].imageSrc,
     solutionCardsLayout[1].imageSrc,

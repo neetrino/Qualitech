@@ -109,7 +109,9 @@
     "featured": "Featured",
     "edit": "Edit",
     "delete": "Delete",
-    "confirmDelete": "Delete this product permanently?"
+    "confirmDelete": "Delete this product permanently?",
+    "filterByCategory": "Filter by category",
+    "allCategories": "All categories"
   },
   "blogForm": {
     "editTitle": "Edit article",
@@ -142,9 +144,11 @@
     "excelSheet": "Specifications (Excel)",
     "excelHint": "Optional .xlsx or .xls file. Shown on the product page below the meta description, expanded by default (Office Online viewer).",
     "excelUpload": "Upload Excel",
+    "excelUploadImages": "Upload images",
     "excelUploading": "Uploading…",
     "excelRemove": "Remove Excel",
-    "excelOpen": "Download current file"
+    "excelOpen": "Download current file",
+    "excelImageAlternativeHint": "Or upload one or more images instead of Excel. These images are used only in the specifications block."
   },
   "gallery": {
     "heading": "Gallery images",
