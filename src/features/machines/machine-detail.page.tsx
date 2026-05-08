@@ -16,9 +16,8 @@ import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.consta
 import { SiteHeader } from "@/shared/layout/site-header";
 import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
-/** Centered body copy under the product sheet panel. */
-const MACHINE_PAGE_META_DESCRIPTION_CLASS =
-  "mx-auto w-full max-w-2xl text-center text-pretty text-[13px] leading-relaxed text-[#a1a1aa] whitespace-pre-wrap sm:max-w-3xl sm:text-sm";
+const MACHINE_PAGE_META_DESCRIPTION_LIST_CLASS =
+  "mx-auto w-full max-w-2xl space-y-3 text-left text-pretty text-[13px] leading-relaxed text-[#f5f5f5] sm:max-w-3xl sm:text-sm";
 
 type MachineDetailPageProps = {
   readonly locale: HomeLocale;
@@ -28,6 +27,31 @@ type MachineDetailPageProps = {
   readonly payload: MachineDetailWithLocaleSlugs;
   readonly relatedProducts: MachineListItemDto[];
 };
+
+type MachineMetaDescriptionProps = {
+  readonly value: string;
+  readonly className?: string;
+};
+
+function MachineMetaDescription({ value, className }: MachineMetaDescriptionProps) {
+  const items = value
+    .split(/\r?\n+/)
+    .map((line) => line.trim())
+    .filter((line) => line.length > 0);
+  if (items.length === 0) {
+    return null;
+  }
+  return (
+    <ul className={`${MACHINE_PAGE_META_DESCRIPTION_LIST_CLASS} ${className ?? ""}`}>
+      {items.map((item, itemIndex) => (
+        <li className="flex items-start gap-2.5" key={`${itemIndex}-${item.slice(0, 20)}`}>
+          <span aria-hidden className="mt-1 inline-block h-1.5 w-2.5 shrink-0 rotate-[-45deg] border-b-2 border-l-2 border-[#ff6900]" />
+          <span className={itemIndex === 0 ? "text-[15px] sm:text-base" : ""}>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 export function MachineDetailPage({
   locale,
@@ -110,7 +134,7 @@ export function MachineDetailPage({
                       />
                     ) : null}
                     {hasMetaDescriptionOnPage ? (
-                      <p className={MACHINE_PAGE_META_DESCRIPTION_CLASS}>{metaDescriptionPlain}</p>
+                      <MachineMetaDescription value={metaDescriptionPlain} />
                     ) : null}
                     {hasExcelContent ? (
                       <MachineExcelInlinePanel
@@ -142,7 +166,7 @@ export function MachineDetailPage({
                 </div>
               ) : null}
               {hasMetaDescriptionOnPage ? (
-                <p className={`mt-8 ${MACHINE_PAGE_META_DESCRIPTION_CLASS}`}>{metaDescriptionPlain}</p>
+                <MachineMetaDescription className="mt-8" value={metaDescriptionPlain} />
               ) : null}
               {hasExcelContent ? (
                 <div className="mt-8">
