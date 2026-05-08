@@ -4,17 +4,11 @@ import Link from "next/link";
 import { ContactFormClient } from "@/features/contact/contact-form.client";
 import type { ContactMessages } from "@/features/contact/contact.messages";
 import { homeAssets } from "@/features/home/home.data";
-import {
-  HERO_CONTENT_TOP_PAD,
-  HOME_PAGE_BACKGROUND_CLASS,
-  HeroBackgroundLayers,
-} from "@/features/home/home-hero-visual";
+import { HOME_PAGE_BACKGROUND_CLASS } from "@/features/home/home-hero-visual";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { homePageHref } from "@/lib/i18n/locale-routes";
 import { Footer } from "@/shared/layout/footer";
 import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
 import { SiteHeader } from "@/shared/layout/site-header";
-import { SiteBreadcrumb } from "@/shared/layout/site-breadcrumb";
 
 const CONTACT_ICON_SIZE_PX = 18;
 
@@ -36,21 +30,10 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
       <SiteHeader locale={locale} messages={homeMessages} navContext="site" />
       <div className="overflow-x-hidden">
-        <section className="relative min-h-[min(52svh,560px)] overflow-hidden lg:min-h-[480px]">
-          <HeroBackgroundLayers />
+        <section className="relative">
           <div
-            className={`relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-10 sm:px-5 sm:pb-12 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
+            className="mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-8 pt-16 sm:px-5 sm:pb-10 sm:pt-20 md:px-6 lg:px-8 lg:pt-24 xl:px-10"
           >
-            <SiteBreadcrumb
-              segments={[
-                { label: homeMessages.nav.home, href: homePageHref(locale) },
-                { label: homeMessages.nav.contact },
-              ]}
-            />
-            <div className="mb-4 flex items-center gap-2">
-              <span className="h-px w-10 rounded-full bg-[#ff6900]" />
-              <p className="text-[10px] font-black uppercase tracking-[0.18em] text-[#ff6900] sm:text-xs">{c.heroEyebrow}</p>
-            </div>
             <h1 className="max-w-[720px] font-display text-[clamp(1.5rem,4.2vw,2.75rem)] uppercase leading-[1.05] tracking-[-0.04em] text-white">
               {c.heroTitle}
             </h1>

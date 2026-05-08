@@ -20,7 +20,7 @@ export const revalidate = 60;
 
 type PageProps = {
   readonly params: Promise<{ locale: string; categorySlug: string }>;
-  readonly searchParams: Promise<{ page?: string; featured?: string }>;
+  readonly searchParams: Promise<{ page?: string }>;
 };
 
 function parseListPage(raw: string | undefined): number {
@@ -29,10 +29,6 @@ function parseListPage(raw: string | undefined): number {
     return 1;
   }
   return n;
-}
-
-function parseFeaturedOnly(raw: string | undefined): boolean {
-  return raw === "true" || raw === "1";
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -56,7 +52,6 @@ export default async function Page({ params, searchParams }: PageProps) {
   const appLocale = homeLocaleToAppLocale(locale);
   const sp = await searchParams;
   const page = parseListPage(sp.page);
-  const featuredOnly = parseFeaturedOnly(sp.featured);
 
   const section = await getMachineCategorySectionPublic(categorySlug, appLocale);
   if (!section) {
@@ -67,7 +62,6 @@ export default async function Page({ params, searchParams }: PageProps) {
     locale: appLocale,
     page,
     limit: MACHINES_LIST_DEFAULT_LIMIT,
-    ...(featuredOnly ? { featured: true } : {}),
   });
   if (!result) {
     notFound();
@@ -75,13 +69,12 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   const totalPages = Math.max(1, Math.ceil(result.meta.total / result.meta.limit));
   if (result.meta.total === 0 && page > 1) {
-    redirect(machinesCategoryListHref(locale, categorySlug, { page: 1, featuredOnly }));
+    redirect(machinesCategoryListHref(locale, categorySlug, { page: 1 }));
   }
   if (result.meta.total > 0 && page > totalPages) {
     redirect(
       machinesCategoryListHref(locale, categorySlug, {
         page: totalPages,
-        featuredOnly,
       }),
     );
   }
@@ -93,7 +86,6 @@ export default async function Page({ params, searchParams }: PageProps) {
 
   return (
     <MachinesCategoryPage
-      featuredOnly={featuredOnly}
       homeMessages={homeMessages}
       locale={locale}
       machineSectionSlugByLocale={section.slugByLocale}

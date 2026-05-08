@@ -1,12 +1,9 @@
 import type { HomeLocale } from "@/features/home/home.messages";
 import { machinesCategoryHref } from "@/lib/i18n/locale-routes";
 
-/** Query string for `/[locale]/machines/[category]` list (page + optional featured). */
-export function buildMachinesCategoryListQueryString(page: number, featuredOnly: boolean): string {
+/** Query string for `/[locale]/machines/[category]` list pagination. */
+export function buildMachinesCategoryListQueryString(page: number): string {
   const params = new URLSearchParams();
-  if (featuredOnly) {
-    params.set("featured", "true");
-  }
   if (page > 1) {
     params.set("page", String(page));
   }
@@ -17,10 +14,7 @@ export function buildMachinesCategoryListQueryString(page: number, featuredOnly:
 export function machinesCategoryListHref(
   locale: HomeLocale,
   categorySlug: string,
-  opts: { readonly page: number; readonly featuredOnly: boolean },
+  opts: { readonly page: number },
 ): string {
-  return `${machinesCategoryHref(locale, categorySlug)}${buildMachinesCategoryListQueryString(
-    opts.page,
-    opts.featuredOnly,
-  )}`;
+  return `${machinesCategoryHref(locale, categorySlug)}${buildMachinesCategoryListQueryString(opts.page)}`;
 }

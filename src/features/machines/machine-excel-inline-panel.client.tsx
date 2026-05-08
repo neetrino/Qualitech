@@ -8,7 +8,7 @@ const OFFICE_EMBED_PREFIX = "https://view.officeapps.live.com/op/embed.aspx?src=
 
 /** Full row width; height matches PDF viewer panel. */
 const EXCEL_VIEWER_FRAME_CLASS =
-  "block h-[min(85dvh,960px)] w-full max-w-full border-0 bg-[#18181b]";
+  "block h-[62dvh] w-full max-w-full border-0 bg-[#18181b] sm:h-[72dvh] lg:h-[min(85dvh,960px)]";
 const EXCEL_PANEL_VIEWPORT_BLEED_CLASS =
   "relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2";
 
@@ -16,6 +16,7 @@ type MachineExcelInlinePanelProps = {
   readonly excelUrl: string | null | undefined;
   readonly excelImageUrls: string[];
   readonly panelTitle: string;
+  readonly openLabel: string;
   readonly closeLabel: string;
   readonly downloadLabel: string;
 };
@@ -24,6 +25,7 @@ export function MachineExcelInlinePanel({
   excelUrl,
   excelImageUrls,
   panelTitle,
+  openLabel,
   closeLabel,
   downloadLabel,
 }: MachineExcelInlinePanelProps) {
@@ -57,7 +59,7 @@ export function MachineExcelInlinePanel({
           }}
           type="button"
         >
-          {panelTitle}
+          {open ? closeLabel : openLabel}
         </button>
         {hasExcelFile ? (
           <a

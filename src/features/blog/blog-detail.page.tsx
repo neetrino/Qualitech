@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { BLOG_DETAIL_HERO_OVERLAY_MIN_HEIGHT_CLASSNAME } from "@/features/blog/blog.constants";
 import type { BlogPostDetailDto, BlogPostImageDto } from "@/features/blog/blog.dto";
 import { formatBlogPublishedDate } from "@/features/blog/blog.format-date";
 import type { BlogMessages } from "@/features/blog/blog.messages";
@@ -47,8 +46,8 @@ function BlogPostHeroOverlay({
   const alt = image.alt?.trim() || fallbackAlt;
   const remote = image.url.startsWith("http");
   return (
-    <div className="relative w-full overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)]">
-      <div className="absolute inset-0">
+    <div className="w-full overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)]">
+      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0f172a]">
         <Image
           alt={alt}
           className="object-cover object-center"
@@ -59,23 +58,17 @@ function BlogPostHeroOverlay({
           unoptimized={remote}
         />
       </div>
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(0,0,0,0.55)_0%,rgba(0,0,0,0.72)_22%,rgba(0,0,0,0.88)_55%,rgb(0_0_0)_100%)]"
-      />
-      <div
-        className={`relative z-[1] space-y-5 p-6 sm:p-8 md:p-10 ${BLOG_DETAIL_HERO_OVERLAY_MIN_HEIGHT_CLASSNAME} pb-12 sm:pb-14`}
-      >
+      <div className="space-y-5 bg-[linear-gradient(180deg,#111827_0%,#000000_100%)] p-6 text-white sm:p-8 md:p-10">
         <SiteBreadcrumb segments={breadcrumbSegments} />
         <Link
-          className="inline-flex w-fit text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
+          className="inline-flex w-fit text-[11px] font-black uppercase tracking-[0.12em] text-white underline-offset-2 transition hover:text-[#e5e7eb] hover:underline"
           href={backHref}
         >
           ← {backText}
         </Link>
         {dateLabel.length > 0 ? (
           <time
-            className="block text-[10px] font-bold uppercase tracking-[0.14em] text-[#d4d4d8]"
+            className="block text-[10px] font-bold uppercase tracking-[0.14em] text-[#e4e4e7]"
             dateTime={publishedAtIso ?? undefined}
           >
             {dateLabel}

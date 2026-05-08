@@ -20,6 +20,7 @@ import {
 } from "@/features/machines/machine-category-solution-card";
 import {
   aboutPageHref,
+  blogPageHref,
   contactPageHref,
   machinesCategoryHref,
   machinesPageHref,
@@ -336,8 +337,8 @@ function AdvantagesSection({ messages }: { readonly messages: HomeMessages }) {
                     {card.index}
                   </span>
                   <div className="relative z-10">
-                    <h3 className="text-center text-xs font-black uppercase leading-snug tracking-[0.02em] text-white sm:text-sm">{content.title}</h3>
-                    <p className="mt-3 text-center text-[10px] leading-relaxed tracking-[-0.01em] text-[#71717b] sm:mt-3.5 sm:text-[11px]">{content.description}</p>
+                    <h3 className="text-center text-[13px] font-black uppercase leading-snug tracking-[0.02em] text-white sm:text-[15px]">{content.title}</h3>
+                    <p className="mt-3 text-center text-xs leading-relaxed tracking-[-0.01em] text-[#71717b] sm:mt-3.5 sm:text-[13px]">{content.description}</p>
                   </div>
                 </div>
                 <div className="absolute left-1/2 top-0 z-20 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-[11px] bg-[#ff6900] shadow-[0_6px_20px_rgba(255,105,0,0.27)] sm:size-12 sm:rounded-xl">
@@ -352,7 +353,8 @@ function AdvantagesSection({ messages }: { readonly messages: HomeMessages }) {
   );
 }
 
-function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
+function InsightsSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
+  const blogHref = blogPageHref(locale);
   return (
     <section className="relative overflow-hidden px-4 pb-16 pt-14 sm:px-5 sm:pb-20 sm:pt-16 md:px-6 lg:px-8 xl:px-10" id="insights">
       <div className="absolute right-[8%] top-12 hidden h-[520px] w-[900px] rounded-full bg-[linear-gradient(28.86deg,rgba(243,244,246,0.2)_0%,rgba(0,0,0,0)_100%)] blur-[48px] xl:block" />
@@ -376,7 +378,6 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
                 <div className="flex min-h-[212px] flex-1 flex-col px-4 py-4 sm:min-h-[232px] sm:px-5 sm:py-5 xl:min-h-[252px]">
                   <div className="flex flex-wrap items-center gap-3 text-[9px] uppercase tracking-[0.12em] text-[#52525c] sm:gap-4 sm:text-[11px] sm:tracking-[0.14em]">
                     <span className="flex items-center gap-1.5"><Image alt="" src={article.dateIconSrc} width={14} height={14} />{content.date}</span>
-                    <span className="flex items-center gap-1.5"><Image alt="" src={article.timeIconSrc} width={14} height={14} />{content.readTime}</span>
                   </div>
                   <h3 className="mt-3 text-sm font-bold leading-snug tracking-[-0.02em] text-white sm:mt-4 sm:text-base">{content.title}</h3>
                   <p className="mt-3 min-h-0 flex-1 text-xs leading-relaxed tracking-[-0.02em] text-[#71717b] sm:mt-4 sm:text-sm">{content.description}</p>
@@ -390,10 +391,13 @@ function InsightsSection({ messages }: { readonly messages: HomeMessages }) {
           })}
         </div>
         <div className="hidden justify-center sm:mt-12 sm:flex">
-          <button className="flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]" type="button">
+          <Link
+            className="flex h-11 items-center gap-2 rounded-full bg-[#ff6900] px-8 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_24px_rgba(255,105,0,0.3)] transition hover:brightness-110 sm:h-12 sm:gap-3 sm:px-9 sm:text-xs sm:tracking-[0.14em]"
+            href={blogHref}
+          >
             {messages.insights.ctaMore}
             <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
-          </button>
+          </Link>
         </div>
       </div>
     </section>
@@ -409,7 +413,7 @@ export function HomePage({ locale, homeSolutionCategories, messages }: HomePageP
         <SolutionsSection homeSolutionCategories={homeSolutionCategories} locale={locale} messages={messages} />
         <AboutSection locale={locale} messages={messages} />
         <AdvantagesSection messages={messages} />
-        <InsightsSection messages={messages} />
+        <InsightsSection locale={locale} messages={messages} />
         <Footer locale={locale} messages={messages} />
       </div>
     </main>
