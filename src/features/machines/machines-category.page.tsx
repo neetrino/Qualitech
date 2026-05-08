@@ -23,67 +23,19 @@ type MachinesCategoryPageProps = {
   readonly page: number;
   readonly totalPages: number;
   readonly total: number;
-  readonly featuredOnly: boolean;
 };
-
-function filterPillClass(active: boolean): string {
-  return active
-    ? "border-[#ff6900] bg-[#ff6900]/10 text-[#ff6900]"
-    : "border-[#27272a] text-white hover:border-[#ff6900] hover:text-[#ff6900]";
-}
-
-function ListingFilters({
-  locale,
-  sectionSlug,
-  featuredOnly,
-  messages,
-}: {
-  readonly locale: HomeLocale;
-  readonly sectionSlug: string;
-  readonly featuredOnly: boolean;
-  readonly messages: MachinesMessages;
-}) {
-  const allHref = machinesCategoryListHref(locale, sectionSlug, { page: 1, featuredOnly: false });
-  const featHref = machinesCategoryListHref(locale, sectionSlug, { page: 1, featuredOnly: true });
-  return (
-    <nav
-      aria-label={messages.filterLabel}
-      className="mb-8 flex flex-col gap-4 border-b border-[#18181b] pb-8 sm:flex-row sm:items-center sm:justify-between"
-    >
-      <p className="text-[11px] font-black uppercase tracking-[0.12em] text-[#71717b]">{messages.filterLabel}</p>
-      <div className="flex flex-wrap gap-2">
-        <Link
-          aria-current={!featuredOnly ? "page" : undefined}
-          className={`rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] transition ${filterPillClass(!featuredOnly)}`}
-          href={allHref}
-        >
-          {messages.filterAll}
-        </Link>
-        <Link
-          aria-current={featuredOnly ? "page" : undefined}
-          className={`rounded-full border px-4 py-2 text-[11px] font-black uppercase tracking-[0.1em] transition ${filterPillClass(featuredOnly)}`}
-          href={featHref}
-        >
-          {messages.filterFeatured}
-        </Link>
-      </div>
-    </nav>
-  );
-}
 
 function Pagination({
   locale,
   sectionSlug,
   page,
   totalPages,
-  featuredOnly,
   messages,
 }: {
   readonly locale: HomeLocale;
   readonly sectionSlug: string;
   readonly page: number;
   readonly totalPages: number;
-  readonly featuredOnly: boolean;
   readonly messages: MachinesMessages;
 }) {
   if (totalPages <= 1) {
@@ -91,8 +43,8 @@ function Pagination({
   }
   const prev = page > 1 ? page - 1 : null;
   const next = page < totalPages ? page + 1 : null;
-  const prevHref = machinesCategoryListHref(locale, sectionSlug, { page: prev ?? 1, featuredOnly });
-  const nextHref = machinesCategoryListHref(locale, sectionSlug, { page: next ?? page, featuredOnly });
+  const prevHref = machinesCategoryListHref(locale, sectionSlug, { page: prev ?? 1 });
+  const nextHref = machinesCategoryListHref(locale, sectionSlug, { page: next ?? page });
 
   return (
     <nav aria-label="Pagination" className="mt-12 flex flex-wrap items-center justify-between gap-4 border-t border-[#18181b] pt-8">
@@ -140,7 +92,6 @@ export function MachinesCategoryPage({
   page,
   totalPages,
   total,
-  featuredOnly,
 }: MachinesCategoryPageProps) {
   return (
     <main className={`relative ${HOME_PAGE_BACKGROUND_CLASS} text-white ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
@@ -167,24 +118,12 @@ export function MachinesCategoryPage({
             </h1>
           </header>
 
-          <ListingFilters featuredOnly={featuredOnly} locale={locale} messages={machinesMessages} sectionSlug={sectionSlug} />
-
           {total === 0 ? (
             <div className="rounded-2xl border border-[#18181b] bg-[#09090b] px-6 py-14 text-center sm:px-10">
               <h2 className="font-display text-xl uppercase tracking-tight text-white">
-                {featuredOnly ? machinesMessages.filterEmptyFeaturedTitle : machinesMessages.sectionEmptyTitle}
+                {machinesMessages.sectionEmptyTitle}
               </h2>
-              {!featuredOnly ? (
-                <p className="mx-auto mt-3 max-w-md text-sm text-[#9f9fa9]">{machinesMessages.sectionEmptyBody}</p>
-              ) : null}
-              {featuredOnly ? (
-                <Link
-                  className="mt-6 inline-flex text-xs font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
-                  href={machinesCategoryListHref(locale, sectionSlug, { page: 1, featuredOnly: false })}
-                >
-                  {machinesMessages.filterShowAllLink}
-                </Link>
-              ) : null}
+              <p className="mx-auto mt-3 max-w-md text-sm text-[#9f9fa9]">{machinesMessages.sectionEmptyBody}</p>
             </div>
           ) : (
             <>
@@ -201,7 +140,6 @@ export function MachinesCategoryPage({
                 ))}
               </div>
               <Pagination
-                featuredOnly={featuredOnly}
                 locale={locale}
                 messages={machinesMessages}
                 page={page}
