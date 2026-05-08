@@ -337,8 +337,8 @@ function AdvantagesSection({ messages }: { readonly messages: HomeMessages }) {
                     {card.index}
                   </span>
                   <div className="relative z-10">
-                    <h3 className="text-center text-xs font-black uppercase leading-snug tracking-[0.02em] text-white sm:text-sm">{content.title}</h3>
-                    <p className="mt-3 text-center text-[10px] leading-relaxed tracking-[-0.01em] text-[#71717b] sm:mt-3.5 sm:text-[11px]">{content.description}</p>
+                    <h3 className="text-center text-[13px] font-black uppercase leading-snug tracking-[0.02em] text-white sm:text-[15px]">{content.title}</h3>
+                    <p className="mt-3 text-center text-xs leading-relaxed tracking-[-0.01em] text-[#71717b] sm:mt-3.5 sm:text-[13px]">{content.description}</p>
                   </div>
                 </div>
                 <div className="absolute left-1/2 top-0 z-20 grid size-11 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-[11px] bg-[#ff6900] shadow-[0_6px_20px_rgba(255,105,0,0.27)] sm:size-12 sm:rounded-xl">

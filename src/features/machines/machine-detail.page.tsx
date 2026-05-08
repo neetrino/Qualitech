@@ -129,7 +129,8 @@ export function MachineDetailPage({
                     {hasPdfSheet ? (
                       <MachinePdfInlinePanel
                         pdfCloseLabel={machinesMessages.pdfCloseViewer}
-                        pdfLinkLabel={machinesMessages.pdfViewLabel}
+                        pdfOpenLabel={machinesMessages.pdfOpenViewer}
+                        pdfPanelTitle={machinesMessages.pdfViewLabel}
                         pdfUrl={detail.pdfUrl}
                       />
                     ) : null}
@@ -141,6 +142,7 @@ export function MachineDetailPage({
                         closeLabel={machinesMessages.excelCloseViewer}
                         downloadLabel={machinesMessages.excelDownloadLabel}
                         excelImageUrls={excelImageUrls}
+                        openLabel={machinesMessages.excelOpenViewer}
                         excelUrl={detail.excelUrl}
                         panelTitle={machinesMessages.excelViewLabel}
                       />
@@ -175,6 +177,7 @@ export function MachineDetailPage({
                     downloadLabel={machinesMessages.excelDownloadLabel}
                     excelImageUrls={excelImageUrls}
                     excelUrl={detail.excelUrl}
+                    openLabel={machinesMessages.excelOpenViewer}
                     panelTitle={machinesMessages.excelViewLabel}
                   />
                 </div>

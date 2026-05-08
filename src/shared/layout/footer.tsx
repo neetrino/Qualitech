@@ -57,16 +57,16 @@ export function Footer({ locale, messages }: FooterProps) {
   const contactPhoneHref = `tel:${messages.footer.contact.phone.replace(/\s+/g, "")}`;
 
   return (
-    <footer className="mx-auto hidden max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:block md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
+    <footer className="mx-auto max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
       <div className="grid gap-10 border-t border-[#18181b] pt-12 sm:gap-12 sm:pt-14 xl:grid-cols-[1.1fr_0.9fr_1fr_1fr]">
         <div>
-          <Link className="inline-block" href={homePageHref(locale)}>
+          <Link className="mx-auto inline-block md:mx-0" href={homePageHref(locale)}>
             <Image alt="Qualitech logo" className="h-auto w-[260px] max-w-full sm:w-[300px]" src={homeAssets.footerLogo} width={338} height={46} />
           </Link>
-          <p className="mt-6 max-w-[220px] text-xs leading-relaxed tracking-[-0.02em] text-[#71717a] sm:mt-7 sm:max-w-[239px] sm:text-sm">{messages.footer.tagline}</p>
+          <p className="mx-auto mt-6 max-w-[220px] text-center text-xs leading-relaxed tracking-[-0.02em] text-[#71717a] sm:mt-7 sm:max-w-[239px] sm:text-sm md:mx-0 md:text-left">{messages.footer.tagline}</p>
         </div>
         {footerColumns.map((section, sectionIndex) => (
-          <div key={section.title}>
+          <div className="text-center md:text-left" key={section.title}>
             <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{section.title}</h3>
             <ul className="mt-4 space-y-2.5 text-[11px] uppercase tracking-[0.12em] text-[#71717a] sm:mt-5 sm:space-y-3 sm:text-xs sm:tracking-[0.14em]">
               {section.links.map((link, linkIndex) => {
@@ -83,7 +83,7 @@ export function Footer({ locale, messages }: FooterProps) {
             </ul>
           </div>
         ))}
-        <div>
+        <div className="text-center md:text-left">
           <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">
             <Link className={footerLinkClassName} href={contactPageHref(locale)}>
               {messages.footer.contact.title}
@@ -91,7 +91,7 @@ export function Footer({ locale, messages }: FooterProps) {
           </h3>
           <div className="mt-4 space-y-3 text-[11px] tracking-[-0.01em] text-[#71717a] sm:mt-5 sm:text-xs">
             <a
-              className="flex gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]"
+              className="flex items-start justify-center gap-3 text-center transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] md:justify-start md:text-left"
               href={contactAddressHref}
               rel="noopener noreferrer"
               target="_blank"
@@ -104,13 +104,13 @@ export function Footer({ locale, messages }: FooterProps) {
               </p>
             </a>
             <a
-              className="flex items-center gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]"
+              className="flex items-center justify-center gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] md:justify-start"
               href={contactPhoneHref}
             >
               <Image alt="" className="shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               {messages.footer.contact.phone}
             </a>
-            <p className="flex items-center gap-3">
+            <p className="flex items-center justify-center gap-3 md:justify-start">
               <Image alt="" className="shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               <a
                 className="break-all text-[#ff6900] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]"
@@ -122,7 +122,7 @@ export function Footer({ locale, messages }: FooterProps) {
           </div>
         </div>
       </div>
-      <div className="mt-10 flex items-center justify-between gap-6 border-t border-[#18181b] pt-6 sm:mt-12 sm:pt-7">
+      <div className="mt-10 flex flex-col items-center justify-center gap-6 border-t border-[#18181b] pt-6 text-center sm:mt-12 sm:pt-7 md:flex-row md:justify-between md:text-left">
         <a
           className="font-legal text-[10px] uppercase text-white transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] sm:text-xs"
           href="https://neetrino.com/"
@@ -131,7 +131,7 @@ export function Footer({ locale, messages }: FooterProps) {
         >
           {messages.footer.copyright}
         </a>
-        <div className="mr-1 flex gap-2 sm:mr-16 sm:gap-3">
+        <div className="flex gap-2 sm:gap-3 md:mr-16">
           {homeAssets.socialIcons.map((icon, index) => {
             const href = FOOTER_SOCIAL_HREFS[index];
             const label = messages.footer.socialLinks[index]?.label ?? "Social";
