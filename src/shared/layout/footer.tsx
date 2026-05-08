@@ -53,6 +53,8 @@ export function Footer({ locale, messages }: FooterProps) {
     { title: messages.footer.quickLinks.title, links: messages.footer.quickLinks.links },
     { title: messages.footer.services.title, links: messages.footer.services.links },
   ] as const;
+  const contactAddressHref = "https://maps.google.com/?q=Hrazdan,+Kotayk+Province,+Armenia";
+  const contactPhoneHref = `tel:${messages.footer.contact.phone.replace(/\s+/g, "")}`;
 
   return (
     <footer className="mx-auto hidden max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:block md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
@@ -61,38 +63,12 @@ export function Footer({ locale, messages }: FooterProps) {
           <Link className="inline-block" href={homePageHref(locale)}>
             <Image alt="Qualitech logo" className="h-auto w-[260px] max-w-full sm:w-[300px]" src={homeAssets.footerLogo} width={338} height={46} />
           </Link>
-          <p className="mt-6 max-w-[220px] text-xs leading-relaxed tracking-[-0.02em] text-[#52525c] sm:mt-7 sm:max-w-[239px] sm:text-sm">{messages.footer.tagline}</p>
-          <div className="mt-6 flex gap-2 sm:mt-7 sm:gap-3">
-            {homeAssets.socialIcons.map((icon, index) => {
-              const href = FOOTER_SOCIAL_HREFS[index];
-              const label = messages.footer.socialLinks[index]?.label ?? "Social";
-              const iconNode = <Image alt="" src={icon} width={18} height={18} />;
-              if (href.length === 0) {
-                return (
-                  <span key={icon} className={footerSocialLinkClassName}>
-                    {iconNode}
-                  </span>
-                );
-              }
-              return (
-                <a
-                  key={icon}
-                  aria-label={label}
-                  className={footerSocialLinkClassName}
-                  href={href}
-                  rel="noopener noreferrer"
-                  target="_blank"
-                >
-                  {iconNode}
-                </a>
-              );
-            })}
-          </div>
+          <p className="mt-6 max-w-[220px] text-xs leading-relaxed tracking-[-0.02em] text-[#71717a] sm:mt-7 sm:max-w-[239px] sm:text-sm">{messages.footer.tagline}</p>
         </div>
         {footerColumns.map((section, sectionIndex) => (
           <div key={section.title}>
             <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{section.title}</h3>
-            <ul className="mt-4 space-y-2.5 text-[11px] uppercase tracking-[0.12em] text-[#52525c] sm:mt-5 sm:space-y-3 sm:text-xs sm:tracking-[0.14em]">
+            <ul className="mt-4 space-y-2.5 text-[11px] uppercase tracking-[0.12em] text-[#71717a] sm:mt-5 sm:space-y-3 sm:text-xs sm:tracking-[0.14em]">
               {section.links.map((link, linkIndex) => {
                 const href =
                   sectionIndex === 0 ? quickLinkHref(locale, linkIndex) : serviceLinkHref(locale, linkIndex);
@@ -108,31 +84,79 @@ export function Footer({ locale, messages }: FooterProps) {
           </div>
         ))}
         <div>
-          <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{messages.footer.contact.title}</h3>
-          <div className="mt-4 space-y-3 text-[11px] tracking-[-0.01em] text-[#52525c] sm:mt-5 sm:text-xs">
-            <div className="flex gap-3">
+          <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">
+            <Link className={footerLinkClassName} href={contactPageHref(locale)}>
+              {messages.footer.contact.title}
+            </Link>
+          </h3>
+          <div className="mt-4 space-y-3 text-[11px] tracking-[-0.01em] text-[#71717a] sm:mt-5 sm:text-xs">
+            <a
+              className="flex gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]"
+              href={contactAddressHref}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               <Image alt="" className="mt-0.5 shrink-0" src={homeAssets.locationIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               <p>
                 {messages.footer.contact.addressLine1}
                 <br />
                 {messages.footer.contact.addressLine2}
               </p>
-            </div>
-            <p className="flex items-center gap-3">
+            </a>
+            <a
+              className="flex items-center gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]"
+              href={contactPhoneHref}
+            >
               <Image alt="" className="shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               {messages.footer.contact.phone}
-            </p>
+            </a>
             <p className="flex items-center gap-3">
               <Image alt="" className="shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
-              <a className="break-all text-[#ff6900] transition hover:brightness-110" href={`mailto:${messages.footer.contact.email}`}>
+              <a
+                className="break-all text-[#ff6900] transition hover:brightness-110 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900]"
+                href={`mailto:${messages.footer.contact.email}`}
+              >
                 {messages.footer.contact.email}
               </a>
             </p>
           </div>
         </div>
       </div>
-      <div className="mt-10 border-t border-[#18181b] pt-6 sm:mt-12 sm:pt-7">
-        <p className="font-legal text-[10px] uppercase text-[#52525c] sm:text-xs">{messages.footer.copyright}</p>
+      <div className="mt-10 flex items-center justify-between gap-6 border-t border-[#18181b] pt-6 sm:mt-12 sm:pt-7">
+        <a
+          className="font-legal text-[10px] uppercase text-white transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] sm:text-xs"
+          href="https://neetrino.com/"
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          {messages.footer.copyright}
+        </a>
+        <div className="mr-1 flex gap-2 sm:mr-16 sm:gap-3">
+          {homeAssets.socialIcons.map((icon, index) => {
+            const href = FOOTER_SOCIAL_HREFS[index];
+            const label = messages.footer.socialLinks[index]?.label ?? "Social";
+            const iconNode = <Image alt="" src={icon} width={18} height={18} />;
+            if (href.length === 0) {
+              return (
+                <span key={icon} className={footerSocialLinkClassName}>
+                  {iconNode}
+                </span>
+              );
+            }
+            return (
+              <a
+                key={icon}
+                aria-label={label}
+                className={footerSocialLinkClassName}
+                href={href}
+                rel="noopener noreferrer"
+                target="_blank"
+              >
+                {iconNode}
+              </a>
+            );
+          })}
+        </div>
       </div>
     </footer>
   );

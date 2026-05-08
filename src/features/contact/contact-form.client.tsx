@@ -140,7 +140,9 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
   return (
     <form className="flex flex-col gap-4" noValidate onSubmit={onSubmit}>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">{messages.name}</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">
+          {messages.name} <span aria-hidden="true">*</span>
+        </span>
         <input
           autoComplete="name"
           className="rounded-xl border border-[#27272a] bg-[#09090b] px-4 py-3 text-sm text-white outline-none ring-[#ff6900] transition placeholder:text-[#52525c] focus:border-[#ff6900] focus:ring-1"
@@ -153,7 +155,9 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
         />
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">{messages.email}</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">
+          {messages.email} <span aria-hidden="true">*</span>
+        </span>
         <input
           autoComplete="email"
           className="rounded-xl border border-[#27272a] bg-[#09090b] px-4 py-3 text-sm text-white outline-none ring-[#ff6900] transition placeholder:text-[#52525c] focus:border-[#ff6900] focus:ring-1"
@@ -165,7 +169,9 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
         />
       </label>
       <label className="flex flex-col gap-1.5">
-        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">{messages.message}</span>
+        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">
+          {messages.message} <span aria-hidden="true">*</span>
+        </span>
         <textarea
           className="min-h-[120px] resize-y rounded-xl border border-[#27272a] bg-[#09090b] px-4 py-3 text-sm text-white outline-none ring-[#ff6900] transition placeholder:text-[#52525c] focus:border-[#ff6900] focus:ring-1"
           maxLength={CONTACT_MESSAGE_MAX_LEN}
