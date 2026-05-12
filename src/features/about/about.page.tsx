@@ -85,10 +85,10 @@ function AboutStats({ messages }: { readonly messages: AboutMessages }) {
   return (
     <section className="mx-auto max-w-[1280px] px-4 py-14 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10">
       <h2 className="text-center text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{messages.statsTitle}</h2>
-      <ul className="mt-10 grid max-w-3xl gap-6 sm:grid-cols-2 sm:justify-items-stretch lg:mx-auto">
-        {messages.stats.map((stat) => (
+      <ul className="mt-10 grid max-w-6xl gap-6 sm:grid-cols-2 sm:justify-items-stretch lg:mx-auto lg:grid-cols-4">
+        {messages.stats.map((stat, index) => (
           <li
-            key={stat.label}
+            key={`${stat.value}-${stat.label}-${index}`}
             className="rounded-2xl border border-[#18181b] bg-[#09090b] px-5 py-6 text-center sm:px-6 sm:py-8"
           >
             <p className="font-display text-2xl uppercase tracking-[-0.03em] text-white sm:text-3xl">{stat.value}</p>
