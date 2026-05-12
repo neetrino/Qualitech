@@ -37,6 +37,8 @@
   "statsTitle": "Why teams trust us",
   "stats": [
     { "value": "1998", "label": "Founded in Armenia" },
+    { "value": "24/7", "label": "Production and support" },
+    { "value": "1998", "label": "Founded in Armenia" },
     { "value": "24/7", "label": "Production and support" }
   ],
   "galleryTitle": "Inside our world",
