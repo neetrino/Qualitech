@@ -87,6 +87,12 @@ model MachineTranslation {
   metaTitle        String?
   metaDescription  String?   @db.Text
   ogImageUrl       String?
+  /// Optional product sheet image / brochure for the current locale (public URL, e.g. R2).
+  pdfUrl           String?   @db.Text
+  /// Optional Excel specs sheet for the current locale.
+  excelUrl         String?   @db.Text
+  /// Optional locale-specific images for the specifications block.
+  excelImageUrls   String[]  @default([])
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 

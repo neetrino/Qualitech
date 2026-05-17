@@ -5,6 +5,7 @@ import { AdminMachineRichText } from "@/features/admin/admin-machine-rich-text.c
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
 import {
+  adminFieldsetLegendClass,
   adminFieldsetShellClass,
   adminInputClass,
   adminLabelClass,
@@ -20,6 +21,9 @@ export type MachineTrForm = {
   /** Preserved on save; no dedicated admin field yet. */
   metaTitle: string;
   metaDescription: string;
+  pdfUrl: string;
+  excelUrl: string;
+  excelImageUrls: string[];
 };
 
 function toNullableMeta(s: string): string | null {
@@ -33,6 +37,9 @@ export function emptyMachineTr(): MachineTrForm {
     description: "",
     metaTitle: "",
     metaDescription: "",
+    pdfUrl: "",
+    excelUrl: "",
+    excelImageUrls: [],
   };
 }
 
@@ -42,6 +49,9 @@ export function machineTrFromApi(t: MachineTranslationRow): MachineTrForm {
     description: t.description,
     metaTitle: t.metaTitle ?? "",
     metaDescription: t.metaDescription ?? "",
+    pdfUrl: t.pdfUrl ?? "",
+    excelUrl: t.excelUrl ?? "",
+    excelImageUrls: (t.excelImageUrls ?? []).map((url) => url.trim()).filter((url) => url.length > 0),
   };
 }
 
@@ -58,6 +68,9 @@ export function buildMachineTranslations(
     metaTitle: toNullableMeta(map[loc].metaTitle),
     metaDescription: toNullableMeta(map[loc].metaDescription),
     ogImageUrl: og,
+    pdfUrl: toNullableMeta(map[loc].pdfUrl),
+    excelUrl: toNullableMeta(map[loc].excelUrl),
+    excelImageUrls: map[loc].excelImageUrls.map((url) => url.trim()).filter((url) => url.length > 0),
   }));
 }
 
@@ -75,18 +88,13 @@ export function AdminMachineLocaleFields({
   onChange,
 }: AdminMachineLocaleFieldsProps) {
   const m = useAdminMessages();
-  const label = locale.toUpperCase();
   const inC = adminInputClass(theme);
   const lab = adminLabelClass(theme);
   const ta = adminTextareaClass(theme);
-  const leg =
-    theme === "light"
-      ? "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ea580c]"
-      : "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ff6900]";
 
   return (
     <fieldset className={adminFieldsetShellClass(theme)}>
-      <legend className={leg}>{label}</legend>
+      <legend className={adminFieldsetLegendClass(theme)}>{locale.toUpperCase()}</legend>
       <div>
         <label className={lab}>{m.machineFields.title}</label>
         <input

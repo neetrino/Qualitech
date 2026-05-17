@@ -3,12 +3,8 @@ import { cookies } from "next/headers";
 
 import { AdminMessagesProvider } from "@/features/admin/admin-messages.context";
 import { loadAdminMessages } from "@/features/admin/admin.messages";
-import { HERO_CONTENT_TOP_PAD } from "@/features/home/home-hero-visual";
 import type { HomeLocale } from "@/features/home/home.messages";
-import { loadHomeMessages } from "@/features/home/home.messages";
 import { HOME_LOCALE_COOKIE_NAME } from "@/lib/i18n/home-locale.constants";
-import { MOBILE_BOTTOM_TAB_BAR_PAD } from "@/shared/layout/mobile-tab-bar.constants";
-import { SiteHeader } from "@/shared/layout/site-header";
 
 function localeFromCookie(raw: string | undefined): HomeLocale {
   return raw === "en" || raw === "ru" ? raw : "ru";
@@ -17,17 +13,11 @@ function localeFromCookie(raw: string | undefined): HomeLocale {
 export default async function AdminLayout({ children }: { children: ReactNode }) {
   const jar = await cookies();
   const locale = localeFromCookie(jar.get(HOME_LOCALE_COOKIE_NAME)?.value);
-  const homeMessages = await loadHomeMessages(locale);
   const adminMessages = await loadAdminMessages(locale);
 
   return (
-    <>
-      <SiteHeader locale={locale} messages={homeMessages} navContext="site" />
-      <div className={`${HERO_CONTENT_TOP_PAD} ${MOBILE_BOTTOM_TAB_BAR_PAD}`}>
-        <AdminMessagesProvider locale={locale} messages={adminMessages}>
-          {children}
-        </AdminMessagesProvider>
-      </div>
-    </>
+    <AdminMessagesProvider locale={locale} messages={adminMessages}>
+      {children}
+    </AdminMessagesProvider>
   );
 }

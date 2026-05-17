@@ -20,6 +20,9 @@ export const adminMachineTranslationSchema = z.object({
   metaTitle: z.string().trim().max(300).nullable().optional(),
   metaDescription: z.string().trim().max(20_000).nullable().optional(),
   ogImageUrl: z.string().trim().url().max(2000).nullable().optional(),
+  pdfUrl: z.union([z.string().trim().url().max(2000), z.null()]).optional(),
+  excelUrl: z.union([z.string().trim().url().max(2000), z.null()]).optional(),
+  excelImageUrls: z.array(z.string().trim().url().max(2000)).max(MAX_MACHINE_EXCEL_IMAGES).optional(),
 });
 
 export const adminMachineImageSchema = z.object({

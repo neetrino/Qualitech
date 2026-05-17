@@ -2,6 +2,7 @@
 
 import { useRef, type ChangeEvent } from "react";
 
+import type { MachineFormLocale } from "@/features/admin/admin-machine-locale-fields.client";
 import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
@@ -15,6 +16,9 @@ import { machineSheetUrlIsPdf } from "@/features/machines/machine-sheet-asset-ur
 
 type AdminMachinePdfFieldProps = {
   readonly theme: AdminTheme;
+  readonly locale: MachineFormLocale;
+  /** When true, locale is shown on the parent fieldset legend instead of the label. */
+  readonly embedInLocalePanel?: boolean;
   readonly pdfUrl: string;
   readonly onPdfUrlChange: (next: string) => void;
   readonly uploadBusy: boolean;
@@ -24,6 +28,8 @@ type AdminMachinePdfFieldProps = {
 
 export function AdminMachinePdfField({
   theme,
+  locale,
+  embedInLocalePanel = false,
   pdfUrl,
   onPdfUrlChange,
   uploadBusy,
@@ -34,6 +40,9 @@ export function AdminMachinePdfField({
   const inputRef = useRef<HTMLInputElement>(null);
   const lab = adminLabelClass(theme);
   const sec = adminButtonSecondaryClass(theme);
+  const sheetLabel = embedInLocalePanel
+    ? m.machineForm.pdfSheet
+    : `${m.machineForm.pdfSheet} (${locale.toUpperCase()})`;
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -57,7 +66,7 @@ export function AdminMachinePdfField({
 
   return (
     <div className="space-y-2">
-      <span className={lab}>{m.machineForm.pdfSheet}</span>
+      <span className={lab}>{sheetLabel}</span>
       <p className={adminHintTextClass(theme)}>{m.machineForm.pdfHint}</p>
       <div className="flex flex-wrap items-center gap-2">
         <input

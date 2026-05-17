@@ -2,6 +2,7 @@
 
 import { useRef, type ChangeEvent } from "react";
 
+import type { MachineFormLocale } from "@/features/admin/admin-machine-locale-fields.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
 import { uploadExcelToR2, uploadImageToR2 } from "@/features/admin/admin-upload.client";
@@ -13,6 +14,9 @@ import {
 
 type AdminMachineExcelFieldProps = {
   readonly theme: AdminTheme;
+  readonly locale: MachineFormLocale;
+  /** When true, locale is shown on the parent fieldset legend instead of the label. */
+  readonly embedInLocalePanel?: boolean;
   readonly excelUrl: string;
   readonly excelImageUrls: string[];
   readonly onExcelUrlChange: (next: string) => void;
@@ -24,6 +28,8 @@ type AdminMachineExcelFieldProps = {
 
 export function AdminMachineExcelField({
   theme,
+  locale,
+  embedInLocalePanel = false,
   excelUrl,
   excelImageUrls,
   onExcelUrlChange,
@@ -37,6 +43,9 @@ export function AdminMachineExcelField({
   const imageInputRef = useRef<HTMLInputElement>(null);
   const lab = adminLabelClass(theme);
   const sec = adminButtonSecondaryClass(theme);
+  const excelLabel = embedInLocalePanel
+    ? m.machineForm.excelSheet
+    : `${m.machineForm.excelSheet} (${locale.toUpperCase()})`;
 
   const onFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -89,7 +98,7 @@ export function AdminMachineExcelField({
 
   return (
     <div className="space-y-2">
-      <span className={lab}>{m.machineForm.excelSheet}</span>
+      <span className={lab}>{excelLabel}</span>
       <p className={adminHintTextClass(theme)}>{m.machineForm.excelHint}</p>
       <p className={adminHintTextClass(theme)}>{m.machineForm.excelImageAlternativeHint}</p>
       <div className="flex flex-wrap items-center gap-2">

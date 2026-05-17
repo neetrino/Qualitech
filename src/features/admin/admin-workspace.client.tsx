@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 
 import { ADMIN_API_AUTH_LOGOUT_PATH } from "@/features/admin/admin.constants";
+import { homeAssets } from "@/features/home/home.data";
 import { adminApiJson } from "@/features/admin/admin-http.client";
 import { AdminBlogPanelClient } from "@/features/admin/admin-blog-panel.client";
 import { AdminMessagesPanelClient } from "@/features/admin/admin-messages-panel.client";
@@ -82,6 +84,19 @@ export function AdminWorkspaceClient({ admin, onSignedOut }: AdminWorkspaceClien
           aria-label={m.workspace.navAriaLabel}
           className={`flex flex-col gap-1 ${adminSidebarDividerClass(theme)} ${ADMIN_SIDEBAR_WIDTH}`}
         >
+          <Link
+            className="mb-4 inline-block shrink-0 self-start rounded-lg transition hover:opacity-80"
+            href="/"
+            prefetch
+          >
+            <Image
+              alt="Qualitech logo"
+              className="h-auto w-[88px] sm:w-[100px]"
+              height={53}
+              src={homeAssets.headerLogo}
+              width={118}
+            />
+          </Link>
           {TAB_ORDER.map((t) => (
             <button
               className={adminNavTabClass(theme, tab === t)}

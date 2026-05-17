@@ -81,13 +81,19 @@ export function mapMachineDetailRow(row: MachineTranslationDetailRow): MachineDe
           ]
         : [];
 
-  const pdfRaw = machine.pdfUrl?.trim() ?? "";
+  const localePdfRaw = translation.pdfUrl?.trim() ?? "";
+  const sharedPdfRaw = machine.pdfUrl?.trim() ?? "";
+  const pdfRaw = localePdfRaw.length > 0 ? localePdfRaw : sharedPdfRaw;
   const pdfUrl = pdfRaw.length > 0 ? normalizeStoredImageUrl(pdfRaw) : null;
-  const excelRaw = machine.excelUrl?.trim() ?? "";
+  const localeExcelRaw = translation.excelUrl?.trim() ?? "";
+  const sharedExcelRaw = machine.excelUrl?.trim() ?? "";
+  const excelRaw = localeExcelRaw.length > 0 ? localeExcelRaw : sharedExcelRaw;
   const excelUrl = excelRaw.length > 0 ? normalizeStoredImageUrl(excelRaw) : null;
-  const excelImageUrls = machine.excelImageUrls
-    .map((url) => normalizeStoredImageUrl(url).trim())
-    .filter((url) => url.length > 0);
+  const localeExcelImages = (translation.excelImageUrls ?? []).map((url) => normalizeStoredImageUrl(url).trim());
+  const sourceExcelImages = localeExcelImages.some((url) => url.length > 0)
+    ? localeExcelImages
+    : machine.excelImageUrls.map((url) => normalizeStoredImageUrl(url).trim());
+  const excelImageUrls = sourceExcelImages.filter((url) => url.length > 0);
 
   return {
     id: machine.id,
