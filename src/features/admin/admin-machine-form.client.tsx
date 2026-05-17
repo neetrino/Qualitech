@@ -25,10 +25,13 @@ import {
   adminCheckboxClass,
   adminCheckboxLabelClass,
   adminFormSectionTitleClass,
+  adminFieldsetLegendClass,
+  adminFieldsetShellClass,
   adminFormStickyBottomActionsClass,
   adminHintTextClass,
   adminInputClass,
   adminLabelClass,
+  adminLocalePanelDividerRuleClass,
 } from "@/features/admin/admin-ui.constants";
 import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
 import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
@@ -341,45 +344,44 @@ export function AdminMachineFormClient({
         onUploadBusyChange={setUploadBusy}
       />
 
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-6 lg:grid-cols-2">
         {MACHINE_FORM_LOCALES.map((loc) => (
-          <AdminMachinePdfField
-            key={loc}
-            locale={loc}
-            onPdfUrlChange={(next) => setLocale(loc, { ...tr[loc], pdfUrl: next })}
-            onUploadBusyChange={(nextBusy) =>
-              setPdfUploadBusyByLocale((prev) => ({
-                ...prev,
-                [loc]: nextBusy,
-              }))
-            }
-            pdfUrl={tr[loc].pdfUrl}
-            reportError={(msg) => setError(msg)}
-            theme={theme}
-            uploadBusy={pdfUploadBusyByLocale[loc]}
-          />
-        ))}
-      </div>
-
-      <div className="grid gap-4 lg:grid-cols-2">
-        {MACHINE_FORM_LOCALES.map((loc) => (
-          <AdminMachineExcelField
-            key={loc}
-            excelImageUrls={tr[loc].excelImageUrls}
-            excelUrl={tr[loc].excelUrl}
-            locale={loc}
-            onExcelImageUrlsChange={(next) => setLocale(loc, { ...tr[loc], excelImageUrls: next })}
-            onExcelUrlChange={(next) => setLocale(loc, { ...tr[loc], excelUrl: next })}
-            onUploadBusyChange={(nextBusy) =>
-              setExcelUploadBusyByLocale((prev) => ({
-                ...prev,
-                [loc]: nextBusy,
-              }))
-            }
-            reportError={(msg) => setError(msg)}
-            theme={theme}
-            uploadBusy={excelUploadBusyByLocale[loc]}
-          />
+          <fieldset className={adminFieldsetShellClass(theme)} key={loc}>
+            <legend className={adminFieldsetLegendClass(theme)}>{loc.toUpperCase()}</legend>
+            <AdminMachinePdfField
+              embedInLocalePanel
+              locale={loc}
+              onPdfUrlChange={(next) => setLocale(loc, { ...tr[loc], pdfUrl: next })}
+              onUploadBusyChange={(nextBusy) =>
+                setPdfUploadBusyByLocale((prev) => ({
+                  ...prev,
+                  [loc]: nextBusy,
+                }))
+              }
+              pdfUrl={tr[loc].pdfUrl}
+              reportError={(msg) => setError(msg)}
+              theme={theme}
+              uploadBusy={pdfUploadBusyByLocale[loc]}
+            />
+            <hr aria-hidden className={adminLocalePanelDividerRuleClass(theme)} />
+            <AdminMachineExcelField
+              embedInLocalePanel
+              excelImageUrls={tr[loc].excelImageUrls}
+              excelUrl={tr[loc].excelUrl}
+              locale={loc}
+              onExcelImageUrlsChange={(next) => setLocale(loc, { ...tr[loc], excelImageUrls: next })}
+              onExcelUrlChange={(next) => setLocale(loc, { ...tr[loc], excelUrl: next })}
+              onUploadBusyChange={(nextBusy) =>
+                setExcelUploadBusyByLocale((prev) => ({
+                  ...prev,
+                  [loc]: nextBusy,
+                }))
+              }
+              reportError={(msg) => setError(msg)}
+              theme={theme}
+              uploadBusy={excelUploadBusyByLocale[loc]}
+            />
+          </fieldset>
         ))}
       </div>
 

@@ -5,6 +5,7 @@ import { AdminMachineRichText } from "@/features/admin/admin-machine-rich-text.c
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import type { AdminTheme } from "@/features/admin/admin-theme.constants";
 import {
+  adminFieldsetLegendClass,
   adminFieldsetShellClass,
   adminInputClass,
   adminLabelClass,
@@ -87,18 +88,13 @@ export function AdminMachineLocaleFields({
   onChange,
 }: AdminMachineLocaleFieldsProps) {
   const m = useAdminMessages();
-  const label = locale.toUpperCase();
   const inC = adminInputClass(theme);
   const lab = adminLabelClass(theme);
   const ta = adminTextareaClass(theme);
-  const leg =
-    theme === "light"
-      ? "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ea580c]"
-      : "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ff6900]";
 
   return (
     <fieldset className={adminFieldsetShellClass(theme)}>
-      <legend className={leg}>{label}</legend>
+      <legend className={adminFieldsetLegendClass(theme)}>{locale.toUpperCase()}</legend>
       <div>
         <label className={lab}>{m.machineFields.title}</label>
         <input

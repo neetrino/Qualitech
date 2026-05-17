@@ -180,8 +180,21 @@ export function adminAuthHeadingClass(theme: AdminTheme): string {
 
 export function adminFieldsetShellClass(theme: AdminTheme): string {
   return theme === "light"
-    ? "space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/40 p-4"
-    : "space-y-3 rounded-xl border border-white/10 p-4";
+    ? "min-w-0 space-y-3 rounded-xl border border-zinc-200 bg-zinc-50/40 p-4 sm:p-5"
+    : "min-w-0 space-y-3 rounded-xl border border-white/10 bg-black/30 p-4 sm:p-5";
+}
+
+export function adminFieldsetLegendClass(theme: AdminTheme): string {
+  return theme === "light"
+    ? "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ea580c]"
+    : "px-1 text-xs font-black uppercase tracking-[0.12em] text-[#ff6900]";
+}
+
+/** Full-width rule between locale asset blocks (product sheet image vs Excel). */
+export function adminLocalePanelDividerRuleClass(theme: AdminTheme): string {
+  return theme === "light"
+    ? "my-6 h-px w-full shrink-0 border-0 bg-zinc-300"
+    : "my-6 h-px w-full shrink-0 border-0 bg-white/25";
 }
 
 export function adminFormSectionTitleClass(theme: AdminTheme): string {
