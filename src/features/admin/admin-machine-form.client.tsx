@@ -94,6 +94,26 @@ export function AdminMachineFormClient({
         base[t.locale] = machineTrFromApi(t);
       }
     }
+    const sharedPdfUrl = machine.pdfUrl?.trim() ?? "";
+    const sharedExcelUrl = machine.excelUrl?.trim() ?? "";
+    const sharedExcelImageUrls = (machine.excelImageUrls ?? [])
+      .map((url) => url.trim())
+      .filter((url) => url.length > 0);
+    for (const loc of MACHINE_FORM_LOCALES) {
+      const hasLocalePdf = base[loc].pdfUrl.trim().length > 0;
+      const hasLocaleExcel =
+        base[loc].excelUrl.trim().length > 0 || base[loc].excelImageUrls.length > 0;
+      base[loc] = {
+        ...base[loc],
+        ...(hasLocalePdf ? {} : { pdfUrl: sharedPdfUrl }),
+        ...(hasLocaleExcel
+          ? {}
+          : {
+              excelUrl: sharedExcelUrl,
+              excelImageUrls: sharedExcelImageUrls,
+            }),
+      };
+    }
     return base;
   }, [machine]);
 
@@ -105,17 +125,16 @@ export function AdminMachineFormClient({
   const [images, setImages] = useState<MachineImageRow[]>(() =>
     machine ? mapApiImagesToForm(machine.images.map((i) => ({ ...i }))) : [],
   );
-  const [pdfUrl, setPdfUrl] = useState(() => machine?.pdfUrl?.trim() ?? "");
-  const [excelUrl, setExcelUrl] = useState(() => machine?.excelUrl?.trim() ?? "");
-  const [excelImageUrls, setExcelImageUrls] = useState<string[]>(() =>
-    machine
-      ? (machine.excelImageUrls ?? []).map((url) => url.trim()).filter((url) => url.length > 0)
-      : [],
-  );
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
-  const [pdfUploadBusy, setPdfUploadBusy] = useState(false);
-  const [excelUploadBusy, setExcelUploadBusy] = useState(false);
+  const [pdfUploadBusyByLocale, setPdfUploadBusyByLocale] = useState<Record<MachineFormLocale, boolean>>({
+    ru: false,
+    en: false,
+  });
+  const [excelUploadBusyByLocale, setExcelUploadBusyByLocale] = useState<Record<MachineFormLocale, boolean>>({
+    ru: false,
+    en: false,
+  });
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -170,10 +189,6 @@ export function AdminMachineFormClient({
 
       const sortOrderVal = Math.max(0, sortOrder - 1);
       const categoryPayload = categoryId.trim().length > 0 ? categoryId.trim() : null;
-      const pdfPayload = pdfUrl.trim().length > 0 ? pdfUrl.trim() : null;
-      const excelPayload = excelUrl.trim().length > 0 ? excelUrl.trim() : null;
-      const excelImageUrlsPayload = excelImageUrls.map((url) => url.trim()).filter((url) => url.length > 0);
-
       if (machine) {
         const res = await adminApiJson<MachineRow>(`${ADMIN_API_MACHINES_PATH}/${machine.id}`, {
           method: "PATCH",
@@ -185,9 +200,6 @@ export function AdminMachineFormClient({
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
-            pdfUrl: pdfPayload,
-            excelUrl: excelPayload,
-            excelImageUrls: excelImageUrlsPayload,
           }),
         });
         if (!res.ok) {
@@ -205,9 +217,6 @@ export function AdminMachineFormClient({
             sortOrder: sortOrderVal,
             translations,
             images: imagePayload,
-            pdfUrl: pdfPayload,
-            excelUrl: excelPayload,
-            excelImageUrls: excelImageUrlsPayload,
           }),
         });
         if (!res.ok) {
@@ -219,7 +228,7 @@ export function AdminMachineFormClient({
       setBusy(false);
       onSaved();
     },
-    [categoryId, excelImageUrls, excelUrl, featured, images, machine, onSaved, pdfUrl, productSlug, sortOrder, tr],
+    [categoryId, featured, images, machine, onSaved, productSlug, sortOrder, tr],
   );
 
   return (
@@ -332,31 +341,64 @@ export function AdminMachineFormClient({
         onUploadBusyChange={setUploadBusy}
       />
 
-      <AdminMachinePdfField
-        onPdfUrlChange={setPdfUrl}
-        onUploadBusyChange={setPdfUploadBusy}
-        pdfUrl={pdfUrl}
-        reportError={(msg) => setError(msg)}
-        theme={theme}
-        uploadBusy={pdfUploadBusy}
-      />
+      <div className="grid gap-4 lg:grid-cols-2">
+        {MACHINE_FORM_LOCALES.map((loc) => (
+          <AdminMachinePdfField
+            key={loc}
+            locale={loc}
+            onPdfUrlChange={(next) => setLocale(loc, { ...tr[loc], pdfUrl: next })}
+            onUploadBusyChange={(nextBusy) =>
+              setPdfUploadBusyByLocale((prev) => ({
+                ...prev,
+                [loc]: nextBusy,
+              }))
+            }
+            pdfUrl={tr[loc].pdfUrl}
+            reportError={(msg) => setError(msg)}
+            theme={theme}
+            uploadBusy={pdfUploadBusyByLocale[loc]}
+          />
+        ))}
+      </div>
 
-      <AdminMachineExcelField
-        excelUrl={excelUrl}
-        excelImageUrls={excelImageUrls}
-        onExcelImageUrlsChange={setExcelImageUrls}
-        onExcelUrlChange={setExcelUrl}
-        onUploadBusyChange={setExcelUploadBusy}
-        reportError={(msg) => setError(msg)}
-        theme={theme}
-        uploadBusy={excelUploadBusy}
-      />
+      <div className="grid gap-4 lg:grid-cols-2">
+        {MACHINE_FORM_LOCALES.map((loc) => (
+          <AdminMachineExcelField
+            key={loc}
+            excelImageUrls={tr[loc].excelImageUrls}
+            excelUrl={tr[loc].excelUrl}
+            locale={loc}
+            onExcelImageUrlsChange={(next) => setLocale(loc, { ...tr[loc], excelImageUrls: next })}
+            onExcelUrlChange={(next) => setLocale(loc, { ...tr[loc], excelUrl: next })}
+            onUploadBusyChange={(nextBusy) =>
+              setExcelUploadBusyByLocale((prev) => ({
+                ...prev,
+                [loc]: nextBusy,
+              }))
+            }
+            reportError={(msg) => setError(msg)}
+            theme={theme}
+            uploadBusy={excelUploadBusyByLocale[loc]}
+          />
+        ))}
+      </div>
 
       <div className={stickyBottomActionsClass}>
         <button className={sec} onClick={onCancel} type="button">
           {m.machineForm.cancel}
         </button>
-        <button className={pri} disabled={busy || uploadBusy || pdfUploadBusy || excelUploadBusy} type="submit">
+        <button
+          className={pri}
+          disabled={
+            busy ||
+            uploadBusy ||
+            pdfUploadBusyByLocale.ru ||
+            pdfUploadBusyByLocale.en ||
+            excelUploadBusyByLocale.ru ||
+            excelUploadBusyByLocale.en
+          }
+          type="submit"
+        >
           {busy ? m.machineForm.saving : m.machineForm.save}
         </button>
       </div>

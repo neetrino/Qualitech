@@ -20,6 +20,9 @@ export type MachineTrForm = {
   /** Preserved on save; no dedicated admin field yet. */
   metaTitle: string;
   metaDescription: string;
+  pdfUrl: string;
+  excelUrl: string;
+  excelImageUrls: string[];
 };
 
 function toNullableMeta(s: string): string | null {
@@ -33,6 +36,9 @@ export function emptyMachineTr(): MachineTrForm {
     description: "",
     metaTitle: "",
     metaDescription: "",
+    pdfUrl: "",
+    excelUrl: "",
+    excelImageUrls: [],
   };
 }
 
@@ -42,6 +48,9 @@ export function machineTrFromApi(t: MachineTranslationRow): MachineTrForm {
     description: t.description,
     metaTitle: t.metaTitle ?? "",
     metaDescription: t.metaDescription ?? "",
+    pdfUrl: t.pdfUrl ?? "",
+    excelUrl: t.excelUrl ?? "",
+    excelImageUrls: (t.excelImageUrls ?? []).map((url) => url.trim()).filter((url) => url.length > 0),
   };
 }
 
@@ -58,6 +67,9 @@ export function buildMachineTranslations(
     metaTitle: toNullableMeta(map[loc].metaTitle),
     metaDescription: toNullableMeta(map[loc].metaDescription),
     ogImageUrl: og,
+    pdfUrl: toNullableMeta(map[loc].pdfUrl),
+    excelUrl: toNullableMeta(map[loc].excelUrl),
+    excelImageUrls: map[loc].excelImageUrls.map((url) => url.trim()).filter((url) => url.length > 0),
   }));
 }
 

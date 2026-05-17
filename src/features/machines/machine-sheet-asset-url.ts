@@ -1,7 +1,8 @@
 import { normalizeStoredImageUrl } from "@/lib/image/remote-image-url";
 
 /**
- * Product "sheet" URLs are stored in `pdfUrl`; new uploads are images, legacy rows may still be PDFs.
+ * Product "sheet" URLs are stored per locale on `MachineTranslation.pdfUrl` (fallback: `Machine.pdfUrl`).
+ * New uploads are images; legacy rows may still be PDFs.
  * Detection uses the URL path extension (R2 keys include the file extension).
  */
 export function machineSheetUrlIsPdf(url: string): boolean {

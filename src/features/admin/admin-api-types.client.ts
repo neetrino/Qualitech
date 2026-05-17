@@ -73,6 +73,9 @@ export type MachineTranslationRow = {
   metaTitle: string | null;
   metaDescription: string | null;
   ogImageUrl: string | null;
+  pdfUrl: string | null;
+  excelUrl: string | null;
+  excelImageUrls: string[];
 };
 
 export type MachineImageRow = {
