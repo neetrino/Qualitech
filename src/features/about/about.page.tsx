@@ -143,6 +143,7 @@ export function AboutPage({ locale, homeMessages, aboutMessages }: AboutPageProp
         <AboutStory homeMessages={homeMessages} locale={locale} messages={aboutMessages} />
         <AboutValues messages={aboutMessages} />
         <AboutStats messages={aboutMessages} />
+        <AboutGallery messages={aboutMessages} />
         <AboutCta locale={locale} messages={aboutMessages} />
         <Footer locale={locale} messages={homeMessages} />
       </div>

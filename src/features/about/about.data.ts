@@ -1,4 +1,4 @@
-import { homeAssets, solutionCardsLayout } from "@/features/home/home.data";
+import { solutionCardsLayout } from "@/features/home/home.data";
 
 /** Visual assets for the About page (reuses public home imagery). */
 export const aboutAssets = {
