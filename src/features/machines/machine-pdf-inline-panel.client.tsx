@@ -10,7 +10,7 @@ const PDF_PANEL_VIEWPORT_BLEED_CLASS =
   "relative left-1/2 w-screen max-w-[100vw] -translate-x-1/2";
 
 /**
- * One full dynamic viewport for the open panel (toolbar + viewer). Viewer uses flex-1 so there is no inner scroll.
+ * One full dynamic viewport for the open panel. Viewer uses flex-1 so there is no inner scroll.
  */
 const SHEET_PANEL_PDF_COLUMN_CLASS =
   "flex h-[68dvh] min-h-0 w-full max-w-full flex-col overflow-hidden rounded-none border-y border-[#18181b] bg-[#09090b] shadow-[0_16px_48px_-20px_rgba(0,0,0,0.55)] sm:h-[78dvh] lg:h-[88dvh]";
@@ -65,20 +65,6 @@ export function MachinePdfInlinePanel({
       {open ? (
         <div className={PDF_PANEL_VIEWPORT_BLEED_CLASS}>
           <div className={isPdf ? SHEET_PANEL_PDF_COLUMN_CLASS : SHEET_PANEL_IMAGE_COLUMN_CLASS}>
-            <div className="flex shrink-0 items-center justify-between gap-3 border-b border-[#18181b] px-3 py-2 sm:px-4">
-              <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-[0.1em] text-[#a1a1aa] sm:text-[11px]">
-                {pdfPanelTitle}
-              </span>
-              <button
-                className="shrink-0 rounded-lg border border-[#27272a] px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-[#e4e4e7] transition hover:border-[#ff6900] hover:text-[#ff6900] sm:text-[11px]"
-                onClick={() => {
-                  setOpen(false);
-                }}
-                type="button"
-              >
-                {pdfCloseLabel}
-              </button>
-            </div>
             <div className={isPdf ? SHEET_VIEWER_BODY_CLASS : ""}>
               {isPdf ? (
                 <iframe

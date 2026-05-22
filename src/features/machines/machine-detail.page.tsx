@@ -139,10 +139,8 @@ export function MachineDetailPage({
                     ) : null}
                     {hasExcelContent ? (
                       <MachineExcelInlinePanel
-                        closeLabel={machinesMessages.excelCloseViewer}
                         downloadLabel={machinesMessages.excelDownloadLabel}
                         excelImageUrls={excelImageUrls}
-                        openLabel={machinesMessages.excelOpenViewer}
                         excelUrl={detail.excelUrl}
                         panelTitle={machinesMessages.excelViewLabel}
                       />
@@ -173,11 +171,9 @@ export function MachineDetailPage({
               {hasExcelContent ? (
                 <div className="mt-8">
                   <MachineExcelInlinePanel
-                    closeLabel={machinesMessages.excelCloseViewer}
                     downloadLabel={machinesMessages.excelDownloadLabel}
                     excelImageUrls={excelImageUrls}
                     excelUrl={detail.excelUrl}
-                    openLabel={machinesMessages.excelOpenViewer}
                     panelTitle={machinesMessages.excelViewLabel}
                   />
                 </div>
