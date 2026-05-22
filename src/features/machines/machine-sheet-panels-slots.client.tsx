@@ -2,10 +2,7 @@
 
 import { MachineExcelInlinePanel } from "@/features/machines/machine-excel-inline-panel.client";
 import { MachinePdfInlinePanel } from "@/features/machines/machine-pdf-inline-panel.client";
-import {
-  useMachineSheetPanelState,
-  useMachineSheetPanels,
-} from "@/features/machines/machine-sheet-inline-section.client";
+import { useMachineSheetPanels } from "@/features/machines/machine-sheet-inline-section.client";
 
 type MachineSheetPdfSlotProps = {
   readonly pdfUrl: string | null | undefined;
@@ -14,7 +11,6 @@ type MachineSheetPdfSlotProps = {
 
 export function MachineSheetPdfSlot({ pdfUrl, pdfPanelTitle }: MachineSheetPdfSlotProps) {
   const { hasPdf, pdfOpenLabel, pdfCloseLabel } = useMachineSheetPanels();
-  const { pdfOpen, setPdfOpen } = useMachineSheetPanelState();
 
   if (!hasPdf) {
     return null;
@@ -22,14 +18,10 @@ export function MachineSheetPdfSlot({ pdfUrl, pdfPanelTitle }: MachineSheetPdfSl
 
   return (
     <MachinePdfInlinePanel
-      hideToggle
-      onOpenChange={setPdfOpen}
-      open={pdfOpen}
       pdfCloseLabel={pdfCloseLabel}
       pdfOpenLabel={pdfOpenLabel}
       pdfPanelTitle={pdfPanelTitle}
       pdfUrl={pdfUrl}
-      showToggleFromLg
     />
   );
 }
