@@ -65,9 +65,9 @@ export const navItemsMeta: readonly NavItemMeta[] = [
 ] as const;
 
 export const solutionCardsLayout: readonly SolutionCardLayout[] = [
-  { index: "01", imageSrc: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k.jpg" },
-  { index: "02", imageSrc: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k1.jpg" },
-  { index: "03", imageSrc: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k2.jpg" },
+  { index: "01", imageSrc: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k3.jpg" },
+  { index: "02", imageSrc: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k4.jpg" },
+  { index: "03", imageSrc: "/home/i-mg-im-ag-ew-it-hf-al-lb-ac-k5.jpg" },
 ] as const;
 
 export const advantageCardsLayout: readonly AdvantageCardLayout[] = [
