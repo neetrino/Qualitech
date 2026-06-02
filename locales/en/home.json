@@ -27,8 +27,8 @@
     "lede": "QM — an Armenian manufacturer of high-precision machine tools and industrial solutions for modern production. We develop and deploy equipment for businesses across Armenia and export our products to international markets.",
     "stats": [
       { "value": "Since 1998", "label": "in the Armenian market" },
-      { "value": "200+", "label": "industrial machine tools" },
-      { "value": "98%", "label": "satisfied customers" }
+      { "value": "200+", "label": "Industrial machine tools" },
+      { "value": "98%", "label": "Satisfied customers" }
     ]
   },
   "solutions": {
@@ -151,7 +151,7 @@
       "links": ["Machines", "About", "Blog", "Contact"]
     },
     "services": {
-      "title": "Services",
+      "title": "Machines",
       "links": [
         "CNC system machining",
         "Robotic automation",
@@ -162,8 +162,8 @@
       "title": "Contact information",
       "addressLine1": "Hrazdan, Kotayk Province",
       "addressLine2": "Armenia",
-      "phone": "+79197292963",
-      "email": "qualitechmachinery@mail.ru"
+      "phones": ["+79197292963", "+374 93219830"],
+      "email": "sale@qualitechmachinery.ru"
     },
     "socialLinks": [
       { "label": "Facebook" },

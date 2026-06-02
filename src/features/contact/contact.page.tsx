@@ -76,9 +76,17 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
                     />
                     <div>
                       <p className="text-[10px] font-black uppercase tracking-[0.12em] text-[#71717b]">{c.labels.phone}</p>
-                      <a className="mt-1 inline-block text-[#ff6900] transition hover:brightness-110" href={buildTelHref(fc.phone)}>
-                        {fc.phone}
-                      </a>
+                      <div className="mt-1 flex flex-col gap-1">
+                        {fc.phones.map((phone) => (
+                          <a
+                            key={phone}
+                            className="inline-block text-[#ff6900] transition hover:brightness-110"
+                            href={buildTelHref(phone)}
+                          >
+                            {phone}
+                          </a>
+                        ))}
+                      </div>
                     </div>
                   </li>
                   <li className="flex gap-3">
