@@ -8,7 +8,7 @@
   "storyTitleAccent": "THE FUTURE",
   "storyLead": "About us — industrial manufacturing in Armenia",
   "storyParagraphs": [
-    "QM is an Armenian manufacturing company founded in 1998 in Razdan. We specialize in industrial equipment and machine tools made in Armenia, combining engineering expertise, high precision, and modern technology.",
+    "QM is an Armenian manufacturing company founded in 1998 in Hrazdan. We specialize in industrial equipment and machine tools made in Armenia, combining engineering expertise, high precision, and modern technology.",
     "Our production structure covers the full metalworking cycle: blanking, foundry, turning, milling, jig boring, grinding, heat treatment, and gear cutting, plus modern CNC equipment. That lets us keep industrial product quality stable and under control at every stage.",
     "The site covers 3 hectares, with more than 20,000 m² of enclosed production space. Over 200 units of industrial equipment are in service, so we can run both serial production and custom metalworking jobs in Armenia.",
     "Our products are supplied across Armenia and exported to Russia, Kazakhstan, Ukraine, the UAE, and Canada — evidence of the quality and reliability of our industrial machinery.",
@@ -34,12 +34,12 @@
       "body": "Spare parts, remote diagnostics, and field service keep your assets productive for years after installation."
     }
   ],
-  "statsTitle": "Why teams trust us",
+  "statsTitle": "WHY CHOOSE US",
   "stats": [
     { "value": "1998", "label": "Founded in Armenia" },
     { "value": "24/7", "label": "Production and support" },
-    { "value": "200+", "label": "industrial machine tools" },
-    { "value": "98%", "label": "satisfied customers" }
+    { "value": "200+", "label": "Industrial machine tools" },
+    { "value": "98%", "label": "Satisfied customers" }
   ],
   "galleryTitle": "Inside our world",
   "galleryAlts": [
@@ -47,7 +47,7 @@
     "Precision metal fabrication workspace",
     "Laser cutting system in operation"
   ],
-  "ctaTitle": "Ready to talk specifics?",
-  "ctaBody": "Share your application, materials, and targets — we will respond with a clear path forward.",
+  "ctaTitle": "READY TO DISCUSS A PROJECT?",
+  "ctaBody": "Describe the task, technical requirements, and production volumes — we will offer the optimal solution taking into account deadlines, budget, and project specifics.",
   "ctaButton": "Contact us"
 }
