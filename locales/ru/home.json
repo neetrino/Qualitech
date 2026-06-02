@@ -162,8 +162,8 @@
       "title": "Контактная информация",
       "addressLine1": "г. Раздан, Котайкская область",
       "addressLine2": "Армения",
-      "phone": "+79197292963",
-      "email": "qualitechmachinery@mail.ru"
+      "phones": ["+79197292963", "+374 93219830"],
+      "email": "sale@qualitechmachinery.ru"
     },
     "socialLinks": [
       { "label": "Facebook" },

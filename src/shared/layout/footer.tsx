@@ -1,13 +1,17 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { homeLocaleToAppLocale } from "@/features/blog/blog.locale";
 import { FOOTER_SOCIAL_HREFS, homeAssets } from "@/features/home/home.data";
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
+import type { MachineCategoryCardDto } from "@/features/machines/machines.dto";
+import { listHomeFeaturedMachineCategoryCardsPublic } from "@/features/machines/machines.service";
 import {
   aboutPageHref,
   blogPageHref,
   contactPageHref,
   homePageHref,
+  machinesCategoryHref,
   machinesPageHref,
 } from "@/lib/i18n/locale-routes";
 
@@ -35,11 +39,27 @@ function quickLinkHref(locale: HomeLocale, index: number): string {
   }
 }
 
-function serviceLinkHref(locale: HomeLocale, index: number): string {
+function footerMachineLinkHref(
+  locale: HomeLocale,
+  index: number,
+  categories: readonly MachineCategoryCardDto[],
+): string {
+  const category = categories[index];
+  if (category) {
+    return machinesCategoryHref(locale, category.slug);
+  }
   if (index < FOOTER_SERVICE_LINES_LINKED_TO_SOLUTIONS) {
     return `${homePageHref(locale)}#solutions`;
   }
   return contactPageHref(locale);
+}
+
+function footerMachineLinkLabel(
+  index: number,
+  categories: readonly MachineCategoryCardDto[],
+  fallbackLinks: readonly string[],
+): string {
+  return categories[index]?.name ?? fallbackLinks[index] ?? "";
 }
 
 const footerLinkClassName =
@@ -48,13 +68,19 @@ const footerLinkClassName =
 const footerSocialLinkClassName =
   "grid size-9 place-items-center rounded-lg border border-[rgba(255,255,255,0.42)] bg-[#18181b] transition hover:border-[#ff6900] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] sm:size-10 sm:rounded-[10px]";
 
-export function Footer({ locale, messages }: FooterProps) {
+function buildTelHref(display: string): string {
+  return `tel:${display.replace(/[^\d+]/g, "")}`;
+}
+
+export async function Footer({ locale, messages }: FooterProps) {
+  const machineCategories = await listHomeFeaturedMachineCategoryCardsPublic(
+    homeLocaleToAppLocale(locale),
+  );
   const footerColumns = [
     { title: messages.footer.quickLinks.title, links: messages.footer.quickLinks.links },
     { title: messages.footer.services.title, links: messages.footer.services.links },
   ] as const;
   const contactAddressHref = "https://maps.google.com/?q=Hrazdan,+Kotayk+Province,+Armenia";
-  const contactPhoneHref = `tel:${messages.footer.contact.phone.replace(/\s+/g, "")}`;
 
   return (
     <footer className="mx-auto max-w-[1280px] px-4 pb-12 pt-8 sm:px-5 md:px-6 lg:px-8 xl:max-w-[1360px] xl:px-10" id="footer">
@@ -70,12 +96,20 @@ export function Footer({ locale, messages }: FooterProps) {
             <h3 className="text-sm font-black uppercase tracking-[0.01em] text-white sm:text-base">{section.title}</h3>
             <ul className="mt-4 space-y-2.5 text-[11px] uppercase tracking-[0.12em] text-[#71717a] sm:mt-5 sm:space-y-3 sm:text-xs sm:tracking-[0.14em]">
               {section.links.map((link, linkIndex) => {
-                const href =
-                  sectionIndex === 0 ? quickLinkHref(locale, linkIndex) : serviceLinkHref(locale, linkIndex);
+                const isMachinesColumn = sectionIndex === 1;
+                const linkLabel = isMachinesColumn
+                  ? footerMachineLinkLabel(linkIndex, machineCategories, section.links)
+                  : link;
+                const href = isMachinesColumn
+                  ? footerMachineLinkHref(locale, linkIndex, machineCategories)
+                  : quickLinkHref(locale, linkIndex);
+                const linkKey = isMachinesColumn
+                  ? (machineCategories[linkIndex]?.slug ?? `${section.title}-${linkIndex}`)
+                  : `${section.title}-${link}`;
                 return (
-                  <li key={`${section.title}-${link}`}>
+                  <li key={linkKey}>
                     <Link className={footerLinkClassName} href={href}>
-                      {link}
+                      {linkLabel}
                     </Link>
                   </li>
                 );
@@ -103,13 +137,16 @@ export function Footer({ locale, messages }: FooterProps) {
                 {messages.footer.contact.addressLine2}
               </p>
             </a>
-            <a
-              className="flex items-center justify-center gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] md:justify-start"
-              href={contactPhoneHref}
-            >
-              <Image alt="" className="shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
-              {messages.footer.contact.phone}
-            </a>
+            {messages.footer.contact.phones.map((phone) => (
+              <a
+                key={phone}
+                className="flex items-center justify-center gap-3 transition hover:text-[#d4d4d8] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff6900] md:justify-start"
+                href={buildTelHref(phone)}
+              >
+                <Image alt="" className="shrink-0" src={homeAssets.phoneIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
+                {phone}
+              </a>
+            ))}
             <p className="flex items-center justify-center gap-3 md:justify-start">
               <Image alt="" className="shrink-0" src={homeAssets.emailIcon} width={CONTACT_INFO_ICON_SIZE_PX} height={CONTACT_INFO_ICON_SIZE_PX} />
               <a

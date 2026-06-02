@@ -151,7 +151,7 @@
       "links": ["Machines", "About", "Blog", "Contact"]
     },
     "services": {
-      "title": "Services",
+      "title": "Machines",
       "links": [
         "CNC system machining",
         "Robotic automation",
@@ -162,8 +162,8 @@
       "title": "Contact information",
       "addressLine1": "Hrazdan, Kotayk Province",
       "addressLine2": "Armenia",
-      "phone": "+79197292963",
-      "email": "qualitechmachinery@mail.ru"
+      "phones": ["+79197292963", "+374 93219830"],
+      "email": "sale@qualitechmachinery.ru"
     },
     "socialLinks": [
       { "label": "Facebook" },
