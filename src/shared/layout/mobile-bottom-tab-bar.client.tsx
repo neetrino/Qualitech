@@ -1,10 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useEffect, useState, type MouseEvent } from "react";
+import { createPortal } from "react-dom";
 
 import type { HomeLocale, HomeMessages } from "@/features/home/home.messages";
-import { contactPageHref, LOCALIZED_CONTACT_PATH } from "@/lib/i18n/locale-routes";
+
+const MOBILE_CALL_PHONE = "093219830";
 
 function IconPhone() {
   return (
@@ -19,28 +20,45 @@ type MobileBottomTabBarProps = {
   readonly messages: HomeMessages;
 };
 
-function contactFabActive(pathname: string): boolean {
-  return LOCALIZED_CONTACT_PATH.test(pathname);
+function buildTelHref(display: string): string {
+  return `tel:${display.replace(/[^\d+]/g, "")}`;
 }
 
-export function MobileBottomTabBar({ locale, messages }: MobileBottomTabBarProps) {
-  const pathname = usePathname() ?? "";
-  const contact = contactPageHref(locale);
-  const contactOn = contactFabActive(pathname);
+function resolveMobileCallHref(messages: HomeMessages): string {
+  const phoneDisplay = messages.footer.contact.phones[1] ?? MOBILE_CALL_PHONE;
+  return buildTelHref(phoneDisplay);
+}
 
-  return (
-    <div className="pointer-events-none fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[98] md:hidden">
-      <Link
-        aria-current={contactOn ? "page" : undefined}
-        aria-label={messages.nav.contact}
-        className={`pointer-events-auto flex size-[3.6rem] items-center justify-center rounded-full bg-[#ff6900] text-black shadow-[0_10px_28px_rgba(255,105,0,0.5)] ring-[4px] ring-black/35 transition hover:brightness-110 active:brightness-95 ${
-          contactOn ? "ring-[#ff6900]/40" : ""
-        }`}
-        href={contact}
-        prefetch
-      >
-        <IconPhone />
-      </Link>
-    </div>
+function openPhoneDialer(phoneHref: string): void {
+  window.location.assign(phoneHref);
+}
+
+function handleCallClick(event: MouseEvent<HTMLAnchorElement>, phoneHref: string): void {
+  event.preventDefault();
+  openPhoneDialer(phoneHref);
+}
+
+export function MobileBottomTabBar({ locale: _locale, messages }: MobileBottomTabBarProps) {
+  const [mounted, setMounted] = useState(false);
+  const phoneHref = resolveMobileCallHref(messages);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return null;
+  }
+
+  return createPortal(
+    <a
+      aria-label={messages.nav.contact}
+      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[120] flex size-[3.6rem] touch-manipulation items-center justify-center rounded-full bg-[#ff6900] text-black shadow-[0_10px_28px_rgba(255,105,0,0.5)] ring-[4px] ring-black/35 transition hover:brightness-110 active:brightness-95 md:hidden"
+      href={phoneHref}
+      onClick={(event) => handleCallClick(event, phoneHref)}
+    >
+      <IconPhone />
+    </a>,
+    document.body,
   );
 }
