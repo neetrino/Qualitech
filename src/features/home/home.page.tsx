@@ -6,6 +6,7 @@ import {
   articleCardsLayout,
   homeAssets,
   solutionCardsLayout,
+  type SolutionCardLayout,
 } from "@/features/home/home.data";
 import {
   HERO_CONTENT_TOP_PAD,
@@ -32,9 +33,34 @@ import { SiteHeader } from "@/shared/layout/site-header";
 type HomePageProps = {
   readonly locale: HomeLocale;
   readonly messages: HomeMessages;
-  /** Up to three top-level sections with home star on (sort order) — home #solutions cards. */
+  /** Top-level sections with home star on (sort order) — home #solutions cards. */
   readonly homeSolutionCategories: readonly MachineCategoryCardDto[];
 };
+
+const SOLUTION_CARD_LAYOUT_COUNT = solutionCardsLayout.length;
+
+function solutionCardLayoutForIndex(index: number): SolutionCardLayout {
+  const preset = solutionCardsLayout[index];
+  if (preset) {
+    return preset;
+  }
+  const cycled = solutionCardsLayout[index % SOLUTION_CARD_LAYOUT_COUNT]!;
+  return {
+    index: String(index + 1).padStart(2, "0"),
+    imageSrc: cycled.imageSrc,
+  };
+}
+
+function solutionCardMessageFallback(
+  messages: HomeMessages,
+  index: number,
+): HomeMessages["solutions"]["cards"][number] | undefined {
+  const preset = messages.solutions.cards[index];
+  if (preset) {
+    return preset;
+  }
+  return messages.solutions.cards[index % messages.solutions.cards.length];
+}
 
 type SectionHeadingProps = {
   readonly eyebrow: string;
@@ -163,15 +189,13 @@ function HomeSolutionCmsCard({
   readonly category: MachineCategoryCardDto;
   readonly index: number;
 }) {
-  const card = solutionCardsLayout[index];
-  const fallback = messages.solutions.cards[index];
-  if (!card || !fallback) {
-    return null;
-  }
+  const card = solutionCardLayoutForIndex(index);
+  const fallback = solutionCardMessageFallback(messages, index);
   const detailsHref = machinesCategoryHref(locale, category.slug);
   const cardTitle = category.name;
-  const cardDescription = category.homeDescription?.trim() || fallback.description;
-  const bullets = category.homeBullets.length > 0 ? category.homeBullets : fallback.bullets;
+  const cardDescription = category.homeDescription?.trim() || fallback?.description || "";
+  const bullets =
+    category.homeBullets.length > 0 ? category.homeBullets : (fallback?.bullets ?? []);
   const imageSrc =
     category.coverImage?.url && category.coverImage.url.trim().length > 0
       ? category.coverImage.url.trim()
@@ -245,7 +269,7 @@ function SolutionsSection({
       />
       <div className="mt-10 grid gap-10 md:grid-cols-2 xl:grid-cols-3 xl:gap-16">
         {homeSolutionCategories.length > 0
-          ? homeSolutionCategories.slice(0, 3).map((category, index) => (
+          ? homeSolutionCategories.map((category, index) => (
               <HomeSolutionCmsCard
                 category={category}
                 index={index}

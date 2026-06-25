@@ -28,6 +28,5 @@ export default async function Page({ params }: PageProps) {
     loadHomeMessages(locale),
     listHomeFeaturedMachineCategoryCardsPublic(homeLocaleToAppLocale(locale)),
   ]);
-  const homeSolutionCategories = machineCategories.slice(0, 3);
-  return <HomePage homeSolutionCategories={homeSolutionCategories} locale={locale} messages={messages} />;
+  return <HomePage homeSolutionCategories={machineCategories} locale={locale} messages={messages} />;
 }
