@@ -1,12 +1,20 @@
 import { AppLocale } from "@prisma/client";
 import { z } from "zod";
 
+import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+
 const localeEnum = z.nativeEnum(AppLocale);
+
+const adminBlogSlugSchema = z
+  .string()
+  .trim()
+  .max(200)
+  .transform((s) => normalizeMachineSlugForAdminStorage(s))
+  .pipe(z.string().min(1).max(200));
 
 export const adminBlogTranslationSchema = z.object({
   locale: localeEnum,
   title: z.string().trim().min(1).max(300),
-  slug: z.string().trim().min(1).max(200),
   excerpt: z.string().trim().min(1).max(20_000),
   content: z.string().trim().min(1).max(500_000),
   metaTitle: z.string().trim().max(300).nullable().optional(),
@@ -22,6 +30,7 @@ export const adminBlogImageSchema = z.object({
 
 export const adminBlogCreateSchema = z
   .object({
+    slug: adminBlogSlugSchema,
     published: z.boolean().default(false),
     publishedAt: z.coerce.date().nullable().optional(),
     translations: z.array(adminBlogTranslationSchema).min(1),
@@ -38,6 +47,7 @@ export type AdminBlogCreateInput = z.infer<typeof adminBlogCreateSchema>;
 
 export const adminBlogPatchSchema = z
   .object({
+    slug: adminBlogSlugSchema.optional(),
     published: z.boolean().optional(),
     publishedAt: z.coerce.date().nullable().optional(),
     translations: z.array(adminBlogTranslationSchema).min(1).optional(),

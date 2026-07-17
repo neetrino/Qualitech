@@ -14,7 +14,7 @@ function buildListWhere(query: MachinesListQuery): Prisma.MachineWhereInput {
   }
   if (categorySlug !== undefined) {
     where.category = {
-      translations: { some: { locale, slug: categorySlug } },
+      slug: categorySlug,
     };
   }
   return where;
@@ -81,10 +81,12 @@ export async function findTopLevelMachineCategories(
   });
 }
 
-export async function findMachineCategoryTranslationBySlug(slug: string, locale: AppLocale) {
-  return prisma.machineCategoryTranslation.findFirst({
-    where: { locale, slug },
-    include: { category: true },
+export async function findMachineCategoryBySlug(slug: string, locale: AppLocale) {
+  return prisma.machineCategory.findFirst({
+    where: { slug, published: true },
+    include: {
+      translations: { where: { locale }, take: 1 },
+    },
   });
 }
 
@@ -195,29 +197,19 @@ export async function findFirstPublishedMachineCoverInCategoryIds(
   return null;
 }
 
-export async function listCategoryTranslationSlugs(categoryId: string) {
-  return prisma.machineCategoryTranslation.findMany({
-    where: { categoryId },
-    select: { locale: true, slug: true },
-  });
-}
-
 /** Public machine detail fallback when `MachineDetailDto.category` is null but `categoryId` exists. */
 export async function findPublishedMachineCategorySlug(
   machineId: string,
-  locale: AppLocale,
 ): Promise<string | null> {
   const row = await prisma.machine.findFirst({
     where: { id: machineId, published: true },
     select: {
       category: {
-        select: {
-          translations: { where: { locale }, select: { slug: true }, take: 1 },
-        },
+        select: { slug: true },
       },
     },
   });
-  const slug = row?.category?.translations[0]?.slug?.trim();
+  const slug = row?.category?.slug?.trim();
   return slug && slug.length > 0 ? slug : null;
 }
 

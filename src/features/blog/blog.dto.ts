@@ -26,7 +26,7 @@ export type BlogPostDetailDto = {
   ogImageUrl: string | null;
   publishedAt: string | null;
   images: BlogPostImageDto[];
-  /** Slugs per locale for the same post (language switcher, hreflang). */
+  /** Shared URL slug for both locales (language switcher, hreflang). */
   slugByLocale: Partial<Record<AppLocale, string>>;
 };
 

@@ -1,18 +1,14 @@
 import type { AppLocale } from "@prisma/client";
 
 import type { BlogPostDetailDto, BlogPostListItemDto } from "@/features/blog/blog.dto";
-import type { BlogPostListRow, BlogPostTranslationDetailRow } from "@/features/blog/blog.repository";
+import type { BlogPostDetailRow, BlogPostListRow } from "@/features/blog/blog.repository";
 
 function toIso(d: Date | null): string | null {
   return d === null ? null : d.toISOString();
 }
 
-function buildSlugByLocale(translations: { locale: AppLocale; slug: string }[]): Partial<Record<AppLocale, string>> {
-  const out: Partial<Record<AppLocale, string>> = {};
-  for (const t of translations) {
-    out[t.locale] = t.slug;
-  }
-  return out;
+function sharedSlugByLocale(slug: string): Partial<Record<AppLocale, string>> {
+  return { en: slug, ru: slug };
 }
 
 function pickCoverImage(
@@ -40,7 +36,7 @@ export function mapBlogListRow(row: BlogPostListRow): BlogPostListItemDto {
   }
   return {
     id: row.id,
-    slug: tr.slug,
+    slug: row.slug,
     title: tr.title,
     excerpt: tr.excerpt,
     publishedAt: toIso(row.publishedAt),
@@ -48,14 +44,14 @@ export function mapBlogListRow(row: BlogPostListRow): BlogPostListItemDto {
   };
 }
 
-export function mapBlogDetailRow(row: BlogPostTranslationDetailRow): BlogPostDetailDto {
-  const { post } = row;
+export function mapBlogDetailRow(row: BlogPostDetailRow): BlogPostDetailDto {
+  const { post, translation } = row;
   const gallery = post.images.map((i) => ({
     url: i.url,
     alt: i.alt,
     sortOrder: i.sortOrder,
   }));
-  const og = row.ogImageUrl?.trim();
+  const og = translation.ogImageUrl?.trim();
   const images =
     gallery.length > 0
       ? gallery
@@ -64,15 +60,15 @@ export function mapBlogDetailRow(row: BlogPostTranslationDetailRow): BlogPostDet
         : [];
   return {
     id: post.id,
-    slug: row.slug,
-    title: row.title,
-    excerpt: row.excerpt,
-    content: row.content,
-    metaTitle: row.metaTitle,
-    metaDescription: row.metaDescription,
-    ogImageUrl: row.ogImageUrl,
+    slug: post.slug,
+    title: translation.title,
+    excerpt: translation.excerpt,
+    content: translation.content,
+    metaTitle: translation.metaTitle,
+    metaDescription: translation.metaDescription,
+    ogImageUrl: translation.ogImageUrl,
     publishedAt: toIso(post.publishedAt),
     images,
-    slugByLocale: buildSlugByLocale(post.translations),
+    slugByLocale: sharedSlugByLocale(post.slug),
   };
 }

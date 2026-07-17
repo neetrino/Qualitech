@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState, type FormEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type FormEvent } from "react";
 
 import type { BlogImageRow, BlogRow } from "@/features/admin/admin-api-types.client";
 import {
@@ -28,6 +28,8 @@ import {
   adminInputClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
+import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
 
 type AdminBlogFormClientProps = {
   readonly post: BlogRow | null;
@@ -65,6 +67,10 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
   }, [post]);
 
   const [tr, setTr] = useState<Record<BlogFormLocale, BlogTrForm>>(initialMap);
+  const [postSlug, setPostSlug] = useState(() =>
+    post?.slug ? normalizeMachineSlugForAdminStorage(post.slug) : "",
+  );
+  const [slugFollowsRuTitle, setSlugFollowsRuTitle] = useState(() => !post);
   const [images, setImages] = useState<BlogImageRow[]>(() =>
     post ? post.images.map((i) => ({ ...i })) : [],
   );
@@ -72,9 +78,37 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
   const [uploadBusy, setUploadBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const setLocale = useCallback((loc: BlogFormLocale, next: BlogTrForm) => {
-    setTr((prev) => ({ ...prev, [loc]: next }));
-  }, []);
+  useEffect(() => {
+    if (post) {
+      setPostSlug(normalizeMachineSlugForAdminStorage(post.slug));
+      setSlugFollowsRuTitle(false);
+    } else {
+      setPostSlug("");
+      setSlugFollowsRuTitle(true);
+    }
+  }, [post?.id, post?.slug]);
+
+  const setLocale = useCallback(
+    (loc: BlogFormLocale, next: BlogTrForm) => {
+      if (loc === "ru") {
+        const prevRu = tr.ru;
+        const prevDerived = slugifyForUrl(prevRu.title);
+        const normalizedCurrent = normalizeMachineSlugForAdminStorage(postSlug);
+        const slugStillSynced =
+          slugFollowsRuTitle &&
+          (normalizedCurrent.length === 0 ||
+            normalizedCurrent ===
+              normalizeMachineSlugForAdminStorage(slugifyForUrl(prevDerived)));
+        if (slugStillSynced) {
+          setPostSlug(normalizeMachineSlugForAdminStorage(slugifyForUrl(next.title)));
+        }
+        setTr((prev) => ({ ...prev, ru: next }));
+        return;
+      }
+      setTr((prev) => ({ ...prev, [loc]: next }));
+    },
+    [postSlug, slugFollowsRuTitle, tr.ru],
+  );
 
   const onUploadOg = useCallback(async (loc: BlogFormLocale, file: File) => {
     setUploadBusy(true);
@@ -102,6 +136,7 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
           alt: i.alt?.trim() ? i.alt.trim() : null,
           sortOrder: i.sortOrder ?? idx,
         }));
+      const slugPayload = normalizeMachineSlugForAdminStorage(postSlug);
 
       if (post) {
         const publishedAtPayload =
@@ -109,6 +144,7 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
         const res = await adminApiJson<BlogRow>(`${ADMIN_API_BLOG_PATH}/${post.id}`, {
           method: "PATCH",
           body: JSON.stringify({
+            slug: slugPayload,
             published,
             publishedAt: publishedAtPayload,
             translations,
@@ -126,6 +162,7 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
         const res = await adminApiJson<BlogRow>(ADMIN_API_BLOG_PATH, {
           method: "POST",
           body: JSON.stringify({
+            slug: slugPayload,
             published,
             publishedAt: publishedAtPayload,
             translations,
@@ -141,13 +178,15 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
       setBusy(false);
       onSaved();
     },
-    [images, onSaved, post, published, publishedAt, tr],
+    [images, onSaved, post, postSlug, published, publishedAt, tr],
   );
 
   const pri = adminButtonPrimaryClass();
   const sec = adminButtonSecondaryClass(theme);
   const title = adminFormSectionTitleClass(theme);
   const stickyBottomActionsClass = adminFormStickyBottomActionsClass(theme);
+  const labelCls = adminLabelClass(theme);
+  const inputCls = adminInputClass(theme);
 
   return (
     <form className="space-y-6" onSubmit={(ev) => void onSubmit(ev)}>
@@ -170,17 +209,32 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
           {m.blogForm.published}
         </label>
         <div>
-          <label className={adminLabelClass(theme)} htmlFor="blog-published-at">
+          <label className={labelCls} htmlFor="blog-published-at">
             {m.blogForm.publishedAt}
           </label>
           <input
-            className={adminInputClass(theme)}
+            className={inputCls}
             id="blog-published-at"
             onChange={(e) => setPublishedAt(e.target.value)}
             type="datetime-local"
             value={publishedAt}
           />
         </div>
+      </div>
+
+      <div>
+        <label className={labelCls} htmlFor="blog-slug">
+          {m.blogFields.slug}
+        </label>
+        <input
+          className={inputCls}
+          id="blog-slug"
+          onChange={(e) => {
+            setSlugFollowsRuTitle(false);
+            setPostSlug(normalizeMachineSlugForAdminStorage(e.target.value));
+          }}
+          value={postSlug}
+        />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

@@ -21,24 +21,19 @@ import {
   countMachinesForList,
   countMachinesForListInCategoryIds,
   findFirstPublishedMachineCoverInCategoryIds,
-  findMachineCategoryTranslationBySlug,
+  findMachineCategoryBySlug,
   findMachineDetailBySlug,
   findPublishedMachineCategorySlug,
   findMachinesForList,
   findMachinesForListInCategoryIds,
   findRelatedMachinesInCategoryIds,
   findTopLevelMachineCategories,
-  listCategoryTranslationSlugs,
 } from "@/features/machines/machines.repository";
 import type { MachinesListQuery } from "@/features/machines/machines.schemas";
 import { normalizeStoredImageUrl } from "@/lib/image/remote-image-url";
 
 const DESCENDANT_IDS_CACHE_TTL_MS = MACHINES_PUBLIC_DATA_REVALIDATE_SEC * 1000;
 const descendantIdsCache = new Map<string, { expiresAt: number; ids: string[] }>();
-
-function localeKey(loc: AppLocale): HomeLocale {
-  return loc === AppLocale.en ? "en" : "ru";
-}
 
 async function getDescendantCategoryIdsCached(rootId: string): Promise<string[]> {
   const now = Date.now();
@@ -75,9 +70,8 @@ export async function listMachinesPublic(query: MachinesListQuery): Promise<Mach
 
 export async function getPublishedMachineCategorySlugForMachine(
   machineId: string,
-  locale: AppLocale,
 ): Promise<string | null> {
-  return findPublishedMachineCategorySlug(machineId, locale);
+  return findPublishedMachineCategorySlug(machineId);
 }
 
 export async function getMachineBySlugPublic(
@@ -137,7 +131,7 @@ async function mapTopLevelCategoryRowsToCards(
         customCover ??
         (fallbackCover ? { ...fallbackCover, url: normalizeStoredImageUrl(fallbackCover.url) } : null);
       return {
-        slug: tr.slug,
+        slug: row.slug,
         name: tr.name,
         coverImage: cover,
         homeDescription: tr.homeDescription?.trim() ? tr.homeDescription.trim() : null,
@@ -186,16 +180,17 @@ export async function getMachineCategorySectionPublic(
 ): Promise<MachineCategorySectionContextDto | null> {
   const cached = unstable_cache(
     async () => {
-      const row = await findMachineCategoryTranslationBySlug(sectionSlug, locale);
-      if (!row) {
+      const row = await findMachineCategoryBySlug(sectionSlug, locale);
+      const tr = row?.translations[0];
+      if (!row || !tr) {
         return null;
       }
-      const slugs = await listCategoryTranslationSlugs(row.categoryId);
-      const slugByLocale: Partial<Record<HomeLocale, string>> = {};
-      for (const t of slugs) {
-        slugByLocale[localeKey(t.locale)] = t.slug;
-      }
-      return { name: row.name, slugByLocale };
+      const sharedSlug = row.slug;
+      const slugByLocale: Partial<Record<HomeLocale, string>> = {
+        en: sharedSlug,
+        ru: sharedSlug,
+      };
+      return { name: tr.name, slugByLocale };
     },
     ["machine-category-section", locale, sectionSlug],
     { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC },
@@ -209,11 +204,11 @@ export async function listMachinesInCategorySectionPublic(
 ): Promise<MachinesListResult | null> {
   const cached = unstable_cache(
     async () => {
-      const cat = await findMachineCategoryTranslationBySlug(sectionSlug, query.locale);
+      const cat = await findMachineCategoryBySlug(sectionSlug, query.locale);
       if (!cat) {
         return null;
       }
-      const ids = await getDescendantCategoryIdsCached(cat.categoryId);
+      const ids = await getDescendantCategoryIdsCached(cat.id);
       const [total, rows] = await Promise.all([
         countMachinesForListInCategoryIds(query, ids),
         findMachinesForListInCategoryIds(query, ids),
@@ -243,11 +238,11 @@ export async function listRelatedMachinesInSectionPublic(
 ): Promise<MachineListItemDto[]> {
   const cached = unstable_cache(
     async () => {
-      const cat = await findMachineCategoryTranslationBySlug(sectionSlug, locale);
+      const cat = await findMachineCategoryBySlug(sectionSlug, locale);
       if (!cat) {
         return [];
       }
-      const ids = await getDescendantCategoryIdsCached(cat.categoryId);
+      const ids = await getDescendantCategoryIdsCached(cat.id);
       const rows = await findRelatedMachinesInCategoryIds(ids, excludeMachineId, locale, RELATED_MACHINES_CAROUSEL_LIMIT);
       return rows.map(mapMachineListRow);
     },
@@ -262,11 +257,11 @@ async function loadMachineDetailForSection(
   sectionSlug: string,
   locale: AppLocale,
 ): Promise<MachineDetailWithLocaleSlugs | null> {
-  const section = await findMachineCategoryTranslationBySlug(sectionSlug, locale);
+  const section = await findMachineCategoryBySlug(sectionSlug, locale);
   if (!section) {
     return null;
   }
-  const descendantIds = await getDescendantCategoryIdsCached(section.categoryId);
+  const descendantIds = await getDescendantCategoryIdsCached(section.id);
   const row = await findMachineDetailBySlug(machineSlug, locale);
   if (!row) {
     return null;
@@ -276,16 +271,16 @@ async function loadMachineDetailForSection(
     return null;
   }
   const detail = mapMachineDetailRow(row);
-  const cTr = await listCategoryTranslationSlugs(section.categoryId);
   const sharedSlug = row.machine.slug;
+  const sharedSectionSlug = section.slug;
   const slugByLocale: Partial<Record<HomeLocale, string>> = {
     en: sharedSlug,
     ru: sharedSlug,
   };
-  const sectionSlugByLocale: Partial<Record<HomeLocale, string>> = {};
-  for (const t of cTr) {
-    sectionSlugByLocale[localeKey(t.locale)] = t.slug;
-  }
+  const sectionSlugByLocale: Partial<Record<HomeLocale, string>> = {
+    en: sharedSectionSlug,
+    ru: sharedSectionSlug,
+  };
   return { detail, slugByLocale, sectionSlugByLocale };
 }
 

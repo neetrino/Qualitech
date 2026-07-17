@@ -11,6 +11,7 @@ import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import { uploadImageToR2 } from "@/features/admin/admin-upload.client";
 import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
 import {
   adminButtonPrimaryClass,
   adminButtonSecondaryClass,
@@ -28,13 +29,12 @@ type AdminMachineCategoryFormClientProps = {
 
 type TrForm = {
   name: string;
-  slug: string;
   homeDescription: string;
   homeBulletsText: string;
 };
 
 function emptyTr(): TrForm {
-  return { name: "", slug: "", homeDescription: "", homeBulletsText: "" };
+  return { name: "", homeDescription: "", homeBulletsText: "" };
 }
 
 function bulletsToTextarea(lines: readonly string[]): string {
@@ -53,6 +53,10 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
 
   const [sortOrder, setSortOrder] = useState(String(category?.sortOrder ?? 0));
   const [imageUrl, setImageUrl] = useState(category?.imageUrl ?? "");
+  const [categorySlug, setCategorySlug] = useState(() =>
+    category?.slug ? normalizeMachineSlugForAdminStorage(category.slug) : "",
+  );
+  const [slugFollowsRuName, setSlugFollowsRuName] = useState(() => !category);
   const [ru, setRu] = useState<TrForm>(emptyTr);
   const [en, setEn] = useState<TrForm>(emptyTr);
   const [busy, setBusy] = useState(false);
@@ -65,25 +69,43 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       setEn(emptyTr());
       setSortOrder("0");
       setImageUrl("");
+      setCategorySlug("");
+      setSlugFollowsRuName(true);
       return;
     }
     const trRu = category.translations.find((t) => t.locale === "ru");
     const trEn = category.translations.find((t) => t.locale === "en");
     setRu({
       name: trRu?.name ?? "",
-      slug: normalizeMachineSlugForAdminStorage(trRu?.slug ?? ""),
       homeDescription: trRu?.homeDescription ?? "",
       homeBulletsText: bulletsToTextarea(trRu?.homeBullets ?? []),
     });
     setEn({
       name: trEn?.name ?? "",
-      slug: normalizeMachineSlugForAdminStorage(trEn?.slug ?? ""),
       homeDescription: trEn?.homeDescription ?? "",
       homeBulletsText: bulletsToTextarea(trEn?.homeBullets ?? []),
     });
     setSortOrder(String(category.sortOrder));
     setImageUrl(category.imageUrl ?? "");
+    setCategorySlug(normalizeMachineSlugForAdminStorage(category.slug));
+    setSlugFollowsRuName(false);
   }, [category]);
+
+  const onRuChange = useCallback(
+    (next: TrForm) => {
+      const prevDerived = slugifyForUrl(ru.name);
+      const normalizedCurrent = normalizeMachineSlugForAdminStorage(categorySlug);
+      const slugStillSynced =
+        slugFollowsRuName &&
+        (normalizedCurrent.length === 0 ||
+          normalizedCurrent === normalizeMachineSlugForAdminStorage(slugifyForUrl(prevDerived)));
+      if (slugStillSynced) {
+        setCategorySlug(normalizeMachineSlugForAdminStorage(slugifyForUrl(next.name)));
+      }
+      setRu(next);
+    },
+    [categorySlug, ru.name, slugFollowsRuName],
+  );
 
   const onUploadCover = useCallback(async (file: File) => {
     setUploadBusy(true);
@@ -124,26 +146,30 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
         {
           locale: AppLocale.ru,
           name: ru.name.trim(),
-          slug: ru.slug.trim(),
           homeDescription: ru.homeDescription.trim(),
           homeBullets: ruBullets,
         },
         {
           locale: AppLocale.en,
           name: en.name.trim(),
-          slug: en.slug.trim(),
           homeDescription: en.homeDescription.trim(),
           homeBullets: enBullets,
         },
       ];
       const imagePayload = imageUrl.trim().length > 0 ? imageUrl.trim() : null;
+      const slugPayload = normalizeMachineSlugForAdminStorage(categorySlug);
 
       if (category) {
         const res = await adminApiJson<MachineCategoryAdminRow>(
           `${ADMIN_API_MACHINE_CATEGORIES_PATH}/${category.id}`,
           {
             method: "PATCH",
-            body: JSON.stringify({ sortOrder: sortOrderVal, imageUrl: imagePayload, translations }),
+            body: JSON.stringify({
+              slug: slugPayload,
+              sortOrder: sortOrderVal,
+              imageUrl: imagePayload,
+              translations,
+            }),
           },
         );
         if (!res.ok) {
@@ -154,7 +180,12 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       } else {
         const res = await adminApiJson<MachineCategoryAdminRow>(ADMIN_API_MACHINE_CATEGORIES_PATH, {
           method: "POST",
-          body: JSON.stringify({ sortOrder: sortOrderVal, imageUrl: imagePayload, translations }),
+          body: JSON.stringify({
+            slug: slugPayload,
+            sortOrder: sortOrderVal,
+            imageUrl: imagePayload,
+            translations,
+          }),
         });
         if (!res.ok) {
           setError(formatAdminValidationError(res.error));
@@ -167,16 +198,15 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
     },
     [
       category,
+      categorySlug,
       en.homeBulletsText,
       en.homeDescription,
       en.name,
-      en.slug,
       imageUrl,
       onSaved,
       ru.homeBulletsText,
       ru.homeDescription,
       ru.name,
-      ru.slug,
       sortOrder,
     ],
   );
@@ -206,6 +236,22 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
           />
         </div>
       ) : null}
+
+      <div>
+        <label className={labelCls} htmlFor="mc-slug">
+          {m.machineCategoryForm.slug}
+        </label>
+        <input
+          className={inputCls}
+          id="mc-slug"
+          onChange={(e) => {
+            setSlugFollowsRuName(false);
+            setCategorySlug(normalizeMachineSlugForAdminStorage(e.target.value));
+          }}
+          type="text"
+          value={categorySlug}
+        />
+      </div>
 
       <div className="max-w-xl space-y-2">
         <div className={labelCls}>{m.machineCategoryForm.coverImage}</div>
@@ -253,23 +299,9 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
             <input
               className={inputCls}
               id="mc-ru-name"
-              onChange={(e) => setRu((p) => ({ ...p, name: e.target.value }))}
+              onChange={(e) => onRuChange({ ...ru, name: e.target.value })}
               type="text"
               value={ru.name}
-            />
-          </div>
-          <div>
-            <label className={labelCls} htmlFor="mc-ru-slug">
-              {m.machineCategoryForm.slug}
-            </label>
-            <input
-              className={inputCls}
-              id="mc-ru-slug"
-              onChange={(e) =>
-                setRu((p) => ({ ...p, slug: normalizeMachineSlugForAdminStorage(e.target.value) }))
-              }
-              type="text"
-              value={ru.slug}
             />
           </div>
           <div>
@@ -308,20 +340,6 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
               onChange={(e) => setEn((p) => ({ ...p, name: e.target.value }))}
               type="text"
               value={en.name}
-            />
-          </div>
-          <div>
-            <label className={labelCls} htmlFor="mc-en-slug">
-              {m.machineCategoryForm.slug}
-            </label>
-            <input
-              className={inputCls}
-              id="mc-en-slug"
-              onChange={(e) =>
-                setEn((p) => ({ ...p, slug: normalizeMachineSlugForAdminStorage(e.target.value) }))
-              }
-              type="text"
-              value={en.slug}
             />
           </div>
           <div>

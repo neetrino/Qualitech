@@ -60,8 +60,6 @@ export function AdminMachineCategoryListClient({
       {!loading && categories.length > 0 ? (
         <ul className="divide-y divide-neutral-200 dark:divide-neutral-700">
           {categories.map((c) => {
-            const ru = c.translations.find((t) => t.locale === "ru");
-            const en = c.translations.find((t) => t.locale === "en");
             const cover = c.imageUrl?.trim();
             const homeFeatured = c.featured ?? true;
             return (
@@ -79,8 +77,7 @@ export function AdminMachineCategoryListClient({
                     </p>
                     <p className="mt-1 text-xs text-neutral-500">
                       {m.machineCategoryList.sortLabel}: {c.sortOrder}
-                      {ru ? ` · RU: ${ru.slug}` : ""}
-                      {en ? ` · EN: ${en.slug}` : ""}
+                      {c.slug ? ` · ${c.slug}` : ""}
                     </p>
                   </div>
                 </div>
