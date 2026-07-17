@@ -18,9 +18,9 @@ export type HeaderProps = {
   readonly navContext?: HeaderNavContext;
   /** Blog index: keep `?page=` when switching locale (serializable — safe for Client Components). */
   readonly blogListPage?: number;
-  /** Blog article: per-locale slugs for the same post (serializable). */
+  /** Blog article: shared URL slug for both locales (serializable). */
   readonly blogSlugByLocale?: Partial<Record<HomeLocale, string>>;
-  /** Machines section listing: same category id, localized slugs. */
+  /** Machines section listing: shared category slug (same value for `en` / `ru` keys). */
   readonly machineSectionSlugByLocale?: Partial<Record<HomeLocale, string>>;
   /** Machine product page: shared URL slug (same value for `en` / `ru` keys). */
   readonly machineSlugByLocale?: Partial<Record<HomeLocale, string>>;

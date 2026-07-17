@@ -8,39 +8,42 @@ const PLACEHOLDER_IMAGE = "https://placehold.co/800x600/e2e8f0/64748b?text=Quali
 async function seedCategories(): Promise<string[]> {
   const c1 = await prisma.machineCategory.create({
     data: {
+      slug: "cnc-machines",
       sortOrder: 0,
       featured: true,
       published: true,
       translations: {
         create: [
-          { locale: AppLocale.ru, name: "ЧПУ станки", slug: "cnc-stanki" },
-          { locale: AppLocale.en, name: "CNC machines", slug: "cnc-machines" },
+          { locale: AppLocale.ru, name: "ЧПУ станки" },
+          { locale: AppLocale.en, name: "CNC machines" },
         ],
       },
     },
   });
   const c2 = await prisma.machineCategory.create({
     data: {
+      slug: "robotics",
       sortOrder: 1,
       featured: true,
       published: true,
       translations: {
         create: [
-          { locale: AppLocale.ru, name: "Робототехника", slug: "robototekhnika" },
-          { locale: AppLocale.en, name: "Robotics", slug: "robotics" },
+          { locale: AppLocale.ru, name: "Робототехника" },
+          { locale: AppLocale.en, name: "Robotics" },
         ],
       },
     },
   });
   const c3 = await prisma.machineCategory.create({
     data: {
+      slug: "automation",
       sortOrder: 2,
       featured: true,
       published: true,
       translations: {
         create: [
-          { locale: AppLocale.ru, name: "Автоматизация", slug: "avtomatizatsiya" },
-          { locale: AppLocale.en, name: "Automation", slug: "automation" },
+          { locale: AppLocale.ru, name: "Автоматизация" },
+          { locale: AppLocale.en, name: "Automation" },
         ],
       },
     },
@@ -89,6 +92,7 @@ async function seedBlog(): Promise<void> {
   const now = new Date();
   await prisma.blogPost.create({
     data: {
+      slug: "welcome",
       published: true,
       publishedAt: now,
       translations: {
@@ -96,7 +100,6 @@ async function seedBlog(): Promise<void> {
           {
             locale: AppLocale.ru,
             title: "Добро пожаловать в блог",
-            slug: "welcome-ru",
             excerpt: "Первый пост для проверки схемы.",
             content: "<p>Содержимое статьи (HTML).</p>",
             metaTitle: "Блог Qualitech",
@@ -105,7 +108,6 @@ async function seedBlog(): Promise<void> {
           {
             locale: AppLocale.en,
             title: "Welcome to the blog",
-            slug: "welcome-en",
             excerpt: "First post to validate the schema.",
             content: "<p>Article body (HTML).</p>",
             metaTitle: "Qualitech blog",

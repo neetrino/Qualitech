@@ -1,5 +1,5 @@
 /**
- * Normalizes product/category slug input in admin: strips accidental URI escapes
+ * Normalizes product / category / blog slug input in admin: strips accidental URI escapes
  * (e.g. pasted from browser bar) and maps `.` / `,` to `-` so public paths stay stable.
  */
 export function normalizeMachineSlugForAdminStorage(raw: string): string {

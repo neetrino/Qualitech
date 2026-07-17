@@ -33,6 +33,7 @@ export async function adminCreateMachineCategory(
   return prisma.machineCategory.create({
     data: {
       parentId: null,
+      slug: data.slug,
       sortOrder: data.sortOrder,
       featured: data.featured ?? true,
       published: data.published ?? true,
@@ -45,6 +46,9 @@ export async function adminCreateMachineCategory(
 
 function buildCategoryUpdateData(patch: AdminMachineCategoryPatchInput): Prisma.MachineCategoryUpdateInput {
   const data: Prisma.MachineCategoryUpdateInput = {};
+  if (patch.slug !== undefined) {
+    data.slug = patch.slug;
+  }
   if (patch.sortOrder !== undefined) {
     data.sortOrder = patch.sortOrder;
   }

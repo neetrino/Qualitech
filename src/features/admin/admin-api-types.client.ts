@@ -12,7 +12,6 @@ export type ContactMessageRow = {
 export type BlogTranslationRow = {
   locale: string;
   title: string;
-  slug: string;
   excerpt: string;
   content: string;
   metaTitle: string | null;
@@ -28,6 +27,7 @@ export type BlogImageRow = {
 
 export type BlogRow = {
   id: string;
+  slug: string;
   published: boolean;
   publishedAt: string | null;
   createdAt: string;
@@ -38,10 +38,10 @@ export type BlogRow = {
 
 export type MachineCategoryRow = {
   id: string;
+  slug: string;
   translations: Array<{
     locale: string;
     name: string;
-    slug: string;
     homeDescription: string | null;
     homeBullets: string[];
   }>;
@@ -50,6 +50,7 @@ export type MachineCategoryRow = {
 /** Top-level catalog section from `GET /api/admin/machine-categories`. */
 export type MachineCategoryAdminRow = {
   id: string;
+  slug: string;
   parentId: string | null;
   sortOrder: number;
   featured: boolean;
@@ -60,7 +61,6 @@ export type MachineCategoryAdminRow = {
   translations: Array<{
     locale: string;
     name: string;
-    slug: string;
     homeDescription: string | null;
     homeBullets: string[];
   }>;

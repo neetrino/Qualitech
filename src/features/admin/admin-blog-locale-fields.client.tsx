@@ -17,7 +17,6 @@ export type BlogFormLocale = (typeof BLOG_FORM_LOCALES)[number];
 
 export type BlogTrForm = {
   title: string;
-  slug: string;
   excerpt: string;
   content: string;
   metaTitle: string;
@@ -28,7 +27,6 @@ export type BlogTrForm = {
 export function emptyBlogTr(): BlogTrForm {
   return {
     title: "",
-    slug: "",
     excerpt: "",
     content: "",
     metaTitle: "",
@@ -40,7 +38,6 @@ export function emptyBlogTr(): BlogTrForm {
 export function blogTrFromApi(t: BlogTranslationRow): BlogTrForm {
   return {
     title: t.title,
-    slug: t.slug,
     excerpt: t.excerpt,
     content: t.content,
     metaTitle: t.metaTitle ?? "",
@@ -58,7 +55,6 @@ export function buildBlogTranslations(map: Record<BlogFormLocale, BlogTrForm>): 
   return BLOG_FORM_LOCALES.map((loc) => ({
     locale: loc,
     title: map[loc].title.trim(),
-    slug: map[loc].slug.trim(),
     excerpt: map[loc].excerpt.trim(),
     content: map[loc].content.trim(),
     metaTitle: toNullableMeta(map[loc].metaTitle),
@@ -107,17 +103,6 @@ export function AdminBlogLocaleFields({
           id={`blog-${locale}-title`}
           onChange={(e) => onChange({ ...value, title: e.target.value })}
           value={value.title}
-        />
-      </div>
-      <div>
-        <label className={lab} htmlFor={`blog-${locale}-slug`}>
-          {m.blogFields.slug}
-        </label>
-        <input
-          className={inC}
-          id={`blog-${locale}-slug`}
-          onChange={(e) => onChange({ ...value, slug: e.target.value })}
-          value={value.slug}
         />
       </div>
       <div>

@@ -42,13 +42,13 @@ const homeBulletsSchema = z
 export const adminMachineCategoryTranslationSchema = z.object({
   locale: localeEnum,
   name: z.string().trim().min(1).max(200),
-  slug: adminMachineCategorySlugSchema,
   homeDescription: optionalTrimmedText(4000),
   homeBullets: homeBulletsSchema,
 });
 
 export const adminMachineCategoryCreateSchema = z
   .object({
+    slug: adminMachineCategorySlugSchema,
     sortOrder: z.number().int().min(0).default(0),
     featured: z.boolean().optional().default(true),
     published: z.boolean().optional().default(true),
@@ -72,6 +72,7 @@ export type AdminMachineCategoryCreateInput = z.infer<typeof adminMachineCategor
 
 export const adminMachineCategoryPatchSchema = z
   .object({
+    slug: adminMachineCategorySlugSchema.optional(),
     sortOrder: z.number().int().min(0).optional(),
     featured: z.boolean().optional(),
     published: z.boolean().optional(),

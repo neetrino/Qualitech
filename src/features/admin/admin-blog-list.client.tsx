@@ -31,9 +31,7 @@ function titlePreview(post: BlogRow): string {
 }
 
 function slugPreview(post: BlogRow): string {
-  const ru = post.translations.find((t) => t.locale === "ru");
-  const en = post.translations.find((t) => t.locale === "en");
-  return ru?.slug ?? en?.slug ?? "—";
+  return post.slug?.trim() || "—";
 }
 
 /** First gallery image by sort order, else OG image from ru then en. */

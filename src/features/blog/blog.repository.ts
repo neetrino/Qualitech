@@ -30,24 +30,24 @@ export async function countBlogPostsForList(query: BlogListQuery): Promise<numbe
 }
 
 export async function findBlogPostDetailBySlug(slug: string, locale: AppLocale) {
-  return prisma.blogPostTranslation.findFirst({
+  const post = await prisma.blogPost.findFirst({
     where: {
-      locale,
       slug,
-      post: { published: true },
+      published: true,
     },
     include: {
-      post: {
-        include: {
-          images: { orderBy: { sortOrder: "asc" } },
-          translations: { select: { locale: true, slug: true } },
-        },
-      },
+      images: { orderBy: { sortOrder: "asc" } },
+      translations: { where: { locale }, take: 1 },
     },
   });
+  const translation = post?.translations[0];
+  if (!post || !translation) {
+    return null;
+  }
+  return { post, translation };
 }
 
 export type BlogPostListRow = Awaited<ReturnType<typeof findBlogPostsForList>>[number];
 
 type DetailLookup = Awaited<ReturnType<typeof findBlogPostDetailBySlug>>;
-export type BlogPostTranslationDetailRow = Exclude<DetailLookup, null>;
+export type BlogPostDetailRow = Exclude<DetailLookup, null>;

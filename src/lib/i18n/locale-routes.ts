@@ -72,7 +72,7 @@ export function machineDetailHref(
   return `/${locale}/machines/${encodeMachinesPathSegment(categorySlug)}/${encodeMachinesPathSegment(machineSlug)}`;
 }
 
-/** Language switch when both section and machine slugs exist per locale. */
+/** Language switch when section and machine use shared slugs (same value in both locale keys). */
 export function machineDetailPathForLocaleSwitch(
   next: HomeLocale,
   sectionSlugByLocale: Partial<Record<HomeLocale, string>>,
@@ -98,7 +98,7 @@ export function machinesSectionPathForLocaleSwitch(
   return machinesPageHref(next);
 }
 
-/** Client-side language switch on a blog article (plain data only — no functions). */
+/** Client-side language switch on a blog article (shared slug in both locale keys). */
 export function blogPostPathForLocaleSwitch(
   next: HomeLocale,
   slugByLocale: Partial<Record<HomeLocale, string>>,

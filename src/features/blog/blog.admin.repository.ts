@@ -46,6 +46,7 @@ export async function adminCreateBlogPost(data: AdminBlogCreateInput): Promise<B
   const publishedAt = data.published ? (data.publishedAt ?? new Date()) : null;
   return prisma.blogPost.create({
     data: {
+      slug: data.slug,
       published: data.published,
       publishedAt,
       translations: { create: data.translations },
@@ -61,6 +62,10 @@ function buildBlogUpdateData(
 ): Prisma.BlogPostUpdateInput {
   const data: Prisma.BlogPostUpdateInput = {};
   const touchedPublished = patch.published !== undefined || patch.publishedAt !== undefined;
+
+  if (patch.slug !== undefined) {
+    data.slug = patch.slug;
+  }
 
   if (touchedPublished) {
     const next = resolvePublishedFields(existing, patch);

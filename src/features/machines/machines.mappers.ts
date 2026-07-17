@@ -4,11 +4,14 @@ import { htmlToPlainExcerpt } from "@/lib/html/html-to-plain-excerpt";
 import { normalizeStoredImageUrl } from "@/lib/image/remote-image-url";
 
 function mapCategoryBrief(category: MachineListRow["category"]): MachineCategoryBriefDto | null {
-  const tr = category?.translations[0];
+  if (!category) {
+    return null;
+  }
+  const tr = category.translations[0];
   if (!tr) {
     return null;
   }
-  return { slug: tr.slug, name: tr.name };
+  return { slug: category.slug, name: tr.name };
 }
 
 export function mapMachineListRow(row: MachineListRow): MachineListItemDto {
