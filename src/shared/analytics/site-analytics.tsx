@@ -1,17 +1,28 @@
 import Script from "next/script";
 
 import {
+  GOOGLE_ANALYTICS_MEASUREMENT_ID,
   GOOGLE_TAG_MANAGER_ID,
   YANDEX_METRIKA_ID,
 } from "@/lib/analytics/analytics.constants";
 
 /**
- * GTM + Yandex Metrika for all public HTML responses.
+ * GTM, GA4 (gtag), and Yandex Metrika for all public HTML responses.
  * Scripts load early; noscript fallbacks sit at the top of `<body>`.
  */
 export function SiteAnalytics() {
   return (
     <>
+      <Script
+        src={`https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ANALYTICS_MEASUREMENT_ID}`}
+        strategy="afterInteractive"
+      />
+      <Script id="google-gtag" strategy="afterInteractive">
+        {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${GOOGLE_ANALYTICS_MEASUREMENT_ID}');`}
+      </Script>
       <Script id="google-tag-manager" strategy="afterInteractive">
         {`(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
