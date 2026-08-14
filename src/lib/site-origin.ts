@@ -1,4 +1,5 @@
-const LOCAL_DEV_ORIGIN = "http://localhost:3000";
+/** Public site origin used in sitemap, robots.txt, and metadata. */
+export const CANONICAL_SITE_ORIGIN = "https://qualitechmachinery.ru";
 
 function originFromEnvValue(raw: string | undefined): string | null {
   const trimmed = raw?.trim();
@@ -19,14 +20,21 @@ function originFromEnvValue(raw: string | undefined): string | null {
   }
 }
 
+function isLocalDevOrigin(origin: string): boolean {
+  const hostname = new URL(origin).hostname;
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
+
 /**
  * Canonical site origin for metadata, sitemap, and robots.
- * Prefers `APP_URL`, then `NEXT_PUBLIC_APP_URL`, then local dev.
+ * Uses `APP_URL` / `NEXT_PUBLIC_APP_URL` when they are a public host;
+ * localhost env values fall back to {@link CANONICAL_SITE_ORIGIN}.
  */
 export function getSiteOrigin(): string {
-  return (
-    originFromEnvValue(process.env.APP_URL) ??
-    originFromEnvValue(process.env.NEXT_PUBLIC_APP_URL) ??
-    LOCAL_DEV_ORIGIN
-  );
+  const fromEnv =
+    originFromEnvValue(process.env.APP_URL) ?? originFromEnvValue(process.env.NEXT_PUBLIC_APP_URL);
+  if (fromEnv && !isLocalDevOrigin(fromEnv)) {
+    return fromEnv;
+  }
+  return CANONICAL_SITE_ORIGIN;
 }
