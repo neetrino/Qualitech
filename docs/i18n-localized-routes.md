@@ -8,6 +8,8 @@ Marketing pages expose the active locale in the **URL path**. APIs stay under `/
 |---------|------------------------|-----------------|
 | Home    | `/{locale}`            | `/ru`, `/en`    |
 | Contact | `/{locale}/contact`    | `/ru/contact`, `/en/contact` |
+| robots.txt | `/{locale}/robots.txt` (also `/robots.txt`) | `/ru/robots.txt` |
+| sitemap.xml | `/{locale}/sitemap.xml` (also `/sitemap.xml`, `/Sitemap.xml`) | `/ru/sitemap.xml` |
 
 - **`/`** → redirects to `/{locale}` using the `NEXT_LOCALE` cookie, default **`ru`**.
 - **`/contact`** → redirects to `/{locale}/contact` the same way.

@@ -7,6 +7,7 @@ import {
   YANDEX_VERIFICATION_CONTENT,
 } from "@/lib/analytics/analytics.constants";
 import { SITE_OG_DESCRIPTION, SITE_OG_TITLE, SITE_TAB_TITLE } from "@/lib/site-metadata";
+import { getSiteOrigin } from "@/lib/site-origin";
 import { SiteAnalytics } from "@/shared/analytics/site-analytics";
 
 import "./globals.css";
@@ -28,12 +29,8 @@ const dmSans = DM_Sans({
   preload: false,
 });
 
-const trimmedAppUrl = process.env.NEXT_PUBLIC_APP_URL?.trim();
-const METADATA_BASE_URL =
-  trimmedAppUrl && trimmedAppUrl.length > 0 ? trimmedAppUrl : "http://localhost:3000";
-
 export const metadata: Metadata = {
-  metadataBase: new URL(METADATA_BASE_URL),
+  metadataBase: new URL(getSiteOrigin()),
   title: SITE_TAB_TITLE,
   description: SITE_OG_DESCRIPTION,
   verification: {
