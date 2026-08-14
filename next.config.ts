@@ -28,6 +28,12 @@ const r2PublicPattern = remotePatternFromPublicBaseUrl(process.env.R2_PUBLIC_URL
 
 const nextConfig: NextConfig = {
   outputFileTracingRoot: projectRoot,
+  async rewrites() {
+    return [
+      { source: "/Sitemap.xml", destination: "/sitemap.xml" },
+      { source: "/:locale(en|ru)/Sitemap.xml", destination: "/:locale/sitemap.xml" },
+    ];
+  },
   /** Allow R2/CDN URLs when `unoptimized` is false (defense in depth; we still set unoptimized for remote). */
   images: {
     remotePatterns: [

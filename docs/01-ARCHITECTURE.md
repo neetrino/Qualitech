@@ -27,7 +27,7 @@ flowchart LR
 
 ## Թղթապանակներ
 
-- `src/app/` — էջեր, `api/` route handlers  
+- `src/app/` — էջեր, `api/` route handlers, SEO (`robots.txt`, `sitemap.xml`)  
 - `src/features/<domain>/` — Zod սխեմաներ, սերվիսներ, repository շերտ (ֆայլ ≤ 300 տող)  
 - `src/lib/` — prisma client, logger, shared utils  
 - `prisma/` — `schema.prisma`, միգրացիաներ  
