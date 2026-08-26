@@ -186,14 +186,18 @@ export async function getMachineCategorySectionPublic(
         return null;
       }
       const sharedSlug = row.slug;
-      const slugByLocale: Partial<Record<HomeLocale, string>> = {
-        en: sharedSlug,
-        ru: sharedSlug,
+      const ogFromTr = tr.ogImageUrl?.trim() ?? "";
+      const ogFromCover = row.imageUrl?.trim() ?? "";
+      const og = ogFromTr.length > 0 ? ogFromTr : ogFromCover.length > 0 ? ogFromCover : null;
+      return {
+        name: tr.name,
+        slugByLocale: { en: sharedSlug, ru: sharedSlug },
+        metaDescription: tr.metaDescription?.trim() ? tr.metaDescription.trim() : null,
+        ogImageUrl: og,
       };
-      return { name: tr.name, slugByLocale };
     },
     ["machine-category-section", locale, sectionSlug],
-    { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC },
+    { revalidate: MACHINES_PUBLIC_DATA_REVALIDATE_SEC, tags: [MACHINE_CATEGORY_PUBLIC_CACHE_TAG] },
   );
   return cached();
 }

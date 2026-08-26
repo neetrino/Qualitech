@@ -44,6 +44,9 @@ model MachineCategoryTranslation {
   homeDescription String?  @db.Text
   /// Home card bullet lines (uppercase styling on the public page).
   homeBullets     String[] @default([])
+  /// Per-locale SEO description and OG image (same as product translations, without meta title).
+  metaDescription String?  @db.Text
+  ogImageUrl      String?
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
 

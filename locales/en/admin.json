@@ -73,7 +73,9 @@
     "localeEn": "English (en)",
     "homeDescription": "Home page card description",
     "homeBullets": "Home page bullet lines",
-    "homeBulletsPlaceholder": "One line per bullet (max 12)."
+    "homeBulletsPlaceholder": "One line per bullet (max 12).",
+    "metaDescription": "Meta description (SEO)",
+    "metaDescriptionHint": "Used in search snippets for this section page. If empty, the default catalog description is used."
   },
   "blogList": {
     "title": "Blog — articles",
