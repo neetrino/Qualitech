@@ -44,6 +44,8 @@ export type MachineCategoryRow = {
     name: string;
     homeDescription: string | null;
     homeBullets: string[];
+    metaDescription: string | null;
+    ogImageUrl: string | null;
   }>;
 };
 
@@ -63,6 +65,8 @@ export type MachineCategoryAdminRow = {
     name: string;
     homeDescription: string | null;
     homeBullets: string[];
+    metaDescription: string | null;
+    ogImageUrl: string | null;
   }>;
 };
 

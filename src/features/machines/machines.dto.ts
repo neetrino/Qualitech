@@ -66,4 +66,6 @@ export type MachineDetailWithLocaleSlugs = {
 export type MachineCategorySectionContextDto = {
   name: string;
   slugByLocale: Partial<Record<HomeLocale, string>>;
+  metaDescription: string | null;
+  ogImageUrl: string | null;
 };

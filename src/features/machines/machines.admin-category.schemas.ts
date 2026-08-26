@@ -44,6 +44,8 @@ export const adminMachineCategoryTranslationSchema = z.object({
   name: z.string().trim().min(1).max(200),
   homeDescription: optionalTrimmedText(4000),
   homeBullets: homeBulletsSchema,
+  metaDescription: z.string().trim().max(20_000).nullable().optional(),
+  ogImageUrl: z.string().trim().url().max(2000).nullable().optional(),
 });
 
 export const adminMachineCategoryCreateSchema = z

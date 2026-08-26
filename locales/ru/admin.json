@@ -73,7 +73,9 @@
     "localeEn": "Английский (en)",
     "homeDescription": "Описание на главной",
     "homeBullets": "Подзаголовки (список)",
-    "homeBulletsPlaceholder": "Одна строка — один пункт (до 12)."
+    "homeBulletsPlaceholder": "Одна строка — один пункт (до 12).",
+    "metaDescription": "Meta description (SEO)",
+    "metaDescriptionHint": "Используется в сниппетах поиска для страницы раздела. Если пусто — берётся описание каталога по умолчанию."
   },
   "blogList": {
     "title": "Блог — статьи",

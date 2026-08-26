@@ -1,11 +1,17 @@
 "use client";
 
-import { AppLocale } from "@prisma/client";
 import { useCallback, useEffect, useState, type FormEvent } from "react";
 
 import type { MachineCategoryAdminRow } from "@/features/admin/admin-api-types.client";
 import { ADMIN_API_MACHINE_CATEGORIES_PATH } from "@/features/admin/admin.constants";
 import { adminApiJson, formatAdminValidationError } from "@/features/admin/admin-http.client";
+import {
+  AdminMachineCategoryLocaleFields,
+  buildCategoryTranslations,
+  categoryTrFromApi,
+  emptyCategoryTr,
+  type CategoryTrForm,
+} from "@/features/admin/admin-machine-category-locale-fields.client";
 import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.client";
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
@@ -27,20 +33,6 @@ type AdminMachineCategoryFormClientProps = {
   readonly onSaved: () => void;
 };
 
-type TrForm = {
-  name: string;
-  homeDescription: string;
-  homeBulletsText: string;
-};
-
-function emptyTr(): TrForm {
-  return { name: "", homeDescription: "", homeBulletsText: "" };
-}
-
-function bulletsToTextarea(lines: readonly string[]): string {
-  return lines.join("\n");
-}
-
 export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: AdminMachineCategoryFormClientProps) {
   const m = useAdminMessages();
   const { theme } = useAdminTheme();
@@ -57,34 +49,24 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
     category?.slug ? normalizeMachineSlugForAdminStorage(category.slug) : "",
   );
   const [slugFollowsRuName, setSlugFollowsRuName] = useState(() => !category);
-  const [ru, setRu] = useState<TrForm>(emptyTr);
-  const [en, setEn] = useState<TrForm>(emptyTr);
+  const [ru, setRu] = useState<CategoryTrForm>(emptyCategoryTr);
+  const [en, setEn] = useState<CategoryTrForm>(emptyCategoryTr);
   const [busy, setBusy] = useState(false);
   const [uploadBusy, setUploadBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!category) {
-      setRu(emptyTr());
-      setEn(emptyTr());
+      setRu(emptyCategoryTr());
+      setEn(emptyCategoryTr());
       setSortOrder("0");
       setImageUrl("");
       setCategorySlug("");
       setSlugFollowsRuName(true);
       return;
     }
-    const trRu = category.translations.find((t) => t.locale === "ru");
-    const trEn = category.translations.find((t) => t.locale === "en");
-    setRu({
-      name: trRu?.name ?? "",
-      homeDescription: trRu?.homeDescription ?? "",
-      homeBulletsText: bulletsToTextarea(trRu?.homeBullets ?? []),
-    });
-    setEn({
-      name: trEn?.name ?? "",
-      homeDescription: trEn?.homeDescription ?? "",
-      homeBulletsText: bulletsToTextarea(trEn?.homeBullets ?? []),
-    });
+    setRu(categoryTrFromApi(category.translations, "ru"));
+    setEn(categoryTrFromApi(category.translations, "en"));
     setSortOrder(String(category.sortOrder));
     setImageUrl(category.imageUrl ?? "");
     setCategorySlug(normalizeMachineSlugForAdminStorage(category.slug));
@@ -92,7 +74,7 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
   }, [category]);
 
   const onRuChange = useCallback(
-    (next: TrForm) => {
+    (next: CategoryTrForm) => {
       const prevDerived = slugifyForUrl(ru.name);
       const normalizedCurrent = normalizeMachineSlugForAdminStorage(categorySlug);
       const slugStillSynced =
@@ -132,83 +114,31 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
         const sortParsed = Number.parseInt(sortOrder, 10);
         sortOrderVal = Number.isFinite(sortParsed) ? Math.max(0, sortParsed) : 0;
       }
-      const ruBullets = ru.homeBulletsText
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter((l) => l.length > 0)
-        .slice(0, 12);
-      const enBullets = en.homeBulletsText
-        .split(/\r?\n/)
-        .map((l) => l.trim())
-        .filter((l) => l.length > 0)
-        .slice(0, 12);
-      const translations = [
-        {
-          locale: AppLocale.ru,
-          name: ru.name.trim(),
-          homeDescription: ru.homeDescription.trim(),
-          homeBullets: ruBullets,
-        },
-        {
-          locale: AppLocale.en,
-          name: en.name.trim(),
-          homeDescription: en.homeDescription.trim(),
-          homeBullets: enBullets,
-        },
-      ];
       const imagePayload = imageUrl.trim().length > 0 ? imageUrl.trim() : null;
       const slugPayload = normalizeMachineSlugForAdminStorage(categorySlug);
-
-      if (category) {
-        const res = await adminApiJson<MachineCategoryAdminRow>(
-          `${ADMIN_API_MACHINE_CATEGORIES_PATH}/${category.id}`,
-          {
-            method: "PATCH",
-            body: JSON.stringify({
-              slug: slugPayload,
-              sortOrder: sortOrderVal,
-              imageUrl: imagePayload,
-              translations,
-            }),
-          },
-        );
-        if (!res.ok) {
-          setError(formatAdminValidationError(res.error));
-          setBusy(false);
-          return;
-        }
-      } else {
-        const res = await adminApiJson<MachineCategoryAdminRow>(ADMIN_API_MACHINE_CATEGORIES_PATH, {
-          method: "POST",
-          body: JSON.stringify({
-            slug: slugPayload,
-            sortOrder: sortOrderVal,
-            imageUrl: imagePayload,
-            translations,
-          }),
-        });
-        if (!res.ok) {
-          setError(formatAdminValidationError(res.error));
-          setBusy(false);
-          return;
-        }
+      const translations = buildCategoryTranslations(ru, en, imagePayload);
+      const body = JSON.stringify({
+        slug: slugPayload,
+        sortOrder: sortOrderVal,
+        imageUrl: imagePayload,
+        translations,
+      });
+      const path = category
+        ? `${ADMIN_API_MACHINE_CATEGORIES_PATH}/${category.id}`
+        : ADMIN_API_MACHINE_CATEGORIES_PATH;
+      const res = await adminApiJson<MachineCategoryAdminRow>(path, {
+        method: category ? "PATCH" : "POST",
+        body,
+      });
+      if (!res.ok) {
+        setError(formatAdminValidationError(res.error));
+        setBusy(false);
+        return;
       }
       setBusy(false);
       onSaved();
     },
-    [
-      category,
-      categorySlug,
-      en.homeBulletsText,
-      en.homeDescription,
-      en.name,
-      imageUrl,
-      onSaved,
-      ru.homeBulletsText,
-      ru.homeDescription,
-      ru.name,
-      sortOrder,
-    ],
+    [category, categorySlug, en, imageUrl, onSaved, ru, sortOrder],
   );
 
   return (
@@ -290,82 +220,8 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <div className="space-y-3 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-          <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{m.machineCategoryForm.localeRu}</p>
-          <div>
-            <label className={labelCls} htmlFor="mc-ru-name">
-              {m.machineCategoryForm.name}
-            </label>
-            <input
-              className={inputCls}
-              id="mc-ru-name"
-              onChange={(e) => onRuChange({ ...ru, name: e.target.value })}
-              type="text"
-              value={ru.name}
-            />
-          </div>
-          <div>
-            <label className={labelCls} htmlFor="mc-ru-home-desc">
-              {m.machineCategoryForm.homeDescription}
-            </label>
-            <textarea
-              className={`${inputCls} min-h-[88px] resize-y`}
-              id="mc-ru-home-desc"
-              onChange={(e) => setRu((p) => ({ ...p, homeDescription: e.target.value }))}
-              value={ru.homeDescription}
-            />
-          </div>
-          <div>
-            <label className={labelCls} htmlFor="mc-ru-home-bullets">
-              {m.machineCategoryForm.homeBullets}
-            </label>
-            <textarea
-              className={`${inputCls} min-h-[100px] resize-y font-mono text-sm`}
-              id="mc-ru-home-bullets"
-              onChange={(e) => setRu((p) => ({ ...p, homeBulletsText: e.target.value }))}
-              placeholder={m.machineCategoryForm.homeBulletsPlaceholder}
-              value={ru.homeBulletsText}
-            />
-          </div>
-        </div>
-        <div className="space-y-3 rounded-lg border border-neutral-200 p-4 dark:border-neutral-700">
-          <p className="text-xs font-semibold uppercase tracking-wide text-neutral-500">{m.machineCategoryForm.localeEn}</p>
-          <div>
-            <label className={labelCls} htmlFor="mc-en-name">
-              {m.machineCategoryForm.name}
-            </label>
-            <input
-              className={inputCls}
-              id="mc-en-name"
-              onChange={(e) => setEn((p) => ({ ...p, name: e.target.value }))}
-              type="text"
-              value={en.name}
-            />
-          </div>
-          <div>
-            <label className={labelCls} htmlFor="mc-en-home-desc">
-              {m.machineCategoryForm.homeDescription}
-            </label>
-            <textarea
-              className={`${inputCls} min-h-[88px] resize-y`}
-              id="mc-en-home-desc"
-              onChange={(e) => setEn((p) => ({ ...p, homeDescription: e.target.value }))}
-              value={en.homeDescription}
-            />
-          </div>
-          <div>
-            <label className={labelCls} htmlFor="mc-en-home-bullets">
-              {m.machineCategoryForm.homeBullets}
-            </label>
-            <textarea
-              className={`${inputCls} min-h-[100px] resize-y font-mono text-sm`}
-              id="mc-en-home-bullets"
-              onChange={(e) => setEn((p) => ({ ...p, homeBulletsText: e.target.value }))}
-              placeholder={m.machineCategoryForm.homeBulletsPlaceholder}
-              value={en.homeBulletsText}
-            />
-          </div>
-        </div>
+        <AdminMachineCategoryLocaleFields locale="ru" onChange={onRuChange} theme={theme} value={ru} />
+        <AdminMachineCategoryLocaleFields locale="en" onChange={setEn} theme={theme} value={en} />
       </div>
 
       <div className={stickyBottomActionsClass}>

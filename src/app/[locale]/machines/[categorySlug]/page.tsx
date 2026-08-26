@@ -32,14 +32,23 @@ function parseListPage(raw: string | undefined): number {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { locale: raw } = await params;
+  const { locale: raw, categorySlug } = await params;
   if (!isHomeLocaleSegment(raw)) {
     return { title: SITE_TAB_TITLE };
   }
-  const m = await loadMachinesMessages(raw);
+  const appLocale = homeLocaleToAppLocale(raw);
+  const [m, section] = await Promise.all([
+    loadMachinesMessages(raw),
+    getMachineCategorySectionPublic(categorySlug, appLocale),
+  ]);
+  const metaFromField = section?.metaDescription?.trim() ?? "";
+  const metaDesc = metaFromField.length > 0 ? metaFromField : m.metaDescription;
   return {
     title: SITE_TAB_TITLE,
-    description: m.metaDescription,
+    description: metaDesc,
+    openGraph: section?.ogImageUrl
+      ? { images: [{ url: section.ogImageUrl, alt: section.name }] }
+      : undefined,
   };
 }
 
