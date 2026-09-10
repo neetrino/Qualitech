@@ -1,9 +1,17 @@
 "use client";
 
 import { useCallback, useState, type FormEvent } from "react";
+import { useRouter } from "next/navigation";
 
-import { CONTACT_MESSAGE_MAX_LEN, CONTACT_NAME_MAX_LEN, CONTACT_SUBMIT_PATH } from "@/features/contact/contact.constants";
+import {
+  CONTACT_MESSAGE_MAX_LEN,
+  CONTACT_NAME_MAX_LEN,
+  CONTACT_PHONE_MAX_LEN,
+  CONTACT_SUBMIT_PATH,
+} from "@/features/contact/contact.constants";
 import type { ContactMessages } from "@/features/contact/contact.messages";
+import type { HomeLocale } from "@/features/home/home.messages";
+import { contactThanksPageHref } from "@/lib/i18n/locale-routes";
 
 const IDEMPOTENCY_HEADER = "idempotency-key";
 
@@ -57,14 +65,26 @@ async function getRecaptchaToken(siteKey: string): Promise<string> {
 }
 
 type ContactFormClientProps = {
+  readonly locale: HomeLocale;
   readonly messages: ContactFormMessages;
 };
 
-export function ContactFormClient({ messages }: ContactFormClientProps) {
+function hasRequiredContactFields(body: Record<string, string>): boolean {
+  return (
+    body.name.length > 0 &&
+    body.email.length > 0 &&
+    body.phone.length > 0 &&
+    body.message.length > 0
+  );
+}
+
+export function ContactFormClient({ locale, messages }: ContactFormClientProps) {
+  const router = useRouter();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "success" | "error">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
   const [errorText, setErrorText] = useState<string | null>(null);
 
   const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim() ?? "";
@@ -89,8 +109,14 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
       const body: Record<string, string> = {
         name: name.trim(),
         email: email.trim(),
+        phone: phone.trim(),
         message: message.trim(),
       };
+      if (!hasRequiredContactFields(body)) {
+        setStatus("error");
+        setErrorText(messages.errorValidation);
+        return;
+      }
       if (recaptchaToken) {
         body.recaptchaToken = recaptchaToken;
       }
@@ -109,10 +135,7 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
         if (res.ok) {
           const ok = json as ContactApiSuccess;
           if (ok.data?.id) {
-            setStatus("success");
-            setName("");
-            setEmail("");
-            setMessage("");
+            router.push(contactThanksPageHref(locale));
             return;
           }
         }
@@ -126,16 +149,8 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
         setErrorText(messages.errorGeneric);
       }
     },
-    [email, message, name, messages.errorGeneric, messages.errorValidation, siteKey],
+    [email, locale, message, messages.errorGeneric, messages.errorValidation, name, phone, router, siteKey],
   );
-
-  if (status === "success") {
-    return (
-      <p className="text-sm leading-relaxed text-[#9f9fa9]" role="status">
-        {messages.success}
-      </p>
-    );
-  }
 
   return (
     <form className="flex flex-col gap-4" noValidate onSubmit={onSubmit}>
@@ -166,6 +181,21 @@ export function ContactFormClient({ messages }: ContactFormClientProps) {
           type="email"
           value={email}
           onChange={(ev) => setEmail(ev.target.value)}
+        />
+      </label>
+      <label className="flex flex-col gap-1.5">
+        <span className="text-[10px] font-black uppercase tracking-[0.14em] text-[#71717b]">
+          {messages.phone} <span aria-hidden="true">*</span>
+        </span>
+        <input
+          autoComplete="tel"
+          className="rounded-xl border border-[#27272a] bg-[#09090b] px-4 py-3 text-sm text-white outline-none ring-[#ff6900] transition placeholder:text-[#52525c] focus:border-[#ff6900] focus:ring-1"
+          maxLength={CONTACT_PHONE_MAX_LEN}
+          name="phone"
+          required
+          type="tel"
+          value={phone}
+          onChange={(ev) => setPhone(ev.target.value)}
         />
       </label>
       <label className="flex flex-col gap-1.5">

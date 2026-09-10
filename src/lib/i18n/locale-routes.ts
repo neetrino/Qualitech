@@ -6,6 +6,9 @@ export const LOCALIZED_HOME_PATH = /^\/(en|ru)$/;
 /** Matches localized contact URLs: `/en/contact`, `/ru/contact`. */
 export const LOCALIZED_CONTACT_PATH = /^\/(en|ru)\/contact$/;
 
+/** Matches localized contact thank-you URLs: `/en/contact/tanks`, `/ru/contact/tanks`. */
+export const LOCALIZED_CONTACT_THANKS_PATH = /^\/(en|ru)\/contact\/tanks$/;
+
 /** Matches localized about URLs: `/en/about`, `/ru/about`. */
 export const LOCALIZED_ABOUT_PATH = /^\/(en|ru)\/about$/;
 
@@ -34,6 +37,10 @@ export function homePageHref(locale: HomeLocale): string {
 
 export function contactPageHref(locale: HomeLocale): string {
   return `/${locale}/contact`;
+}
+
+export function contactThanksPageHref(locale: HomeLocale): string {
+  return `/${locale}/contact/tanks`;
 }
 
 export function aboutPageHref(locale: HomeLocale): string {

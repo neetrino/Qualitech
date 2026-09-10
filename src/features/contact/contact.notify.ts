@@ -30,6 +30,7 @@ async function postResend(apiKey: string, payload: ResendPayload): Promise<void>
 export async function notifyContactInbox(params: {
   name: string;
   email: string;
+  phone: string;
   message: string;
   messageId: string;
   requestId?: string;
@@ -45,6 +46,7 @@ export async function notifyContactInbox(params: {
   const text = [
     `New contact message (id: ${params.messageId})`,
     `From: ${params.name} <${params.email}>`,
+    `Phone: ${params.phone}`,
     "",
     params.message,
   ].join("\n");

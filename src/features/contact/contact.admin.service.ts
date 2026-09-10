@@ -4,6 +4,7 @@ export type ContactMessageAdminRow = {
   id: string;
   name: string;
   email: string;
+  phone: string;
   message: string;
   createdAt: string;
   readAt: string | null;
@@ -13,6 +14,7 @@ function toRow(msg: {
   id: string;
   name: string;
   email: string;
+  phone: string;
   message: string;
   createdAt: Date;
   readAt: Date | null;
@@ -21,6 +23,7 @@ function toRow(msg: {
     id: msg.id,
     name: msg.name,
     email: msg.email,
+    phone: msg.phone,
     message: msg.message,
     createdAt: msg.createdAt.toISOString(),
     readAt: msg.readAt ? msg.readAt.toISOString() : null,
@@ -34,6 +37,7 @@ export async function listContactMessagesForAdmin(): Promise<ContactMessageAdmin
       id: true,
       name: true,
       email: true,
+      phone: true,
       message: true,
       createdAt: true,
       readAt: true,
@@ -51,6 +55,7 @@ export async function markContactMessageRead(id: string): Promise<ContactMessage
         id: true,
         name: true,
         email: true,
+        phone: true,
         message: true,
         createdAt: true,
         readAt: true,
