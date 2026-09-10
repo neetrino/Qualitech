@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import type { ReactElement } from "react";
 
 import { ContactFormClient } from "@/features/contact/contact-form.client";
 import type { ContactMessages } from "@/features/contact/contact.messages";
@@ -22,7 +23,7 @@ function buildTelHref(display: string): string {
   return `tel:${display.replace(/[^\d+]/g, "")}`;
 }
 
-export function ContactPage({ locale, homeMessages, contactMessages }: ContactPageProps) {
+export function ContactPage({ locale, homeMessages, contactMessages }: ContactPageProps): ReactElement {
   const c = contactMessages;
   const fc = homeMessages.footer.contact;
 
