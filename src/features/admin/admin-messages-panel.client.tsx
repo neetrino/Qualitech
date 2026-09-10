@@ -94,12 +94,23 @@ export function AdminMessagesPanelClient() {
                     </span>
                   ) : null}
                 </div>
-                <p className={adminListMetaClass(theme)}>
-                  {row.email} · {formatDate(row.createdAt)}
-                </p>
-                <p className={`mt-2 text-sm ${theme === "light" ? "text-zinc-700" : "text-white/80"} whitespace-pre-wrap`}>
-                  {row.message}
-                </p>
+                <div className={`mt-2 space-y-1 text-sm ${theme === "light" ? "text-zinc-700" : "text-white/80"}`}>
+                  <p className={adminListMetaClass(theme)}>
+                    <span className="font-semibold">{m.messagesList.fieldName}:</span> {row.name}
+                  </p>
+                  <p className={adminListMetaClass(theme)}>
+                    <span className="font-semibold">{m.messagesList.fieldEmail}:</span> {row.email}
+                  </p>
+                  <p className={adminListMetaClass(theme)}>
+                    <span className="font-semibold">{m.messagesList.fieldPhone}:</span> {row.phone}
+                  </p>
+                  <p className={adminListMetaClass(theme)}>
+                    <span className="font-semibold">{m.messagesList.fieldSentAt}:</span> {formatDate(row.createdAt)}
+                  </p>
+                  <p className={`pt-1 text-sm ${theme === "light" ? "text-zinc-700" : "text-white/80"} whitespace-pre-wrap`}>
+                    <span className="font-semibold">{m.messagesList.fieldMessage}:</span> {row.message}
+                  </p>
+                </div>
               </div>
               {!row.readAt ? (
                 <button

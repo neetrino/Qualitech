@@ -30,6 +30,11 @@
     "empty": "No messages yet.",
     "refresh": "Refresh",
     "unread": "New",
+    "fieldName": "Name",
+    "fieldEmail": "Email",
+    "fieldPhone": "Phone",
+    "fieldMessage": "SMS",
+    "fieldSentAt": "Sent at",
     "markRead": "Mark as read",
     "marking": "Marking…",
     "read": "Read"

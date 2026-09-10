@@ -143,7 +143,7 @@ export function ContactPage({ locale, homeMessages, contactMessages }: ContactPa
             <div className="rounded-2xl border border-[#18181b] bg-[#09090b] p-6 sm:p-8">
               <h2 className="text-sm font-black uppercase tracking-[0.08em] text-white sm:text-base">{c.formTitle}</h2>
               <div className="mt-6">
-                <ContactFormClient messages={c.form} />
+                <ContactFormClient locale={locale} messages={c.form} />
               </div>
             </div>
           </div>

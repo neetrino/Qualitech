@@ -30,6 +30,11 @@
     "empty": "Пока нет сообщений.",
     "refresh": "Обновить",
     "unread": "Новое",
+    "fieldName": "Имя",
+    "fieldEmail": "Email",
+    "fieldPhone": "Телефон",
+    "fieldMessage": "SMS",
+    "fieldSentAt": "Отправлено",
     "markRead": "Отметить как прочитанное",
     "marking": "Отмечаем…",
     "read": "Прочитано"

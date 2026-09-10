@@ -15,9 +15,17 @@
   "mapEmbedUrl": "https://maps.google.com/maps?q=Hrazdan+Kotayk+Armenia&z=12&output=embed",
   "socialTitle": "Messengers",
   "formTitle": "Write to us",
+  "thanks": {
+    "eyebrow": "Thank you",
+    "title": "Message sent",
+    "subtitle": "Thank you for your request. We received your message and will contact you shortly.",
+    "homeCta": "Go home",
+    "backCta": "Send another message"
+  },
   "form": {
     "name": "Name",
     "email": "Email",
+    "phone": "Phone",
     "message": "Message",
     "submit": "Send",
     "sending": "Sending…",

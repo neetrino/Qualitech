@@ -1,4 +1,5 @@
 export const CONTACT_NAME_MAX_LEN = 120;
+export const CONTACT_PHONE_MAX_LEN = 32;
 export const CONTACT_MESSAGE_MAX_LEN = 10_000;
 
 /** Public JSON API for the contact form (same origin). */

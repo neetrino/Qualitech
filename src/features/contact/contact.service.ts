@@ -71,12 +71,14 @@ async function persistNewMessage(
     const row = await createContactMessage({
       name: body.name,
       email: body.email,
+      phone: body.phone,
       message: body.message,
       idempotencyKey,
     });
     void notifyContactInbox({
       name: body.name,
       email: body.email,
+      phone: body.phone,
       message: body.message,
       messageId: row.id,
       requestId,
