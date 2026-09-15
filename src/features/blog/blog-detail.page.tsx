@@ -1,6 +1,12 @@
-import Image from "next/image";
 import Link from "next/link";
 
+import { BlogArticleFigure } from "@/features/blog/blog-article-figure";
+import {
+  dropBlocksCoveredByExcerpt,
+  getBlogInlineImageInsertIndex,
+  joinBlogContentBlocks,
+  splitBlogContentBlocks,
+} from "@/features/blog/blog-content-blocks";
 import type { BlogPostDetailDto, BlogPostImageDto } from "@/features/blog/blog.dto";
 import { formatBlogPublishedDate } from "@/features/blog/blog.format-date";
 import type { BlogMessages } from "@/features/blog/blog.messages";
@@ -20,112 +26,7 @@ type BlogDetailPageProps = {
   readonly post: BlogPostDetailDto;
 };
 
-function BlogPostHeroOverlay({
-  image,
-  fallbackAlt,
-  backHref,
-  backText,
-  breadcrumbSegments,
-  dateLabel,
-  publishedAtIso,
-  title,
-  excerpt,
-  contentHtml,
-}: {
-  readonly image: BlogPostImageDto;
-  readonly fallbackAlt: string;
-  readonly backHref: string;
-  readonly backText: string;
-  readonly breadcrumbSegments: readonly SiteBreadcrumbSegment[];
-  readonly dateLabel: string;
-  readonly publishedAtIso: string | null;
-  readonly title: string;
-  readonly excerpt: string;
-  readonly contentHtml: string;
-}) {
-  const alt = image.alt?.trim() || fallbackAlt;
-  const remote = image.url.startsWith("http");
-  return (
-    <div className="w-full overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b] shadow-[0_24px_80px_-24px_rgba(0,0,0,0.65)]">
-      <div className="relative aspect-[16/10] w-full overflow-hidden bg-[#0f172a]">
-        <Image
-          alt={alt}
-          className="object-cover object-center"
-          fill
-          priority
-          sizes="(max-width: 1280px) 100vw, 1200px"
-          src={image.url}
-          unoptimized={remote}
-        />
-      </div>
-      <div className="space-y-5 bg-[linear-gradient(180deg,#111827_0%,#000000_100%)] p-6 text-white sm:p-8 md:p-10">
-        <SiteBreadcrumb segments={breadcrumbSegments} />
-        <Link
-          className="inline-flex w-fit text-[11px] font-black uppercase tracking-[0.12em] text-white underline-offset-2 transition hover:text-[#e5e7eb] hover:underline"
-          href={backHref}
-        >
-          ← {backText}
-        </Link>
-        {dateLabel.length > 0 ? (
-          <time
-            className="block text-[10px] font-bold uppercase tracking-[0.14em] text-[#e4e4e7]"
-            dateTime={publishedAtIso ?? undefined}
-          >
-            {dateLabel}
-          </time>
-        ) : null}
-        <h1 className="max-w-[48rem] font-display text-[clamp(1.35rem,4vw,2.25rem)] uppercase leading-[1.08] tracking-[-0.03em] text-white">
-          {title}
-        </h1>
-        {excerpt.length > 0 ? (
-          <p className="max-w-[40rem] text-base leading-relaxed text-[#e4e4e7] sm:text-[17px]">{excerpt}</p>
-        ) : null}
-        <div className="pt-2">
-          <BlogProse html={contentHtml} />
-        </div>
-      </div>
-    </div>
-  );
-}
-
-/** Extra gallery images after the first (hero) image. */
-function ArticleRemainingImagesGrid({
-  images,
-  fallbackAlt,
-}: {
-  readonly images: BlogPostImageDto[];
-  readonly fallbackAlt: string;
-}) {
-  if (images.length === 0) {
-    return null;
-  }
-  return (
-    <div className="mx-auto grid w-full max-w-[1200px] gap-5 px-4 sm:grid-cols-2 sm:gap-6 sm:px-5 md:px-6 lg:gap-8 lg:px-8 xl:px-10">
-      {images.map((img, index) => {
-        const alt = img.alt?.trim() || fallbackAlt;
-        const remote = img.url.startsWith("http");
-        return (
-          <div
-            key={`${img.url}-${img.sortOrder}`}
-            className="relative aspect-[16/10] overflow-hidden rounded-2xl border border-[#18181b] bg-[#09090b]"
-          >
-            <Image
-              alt={alt}
-              className="object-cover object-center"
-              fill
-              priority={index === 0}
-              sizes="(max-width: 640px) 100vw, 50vw"
-              src={img.url}
-              unoptimized={remote}
-            />
-          </div>
-        );
-      })}
-    </div>
-  );
-}
-
-function StandaloneArticleHeader({
+function ArticleHeader({
   blogMessages,
   breadcrumbSegments,
   dateLabel,
@@ -143,7 +44,7 @@ function StandaloneArticleHeader({
   readonly excerpt: string;
 }) {
   return (
-    <section className={`mx-auto w-full max-w-[800px] px-4 pb-6 sm:px-5 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
+    <header className={`mx-auto w-full max-w-[800px] px-4 pb-6 sm:px-5 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
       <SiteBreadcrumb segments={breadcrumbSegments} />
       <Link
         className="inline-flex text-[11px] font-black uppercase tracking-[0.12em] text-[#ff6900] transition hover:brightness-110"
@@ -162,15 +63,44 @@ function StandaloneArticleHeader({
       {excerpt.length > 0 ? (
         <p className="mt-4 text-base leading-relaxed text-[#9f9fa9] sm:text-[17px]">{excerpt}</p>
       ) : null}
+    </header>
+  );
+}
+
+function ArticleBody({
+  contentHtml,
+  excerpt,
+  fallbackAlt,
+  images,
+}: {
+  readonly contentHtml: string;
+  readonly excerpt: string;
+  readonly fallbackAlt: string;
+  readonly images: readonly BlogPostImageDto[];
+}) {
+  const blocks = dropBlocksCoveredByExcerpt(splitBlogContentBlocks(contentHtml), excerpt);
+  const leadImage = images[0] ?? null;
+  const restImages = images.slice(1);
+  const insertAt = leadImage ? getBlogInlineImageInsertIndex(blocks) : blocks.length;
+  const beforeHtml = joinBlogContentBlocks(blocks.slice(0, insertAt));
+  const afterHtml = joinBlogContentBlocks(blocks.slice(insertAt));
+
+  return (
+    <section className="mx-auto max-w-[800px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:px-10">
+      <div className="border-t border-[#18181b] pt-10">
+        {beforeHtml.length > 0 ? <BlogProse html={beforeHtml} /> : null}
+        {leadImage ? <BlogArticleFigure fallbackAlt={fallbackAlt} image={leadImage} /> : null}
+        {afterHtml.length > 0 ? <BlogProse html={afterHtml} /> : null}
+        {restImages.map((image) => (
+          <BlogArticleFigure fallbackAlt={fallbackAlt} image={image} key={`${image.url}-${image.sortOrder}`} />
+        ))}
+      </div>
     </section>
   );
 }
 
 export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: BlogDetailPageProps) {
   const dateLabel = formatBlogPublishedDate(post.publishedAt, locale);
-  const hasLeadMedia = post.images.length > 0;
-  const heroImage = hasLeadMedia ? post.images[0]! : null;
-  const restImages = hasLeadMedia && post.images.length > 1 ? post.images.slice(1) : [];
   const detailBreadcrumbSegments: readonly SiteBreadcrumbSegment[] = [
     { label: homeMessages.nav.home, href: homePageHref(locale) },
     { label: homeMessages.nav.blog, href: blogPageHref(locale) },
@@ -187,48 +117,21 @@ export function BlogDetailPage({ locale, homeMessages, blogMessages, post }: Blo
       />
       <div className="overflow-x-hidden">
         <article>
-          {heroImage ? (
-            <section className={`mx-auto w-full max-w-[1200px] px-4 pb-16 sm:px-5 sm:pb-20 md:px-6 lg:px-8 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}>
-              <BlogPostHeroOverlay
-                backHref={blogPageHref(locale)}
-                backText={blogMessages.backToBlog}
-                breadcrumbSegments={detailBreadcrumbSegments}
-                contentHtml={post.content}
-                dateLabel={dateLabel}
-                excerpt={post.excerpt}
-                fallbackAlt={blogMessages.galleryFallbackAlt}
-                image={heroImage}
-                publishedAtIso={post.publishedAt}
-                title={post.title}
-              />
-            </section>
-          ) : null}
-
-          {restImages.length > 0 ? (
-            <section className="w-full pb-16 pt-8 sm:pb-20 sm:pt-10">
-              <ArticleRemainingImagesGrid fallbackAlt={blogMessages.galleryFallbackAlt} images={restImages} />
-            </section>
-          ) : null}
-
-          {!hasLeadMedia ? (
-            <StandaloneArticleHeader
-              blogMessages={blogMessages}
-              breadcrumbSegments={detailBreadcrumbSegments}
-              dateLabel={dateLabel}
-              excerpt={post.excerpt}
-              locale={locale}
-              publishedAtIso={post.publishedAt}
-              title={post.title}
-            />
-          ) : null}
-
-          {!hasLeadMedia ? (
-            <section className="mx-auto max-w-[800px] px-4 pb-20 sm:px-5 md:px-6 lg:px-8 xl:px-10">
-              <div className="border-t border-[#18181b] pt-10">
-                <BlogProse html={post.content} />
-              </div>
-            </section>
-          ) : null}
+          <ArticleHeader
+            blogMessages={blogMessages}
+            breadcrumbSegments={detailBreadcrumbSegments}
+            dateLabel={dateLabel}
+            excerpt={post.excerpt}
+            locale={locale}
+            publishedAtIso={post.publishedAt}
+            title={post.title}
+          />
+          <ArticleBody
+            contentHtml={post.content}
+            excerpt={post.excerpt}
+            fallbackAlt={blogMessages.galleryFallbackAlt}
+            images={post.images}
+          />
         </article>
         <Footer locale={locale} messages={homeMessages} />
       </div>
