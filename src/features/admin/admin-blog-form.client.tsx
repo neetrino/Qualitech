@@ -229,9 +229,12 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
         <input
           className={inputCls}
           id="blog-slug"
+          onBlur={() => {
+            setPostSlug((prev) => normalizeMachineSlugForAdminStorage(prev));
+          }}
           onChange={(e) => {
             setSlugFollowsRuTitle(false);
-            setPostSlug(normalizeMachineSlugForAdminStorage(e.target.value));
+            setPostSlug(e.target.value);
           }}
           value={postSlug}
         />
