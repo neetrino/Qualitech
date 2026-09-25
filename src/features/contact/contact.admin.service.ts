@@ -66,3 +66,9 @@ export async function markContactMessageRead(id: string): Promise<ContactMessage
     return null;
   }
 }
+
+/** Permanently removes a contact message. Returns false when the id does not exist. */
+export async function deleteContactMessage(id: string): Promise<boolean> {
+  const result = await prisma.contactMessage.deleteMany({ where: { id } });
+  return result.count > 0;
+}

@@ -27,3 +27,8 @@ export const contactIdempotencyKeyHeaderSchema = z
   .trim()
   .uuid()
   .optional();
+
+/** Admin path param for a stored contact message. */
+export const adminContactMessageIdParamSchema = z.object({
+  id: z.string().cuid(),
+});

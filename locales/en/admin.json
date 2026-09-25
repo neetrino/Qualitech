@@ -37,7 +37,10 @@
     "fieldSentAt": "Sent at",
     "markRead": "Mark as read",
     "marking": "Marking…",
-    "read": "Read"
+    "read": "Read",
+    "delete": "Delete",
+    "deleting": "Deleting…",
+    "confirmDelete": "Delete this message permanently?"
   },
   "blogPanel": {
     "loadingArticle": "Loading article…"
