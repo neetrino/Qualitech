@@ -31,3 +31,47 @@ body {
 .font-legal {
   font-family: var(--font-legal), sans-serif;
 }
+
+/**
+ * Hero min-height: cascade fallbacks for WebViews that drop `svh` / `min()`.
+ * Last supported declaration wins.
+ */
+.hero-section-min-height {
+  min-height: 32rem;
+  min-height: 88vh;
+  min-height: 88svh;
+  min-height: min(88svh, 980px);
+}
+
+@media (min-width: 1024px) {
+  .hero-section-min-height {
+    min-height: 920px;
+  }
+}
+
+/**
+ * Hero CTAs: column by default (also if Tailwind utilities fail to apply).
+ * Side-by-side only on real desktop widths — avoids overlap in Instagram IAB.
+ */
+.hero-cta-row {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: stretch;
+  align-self: center;
+  gap: 0.625rem;
+  width: 100%;
+  max-width: 28rem;
+}
+
+@media (min-width: 1024px) {
+  .hero-cta-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 0.75rem;
+    width: auto;
+    max-width: none;
+  }
+}

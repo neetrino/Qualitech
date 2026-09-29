@@ -97,23 +97,23 @@ function SectionHeading({
 }
 
 const HERO_PRIMARY_CTA_CLASS =
-  "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#ff6900] px-5 text-[11px] font-black uppercase tracking-[0.12em] text-white shadow-[0_8px_14px_rgba(255,105,0,0.28),0_3px_5px_rgba(255,105,0,0.25)] transition hover:brightness-110 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[200px] lg:min-w-[220px]";
+  "flex h-11 w-full max-w-full min-w-0 shrink items-center justify-center gap-2 rounded-full bg-[#ff6900] px-5 text-center text-[11px] font-black uppercase leading-tight tracking-[0.08em] text-white shadow-[0_8px_14px_rgba(255,105,0,0.28),0_3px_5px_rgba(255,105,0,0.25)] transition hover:brightness-110 sm:h-12 sm:text-xs sm:tracking-[0.12em] lg:w-auto lg:min-w-[220px] lg:shrink-0 lg:tracking-[0.14em]";
 
 const HERO_SECONDARY_CTA_CLASS =
-  "inline-flex h-11 w-full items-center justify-center gap-2 rounded-full border-2 border-black/20 bg-white/45 px-4 pl-[18px] text-[11px] font-bold uppercase tracking-[0.12em] text-black shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md transition hover:bg-white/70 sm:h-12 sm:text-xs sm:tracking-[0.14em] sm:w-auto sm:min-w-[168px] lg:min-w-[180px]";
+  "flex h-11 w-full max-w-full min-w-0 shrink items-center justify-center gap-2 rounded-full border-2 border-black/20 bg-white/45 px-4 pl-[18px] text-center text-[11px] font-bold uppercase leading-tight tracking-[0.08em] text-black shadow-[0_8px_28px_rgba(0,0,0,0.12)] backdrop-blur-md transition hover:bg-white/70 sm:h-12 sm:text-xs sm:tracking-[0.12em] lg:w-auto lg:min-w-[180px] lg:shrink-0 lg:tracking-[0.14em]";
 
 function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readonly messages: HomeMessages }) {
   const contactHref = contactPageHref(locale);
   const machinesHref = machinesPageHref(locale);
   /** Extra top spacing for RU hero copy — keeps CTAs visually balanced below longer lines. Tighter on small screens so buttons sit slightly higher. */
   const ctaRowMarginTop =
-    locale === "ru" ? "mt-28 sm:mt-36 lg:mt-32" : "mt-16 sm:mt-24 lg:mt-20";
+    locale === "ru" ? "mt-16 sm:mt-28 lg:mt-32" : "mt-10 sm:mt-20 lg:mt-20";
 
   return (
-    <section className="relative min-h-[min(88svh,980px)] overflow-hidden lg:min-h-[920px]" id="hero">
+    <section className="hero-section-min-height relative overflow-hidden" id="hero">
       <HeroBackgroundLayers imagePriority />
       <div
-        className={`relative z-[2] mx-auto flex min-h-[min(88svh,980px)] w-full max-w-[1380px] flex-col px-4 pb-4 sm:px-5 sm:pb-8 md:px-6 lg:min-h-[920px] lg:px-8 lg:pb-16 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
+        className={`hero-section-min-height relative z-[2] mx-auto flex w-full max-w-[1380px] flex-col px-4 pb-4 sm:px-5 sm:pb-8 md:px-6 lg:px-8 lg:pb-16 xl:px-10 ${HERO_CONTENT_TOP_PAD}`}
       >
         <div className="relative mx-auto w-full max-w-[880px] text-center">
           <div className="pointer-events-none absolute left-1/2 top-0 w-full max-w-[920px] -translate-x-1/2 sm:top-[6px]">
@@ -140,12 +140,10 @@ function HeroSection({ locale, messages }: { readonly locale: HomeLocale; readon
             </h1>
           </div>
         </div>
-        <div
-          className={`flex w-full max-w-md flex-col items-stretch gap-2.5 self-center sm:max-w-none sm:flex-row sm:justify-center sm:gap-3 ${ctaRowMarginTop}`}
-        >
+        <div className={`hero-cta-row ${ctaRowMarginTop}`}>
           <Link className={HERO_PRIMARY_CTA_CLASS} href={machinesHref}>
             {messages.hero.ctaExplore}
-            <Image alt="" src={homeAssets.primaryArrow} width={20} height={20} />
+            <Image alt="" className="shrink-0" src={homeAssets.primaryArrow} width={20} height={20} />
           </Link>
           <Link className={HERO_SECONDARY_CTA_CLASS} href={contactHref}>
             <Image alt="" className="shrink-0 brightness-0" src={homeAssets.playIcon} width={16} height={16} />

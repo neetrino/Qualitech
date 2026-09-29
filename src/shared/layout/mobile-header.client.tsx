@@ -88,7 +88,7 @@ function MobileGlassBar({
   onToggleMenu,
 }: MobileGlassBarProps) {
   return (
-    <header className="fixed inset-x-0 top-0 md:hidden" style={{ zIndex: Z_MOBILE_HEADER }}>
+    <header className="fixed inset-x-0 top-0 lg:hidden" style={{ zIndex: Z_MOBILE_HEADER }}>
       <div className="px-2 pt-[max(0.5rem,env(safe-area-inset-top))] sm:px-3">
         <GlassBarSurface>
           <Link
@@ -187,7 +187,7 @@ function MobileNavDrawerLinks({ navLinks, onNavigate }: MobileNavDrawerLinksProp
 function MobileNavDrawer({ contactHref, messages, navLinks, panelId, onClose }: MobileNavDrawerProps) {
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center px-4 py-[max(1rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))] md:hidden"
+      className="fixed inset-0 flex items-center justify-center px-4 py-[max(1rem,env(safe-area-inset-top))] pb-[max(1.25rem,env(safe-area-inset-bottom))] lg:hidden"
       style={{ zIndex: Z_MOBILE_MENU_BACKDROP }}
     >
       <button

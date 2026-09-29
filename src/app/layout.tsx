@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
 import { DM_Sans, Inter, Prosto_One } from "next/font/google";
 
@@ -28,6 +28,13 @@ const dmSans = DM_Sans({
   variable: "--font-legal",
   preload: false,
 });
+
+/** Explicit viewport so Instagram/Android in-app browsers do not fall back to a ~980px layout. */
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(getSiteOrigin()),
