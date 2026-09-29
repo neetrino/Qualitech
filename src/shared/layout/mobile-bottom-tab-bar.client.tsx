@@ -53,7 +53,7 @@ export function MobileBottomTabBar({ locale: _locale, messages }: MobileBottomTa
   return createPortal(
     <a
       aria-label={messages.nav.contact}
-      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[120] flex size-[3.6rem] touch-manipulation items-center justify-center rounded-full bg-[#ff6900] text-black shadow-[0_10px_28px_rgba(255,105,0,0.5)] ring-[4px] ring-black/35 transition hover:brightness-110 active:brightness-95 md:hidden"
+      className="fixed bottom-[calc(1rem+env(safe-area-inset-bottom))] right-4 z-[120] flex size-[3.6rem] touch-manipulation items-center justify-center rounded-full bg-[#ff6900] text-black shadow-[0_10px_28px_rgba(255,105,0,0.5)] ring-[4px] ring-black/35 transition hover:brightness-110 active:brightness-95 lg:hidden"
       href={phoneHref}
       onClick={(event) => handleCallClick(event, phoneHref)}
     >

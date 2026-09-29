@@ -10,9 +10,9 @@ export const HOME_PAGE_BACKGROUND_CLASS =
 const HERO_IMAGE_MASK_CLASS =
   "[mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,rgba(0_0_0_/_0.45)_78%,transparent_100%)] [-webkit-mask-image:linear-gradient(to_bottom,#000_0%,#000_62%,rgba(0_0_0_/_0.45)_78%,transparent_100%)]";
 
-/** Below `md`: fixed glass mobile header + safe area; from `md`: desktop header clearance. */
+/** Below `lg`: glass mobile header + safe area; from `lg`: desktop header clearance. */
 export const HERO_CONTENT_TOP_PAD =
-  "pt-[calc(4.5rem+env(safe-area-inset-top))] sm:pt-[calc(4.75rem+env(safe-area-inset-top))] md:pt-[8.5rem] lg:pt-[6.75rem] xl:pt-28";
+  "pt-[calc(4.5rem+env(safe-area-inset-top))] sm:pt-[calc(4.75rem+env(safe-area-inset-top))] lg:pt-[6.75rem] xl:pt-28";
 
 /** Softens the seam between the hero and the solutions block (full-bleed top gradient). */
 export const SOLUTIONS_TOP_FOLD_SCRIM_CLASS =

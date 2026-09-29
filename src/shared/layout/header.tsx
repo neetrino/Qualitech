@@ -49,7 +49,7 @@ export function Header({
         messages={messages}
         navContext={navContext}
       />
-      <header className="fixed inset-x-0 top-0 z-50 hidden w-full justify-center px-4 pt-3 sm:px-5 sm:pt-5 md:flex md:px-6 lg:px-8 lg:pt-6 xl:px-10">
+      <header className="fixed inset-x-0 top-0 z-50 hidden w-full justify-center px-4 pt-3 sm:px-5 sm:pt-5 lg:flex lg:px-8 lg:pt-6 xl:px-10">
       <div className="relative flex w-full max-w-[1200px] flex-col gap-3 rounded-[20px] bg-white p-3 text-black shadow-[0_16px_48px_rgba(0,0,0,0.28)] sm:rounded-3xl sm:p-4 lg:h-[64px] lg:flex-row lg:items-center lg:justify-between lg:rounded-[80px] lg:px-6 lg:py-0 xl:max-w-[1320px]">
         <div className="flex items-center justify-between gap-2 lg:contents">
           <Link className="shrink-0" href={logoHref} prefetch={canPrefetchLogo ? true : undefined}>
