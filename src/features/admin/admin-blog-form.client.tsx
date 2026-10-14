@@ -28,7 +28,10 @@ import {
   adminInputClass,
   adminLabelClass,
 } from "@/features/admin/admin-ui.constants";
-import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import {
+  normalizeMachineSlugForAdminStorage,
+  normalizeSlugWhileTyping,
+} from "@/lib/slug/normalize-machine-slug-for-admin";
 import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
 
 type AdminBlogFormClientProps = {
@@ -234,7 +237,7 @@ export function AdminBlogFormClient({ post, onCancel, onSaved }: AdminBlogFormCl
           }}
           onChange={(e) => {
             setSlugFollowsRuTitle(false);
-            setPostSlug(e.target.value);
+            setPostSlug(normalizeSlugWhileTyping(e.target.value));
           }}
           value={postSlug}
         />

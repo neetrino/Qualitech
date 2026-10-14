@@ -33,7 +33,10 @@ import {
   adminLabelClass,
   adminLocalePanelDividerRuleClass,
 } from "@/features/admin/admin-ui.constants";
-import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import {
+  normalizeMachineSlugForAdminStorage,
+  normalizeSlugWhileTyping,
+} from "@/lib/slug/normalize-machine-slug-for-admin";
 import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
 
 type CategoryOption = { id: string; label: string };
@@ -302,9 +305,12 @@ export function AdminMachineFormClient({
         <input
           className={inputCls}
           id="machine-slug"
+          onBlur={() => {
+            setProductSlug((prev) => normalizeMachineSlugForAdminStorage(prev));
+          }}
           onChange={(e) => {
             setSlugFollowsRuTitle(false);
-            setProductSlug(normalizeMachineSlugForAdminStorage(e.target.value));
+            setProductSlug(normalizeSlugWhileTyping(e.target.value));
           }}
           value={productSlug}
         />
