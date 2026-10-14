@@ -16,7 +16,10 @@ import { AdminOgImagePreview } from "@/features/admin/admin-og-image-preview.cli
 import { useAdminMessages } from "@/features/admin/admin-messages.context";
 import { useAdminTheme } from "@/features/admin/admin-theme.context";
 import { uploadImageToR2 } from "@/features/admin/admin-upload.client";
-import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import {
+  normalizeMachineSlugForAdminStorage,
+  normalizeSlugWhileTyping,
+} from "@/lib/slug/normalize-machine-slug-for-admin";
 import { slugifyForUrl } from "@/lib/slug/slugify-for-url";
 import {
   adminButtonPrimaryClass,
@@ -174,9 +177,12 @@ export function AdminMachineCategoryFormClient({ category, onCancel, onSaved }: 
         <input
           className={inputCls}
           id="mc-slug"
+          onBlur={() => {
+            setCategorySlug((prev) => normalizeMachineSlugForAdminStorage(prev));
+          }}
           onChange={(e) => {
             setSlugFollowsRuName(false);
-            setCategorySlug(normalizeMachineSlugForAdminStorage(e.target.value));
+            setCategorySlug(normalizeSlugWhileTyping(e.target.value));
           }}
           type="text"
           value={categorySlug}

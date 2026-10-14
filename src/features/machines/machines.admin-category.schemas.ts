@@ -1,16 +1,12 @@
 import { AppLocale } from "@prisma/client";
 import { z } from "zod";
 
-import { normalizeMachineSlugForAdminStorage } from "@/lib/slug/normalize-machine-slug-for-admin";
+import { createAdminSlugSchema } from "@/lib/slug/admin-slug.schema";
 
 const localeEnum = z.nativeEnum(AppLocale);
+const MAX_CATEGORY_SLUG_LENGTH = 120;
 
-const adminMachineCategorySlugSchema = z
-  .string()
-  .trim()
-  .max(120)
-  .transform((s) => normalizeMachineSlugForAdminStorage(s))
-  .pipe(z.string().min(1).max(120));
+const adminMachineCategorySlugSchema = createAdminSlugSchema(MAX_CATEGORY_SLUG_LENGTH);
 
 const optionalCategoryImageUrl = z
   .string()
